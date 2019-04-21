@@ -43,3 +43,11 @@
   loop_control:
     loop_var: "loop_var"
   tags: kubernetes
+
+- name: kubeadm init
+  shell: |
+    set -o pipefail
+    kubeadm init --ignore-preflight-errors=all
+  args:
+    executable: "/bin/bash"
+  tags: kubernetes
