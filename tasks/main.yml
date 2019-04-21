@@ -50,4 +50,6 @@
     kubeadm init --ignore-preflight-errors=all
   args:
     executable: "/bin/bash"
+  register: result
+  changed_when: result is not succeeded
   tags: kubernetes
