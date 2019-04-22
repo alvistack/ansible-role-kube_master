@@ -49,3 +49,11 @@
   remote_user: root
   roles:
     - role: kubernetes
+
+- hosts: all
+  remote_user: root
+  tasks:
+    - name: kubectl version
+      command: kubectl version
+      register: result
+      changed_when: result is not succeeded

@@ -53,3 +53,15 @@
   register: result
   changed_when: result is not succeeded
   tags: kubernetes
+
+- name: setup /root/.kube/config
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: "{{ item.owner | default('root') }}"
+    group: "{{ item.group | default('root') }}"
+    mode: "{{ item.mode | default('0644') }}"
+    remote_src: yes
+  with_items:
+    - { src: "/etc/kubernetes/admin.conf", dest: "/root/.kube/config", mode: "0600" }
+  tags: kubernetes
