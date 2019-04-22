@@ -84,6 +84,12 @@
   ignore_errors: true
   tags: kubernetes
 
+- debug:
+    msg: "{{ result.stdout }}"
+
+- debug:
+    msg: "{{ result.stderr }}"
+
 - name: journalctl -xeu kubelet
   shell: |
     set -o pipefail
@@ -95,15 +101,11 @@
   ignore_errors: true
   tags: kubernetes
 
-- name: install pod network add-on (weave)
-  shell: |
-    set -o pipefail
-    kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
-  args:
-    executable: "/bin/bash"
-  register: result
-  changed_when: result is not succeeded
-  tags: kubernetes
+- debug:
+    msg: "{{ result.stdout }}"
+
+- debug:
+    msg: "{{ result.stderr }}"
 
 - name: setup /root/.kube/config
   copy:
@@ -115,4 +117,14 @@
     remote_src: true
   with_items:
     - { src: "/etc/kubernetes/admin.conf", dest: "/root/.kube/config", mode: "0600" }
+  tags: kubernetes
+
+- name: install pod network add-on (weave)
+  shell: |
+    set -o pipefail
+    kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
+  args:
+    executable: "/bin/bash"
+  register: result
+  changed_when: result is not succeeded
   tags: kubernetes
