@@ -44,6 +44,33 @@
     loop_var: "loop_var"
   tags: kubernetes
 
+- name: configure kernel modules
+  modprobe:
+    name: "{{ item.name }}"
+    state: "{{ item.state | default('present') }}"
+  with_items:
+    - { name: "br_netfilter" }
+    - { name: "ip_vs" }
+    - { name: "ip_vs_rr" }
+    - { name: "ip_vs_sh" }
+    - { name: "ip_vs_wrr" }
+    - { name: "nf_conntrack" }
+    - { name: "nf_conntrack_ipv4" }
+  ignore_errors: true
+  tags: kubernetes
+
+- name: configure kernel parameters
+  sysctl:
+    name: "{{ item.name }}"
+    value: "{{ item.value }}"
+    state: "{{ item.state | default('present') }}"
+    reload: true
+  with_items:
+    - { name: "net.bridge.bridge-nf-call-arptables", value: "1" }
+    - { name: "net.bridge.bridge-nf-call-ip6tables", value: "1" }
+    - { name: "net.bridge.bridge-nf-call-iptables", value: "1" }
+  tags: kubernetes
+
 - name: kubeadm init
   shell: |
     set -o pipefail
@@ -61,7 +88,7 @@
     owner: "{{ item.owner | default('root') }}"
     group: "{{ item.group | default('root') }}"
     mode: "{{ item.mode | default('0644') }}"
-    remote_src: yes
+    remote_src: true
   with_items:
     - { src: "/etc/kubernetes/admin.conf", dest: "/root/.kube/config", mode: "0600" }
   tags: kubernetes
