@@ -16,7 +16,8 @@
 
 - name: disable selinux
   selinux:
-    state: disabled
+    policy: "targeted"
+    state: "permissive"
   tags: kubernetes
 
 - name: yum install
