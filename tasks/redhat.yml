@@ -27,7 +27,7 @@
   args:
     executable: "/bin/bash"
   register: result
-  changed_when: resuit is not succeeded
+  changed_when: result is not succeeded
   tags: kubernetes
 
 - name: yum install
