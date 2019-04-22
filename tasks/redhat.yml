@@ -20,6 +20,16 @@
     state: "permissive"
   tags: kubernetes
 
+- name: modify selinux in runtime
+  shell: |
+    set -o pipefail
+    setenforce 0
+  args:
+    executable: "/bin/bash"
+  register: result
+  changed_when: resuit is not succeeded
+  tags: kubernetes
+
 - name: yum install
   yum:
     name: "{{ item.name }}"
