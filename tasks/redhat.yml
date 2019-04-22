@@ -26,8 +26,8 @@
     setenforce 0
   args:
     executable: "/bin/bash"
-  register: result
-  changed_when: result is not succeeded
+  changed_when: false
+  ignore_errors: true
   tags: kubernetes
 
 - name: yum install
