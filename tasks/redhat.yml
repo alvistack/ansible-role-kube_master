@@ -29,12 +29,3 @@
   changed_when: false
   ignore_errors: true
   tags: kubernetes
-
-- name: yum install
-  yum:
-    name: "{{ item.name }}"
-    state: "{{ item.state }}"
-  with_items: "{{ _yum }}"
-  register: result
-  until: result is succeeded
-  tags: kubernetes

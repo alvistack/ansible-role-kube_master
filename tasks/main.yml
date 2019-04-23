@@ -44,24 +44,6 @@
     loop_var: "loop_var"
   tags: kubernetes
 
-- name: configure kernel modules
-  modprobe:
-    name: "{{ item.name }}"
-    state: "{{ item.state | default('present') }}"
-  with_items: "{{ kubernetes_modprobe }}"
-  ignore_errors: true
-  tags: kubernetes
-
-- name: configure kernel parameters
-  sysctl:
-    name: "{{ item.name }}"
-    value: "{{ item.value }}"
-    state: "{{ item.state | default('present') }}"
-    reload: true
-  with_items: "{{ kubernetes_sysctl }}"
-  ignore_errors: true
-  tags: kubernetes
-
 - name: kubeadm init
   shell: |
     set -o pipefail
@@ -107,7 +89,7 @@
 - debug:
     msg: "{{ result.stderr }}"
 
-- name: setup /root/.kube/config
+- name: copy /root/.kube/config
   copy:
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"

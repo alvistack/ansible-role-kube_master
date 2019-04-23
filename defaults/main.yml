@@ -16,23 +16,3 @@
 
 # Kubernetes version.
 kubernetes_version: "v1.14.1"
-
-# modprobe for Kubernetes.
-kubernetes_modprobe: [
-  { name: "br_netfilter" },
-  { name: "ip_vs" },
-  { name: "ip_vs_rr" },
-  { name: "ip_vs_sh" },
-  { name: "ip_vs_wrr" },
-  { name: "nf_conntrack" },
-  { name: "nf_conntrack_ipv4" },
-]
-
-# sysctl for Kubernetes.
-kubernetes_sysctl: [
-  { name: "net.bridge.bridge-nf-call-arptables", value: "1" },
-  { name: "net.bridge.bridge-nf-call-ip6tables", value: "1" },
-  { name: "net.bridge.bridge-nf-call-iptables", value: "1" },
-  { name: "net.ipv4.ip_forward", value: "1" },
-  { name: "vm.swappiness", value: "0" },
-]
