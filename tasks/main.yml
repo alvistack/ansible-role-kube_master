@@ -72,6 +72,23 @@
 - debug:
     msg: "{{ result.stderr }}"
 
+- name: docker ps -a
+  shell: |
+    set -o pipefail
+    docker ps -a | grep kube | grep -v pause
+  args:
+    executable: "/bin/bash"
+  register: result
+  changed_when: result is not succeeded
+  ignore_errors: true
+  tags: kubernetes
+
+- debug:
+    msg: "{{ result.stdout }}"
+
+- debug:
+    msg: "{{ result.stderr }}"
+
 - name: journalctl -xeu kubelet
   shell: |
     set -o pipefail
