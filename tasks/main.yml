@@ -47,7 +47,7 @@
 - name: kubeadm init
   shell: |
     set -o pipefail
-    kubeadm init --ignore-preflight-errors=all
+    kubeadm init --ignore-preflight-errors=all --cri-socket=/var/run/dockershim.sock
   args:
     executable: "/bin/bash"
   register: result
