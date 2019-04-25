@@ -6,7 +6,7 @@ language: python
 
 env:
   matrix:
-    - MOLECULE_OPTIONS="-s centos-7"
+#    - MOLECULE_OPTIONS="-s centos-7"
     - MOLECULE_OPTIONS="-s suse-15"
     - MOLECULE_OPTIONS="-s ubuntu-16.04"
     - MOLECULE_OPTIONS="-s ubuntu-18.04"
@@ -16,8 +16,6 @@ before_install:
   - sudo snap install lxd && sudo lxd init --preseed < .travis.lxd.yml
   - sudo apt-get -y purge python-openssl && sudo apt-get -y autoremove
   - sudo -H pip install --upgrade --requirement requirements.txt
-  - sudo xargs modprobe < .travis.modules.conf && sudo lsmod
-  - sudo sysctl -p .travis.sysctl.conf && sudo sysctl -a
 
 install:
   - export ROLE=$(echo $TRAVIS_REPO_SLUG | sed 's/^.*\/ansible-role-/\//g')

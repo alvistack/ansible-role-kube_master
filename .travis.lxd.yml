@@ -6,8 +6,11 @@ networks:
   - name: lxdbr0
     type: bridge
     config:
+      dns.domain: localdomain
       ipv4.address: auto
+      ipv4.nat: true
       ipv6.address: none
+      ipv6.nat: false
 
 storage_pools:
   - name: default
@@ -18,15 +21,15 @@ storage_pools:
 profiles:
   - name: default
     config:
-      boot.autostart: "false"
+      boot.autostart: false
       linux.kernel_modules: ip_tables,ip6_tables,netlink_diag,nf_nat,overlay
       raw.lxc: |
         lxc.apparmor.profile = unconfined
-        lxc.cap.drop =
-        lxc.cgroup.devices.allow = a
         lxc.mount.auto = proc:rw sys:rw cgroup:rw
-      security.nesting: "true"
-      security.privileged: "true"
+        lxc.cgroup.devices.allow = a
+        lxc.cap.drop =
+      security.nesting: true
+      security.privileged: true
     devices:
       aadisable:
         path: /sys/module/nf_conntrack/parameters/hashsize
@@ -36,3 +39,12 @@ profiles:
         path: /sys/module/apparmor/parameters/enabled
         source: /dev/null
         type: disk
+      root:
+        path: /
+        pool: default
+        type: disk
+      eth0:
+        name: eth0
+        nictype: bridged
+        parent: lxdbr0
+        type: nic
