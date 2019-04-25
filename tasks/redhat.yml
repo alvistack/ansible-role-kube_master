@@ -29,3 +29,12 @@
   changed_when: false
   ignore_errors: true
   tags: kubernetes
+
+- name: disable service
+  service:
+    name: firewalld
+    state: stopped
+    enabled: false
+  changed_when: false
+  ignore_errors: true
+  tags: kubernetes
