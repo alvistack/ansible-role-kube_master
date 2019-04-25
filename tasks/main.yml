@@ -44,6 +44,15 @@
     loop_var: "loop_var"
   tags: kubernetes
 
+- name: docker run hello-world
+  shell: |
+    set -o pipefail
+    docker restart hello-world || docker run -itd --name hello-world hello-world
+  args:
+    executable: "/bin/bash"
+  register: result
+  changed_when: result is not succeeded
+
 - name: kubeadm init
   shell: |
     set -o pipefail
