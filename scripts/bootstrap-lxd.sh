@@ -19,7 +19,7 @@ set -o xtrace
 cd "$(cd "$(dirname "$0")"; pwd -P)/../"
 
 # Remove conflict packages.
-apt-get -y purge lxc-* lxd-*
+apt-get -y purge lxc-* lxd-* && apt-get -y autoremove
 
 # Install Snaps.
 apt-get -y install snapd
