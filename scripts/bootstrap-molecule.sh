@@ -18,13 +18,16 @@ set -o xtrace
 
 cd "$(cd "$(dirname "$0")"; pwd -P)/../"
 
+# Setup for Ansible.
 export ANSIBLE_FORCE_COLOR=true
 export ANSIBLE_LOG_PATH="$PWD/ansible.log"
 export ANSIBLE_ROLES_PATH="$HOME/.ansible/roles"
 
+# Setup for Molecule.
 export LXC_IMAGE=${LXC_IMAGE:-"ubuntu/bionic/amd64"}
 export LXC_ID=${LXC_ID:-"$(cat /dev/urandom | tr -dc a-z | head -c1)$(cat /dev/urandom | tr -dc a-z0-9 | head -c11)"}
 
 set +o xtrace
 
+# Export environment variables.
 exec $SHELL -i

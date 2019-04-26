@@ -18,9 +18,14 @@ set -o xtrace
 
 cd "$(cd "$(dirname "$0")"; pwd -P)/../"
 
-apt-get update
+# Remove conflict packages.
+apt-get -y purge lxc-* lxd-*
+
+# Install Snaps.
 apt-get -y install snapd
 
+# Install LXD with Snaps.
 snap install lxd
 
+# Bootstrap LXD profile.
 lxd init --preseed < .travis.lxd.yml

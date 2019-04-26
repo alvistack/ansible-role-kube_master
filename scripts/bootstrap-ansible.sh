@@ -18,9 +18,14 @@ set -o xtrace
 
 cd "$(cd "$(dirname "$0")"; pwd -P)/../"
 
-apt-get update
+# Remove conflict packages.
+apt-get -y purge python-openssl
+
+# Install Python.
 apt-get -y install curl gcc libffi-dev libssl-dev make python python-dev
 
+# Install PIP.
 curl -skL https://bootstrap.pypa.io/get-pip.py | python
 
+# Install packages with PIP.
 pip install --upgrade --requirement requirements.txt
