@@ -29,11 +29,3 @@
   changed_when: false
   ignore_errors: true
   tags: kubernetes
-
-- name: disable search
-  lineinfile:
-    path: "/etc/resolv.conf"
-    regexp: "^search"
-    line: "#search"
-    state: present
-  tags: kubernetes

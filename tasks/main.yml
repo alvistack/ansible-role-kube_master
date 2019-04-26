@@ -163,6 +163,29 @@
 - debug:
     msg: "{{ result.stderr }}"
 
+- name: other debug
+  shell: |
+    set -o pipefail
+    echo `hostname`
+    echo `hostname -i`
+    ping -c 5 `hostname -i`
+    ip address
+    ip route
+    iptables -nvL
+    iptables -nvL -t nat
+  args:
+    executable: "/bin/bash"
+  register: result
+  changed_when: result is not succeeded
+  ignore_errors: true
+  tags: kubernetes
+
+- debug:
+    msg: "{{ result.stdout }}"
+
+- debug:
+    msg: "{{ result.stderr }}"
+
 - name: copy /root/.kube/config
   copy:
     src: "{{ item.src }}"
