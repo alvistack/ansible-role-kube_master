@@ -19,7 +19,7 @@ set -o xtrace
 cd "$(cd "$(dirname "$0")"; pwd -P)/../"
 
 # Remove conflict packages.
-apt-get -y purge python-openssl && apt-get -y autoremove
+apt-get -y purge python-openssl python-pip && apt-get -y autoremove
 
 # Install Python.
 apt-get -y install curl gcc libffi-dev libssl-dev make python python-dev
