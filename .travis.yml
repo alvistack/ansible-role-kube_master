@@ -12,6 +12,7 @@ env:
     - MOLECULE_CMD="molecule test -s ubuntu-18.04"
 
 before_install:
+  - sudo apt-get update
   - sudo ./scripts/bootstrap-ansible.sh
   - sudo ./scripts/bootstrap-lxd.sh
 
