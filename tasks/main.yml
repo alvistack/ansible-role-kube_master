@@ -112,6 +112,23 @@
 - debug:
     msg: "{{ result.stderr }}"
 
+- name: docker image list
+  shell: |
+    set -o pipefail
+    docker image list
+  args:
+    executable: "/bin/bash"
+  register: result
+  changed_when: result is not succeeded
+  ignore_errors: true
+  tags: kubernetes
+
+- debug:
+    msg: "{{ result.stdout }}"
+
+- debug:
+    msg: "{{ result.stderr }}"
+
 - name: docker ps -a
   shell: |
     set -o pipefail
