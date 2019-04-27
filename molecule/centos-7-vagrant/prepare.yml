@@ -19,8 +19,30 @@
   become: true
   gather_facts: false
   tasks:
-    - name: Install python for Ansible
-      raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
+    - name: Install some basic packages because vagrant machines maybe bare
+      raw: |
+        if [ -x "$(command -v apt-get)" ]
+        then
+          apt-get update && apt-get install -y ca-certificates curl python sudo
+        elif [ -x "$(command -v yum)" ]
+        then
+          yum install -y ca-certificates curl python sudo
+        elif [ -x "$(command -v zypper)" ]
+        then
+          zypper -n --gpg-auto-import-keys refresh && zypper -n install -y ca-certificates ca-certificates-cacert ca-certificates-mozilla curl python python-xml sudo
+        elif [ -x "$(command -v apk)" ]
+        then
+          apk update && apk add ca-certificates curl python sudo
+        elif [ -x "$(command -v pacman)" ]
+        then
+          pacman -Syu --noconfirm ca-certificates curl python2 sudo
+        elif [ -x "$(command -v dnf)" ]
+        then
+          dnf --assumeyes install ca-certificates curl python python-devel python2-dnf sudo
+        elif [ -x "$(command -v emerge)" ]
+        then
+          emerge --ask n ca-certificates curl dev-lang/python-2 gentoolkit sudo
+        fi
       changed_when: false
 
     - name: setup PATH
@@ -30,3 +52,18 @@
         line: "PATH=\"/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games\""
         state: "present"
       changed_when: false
+
+    - name: disable swap
+      mount:
+        name: "{{ item.name }}"
+        fstype: "{{ item.fstype }}"
+        state: "{{ item.state }}"
+      with_items:
+        - { state: "absent", name: "swap", fstype: "swap" }
+        - { state: "absent", name: "none", fstype: "swap" }
+      changed_when: false
+
+    - name: swapoff -a
+      command: swapoff -a
+      changed_when: false
+      ignore_errors: true
