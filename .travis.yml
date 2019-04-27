@@ -14,11 +14,19 @@ env:
 matrix:
   allow_failures:
     - env: MOLECULE_CMD="molecule test -s centos-7"
+    - env: MOLECULE_CMD="molecule test -s suse-15"
 
 before_install:
-  - sudo apt-get update
-  - sudo ./scripts/bootstrap-ansible.sh
-  - sudo ./scripts/bootstrap-lxd.sh
+  - |
+    sudo apt-get -y purge lxc-* lxd-* && sudo apt-get -y autoremove
+    sudo apt-get update && apt-get install -y snapd
+    sudo snap install lxd
+    sudo lxd init --preseed < .travis.lxd.yml
+  - |
+    sudo apt-get -y purge python-openssl && sudo apt-get -y autoremove
+    sudo apt-get update && apt-get -y install curl gcc libffi-dev libssl-dev make python python-dev
+    curl -skL https://bootstrap.pypa.io/get-pip.py | sudo -H python
+    sudo -H pip install --upgrade --requirement requirements.txt
 
 install:
   - export ROLE=$(echo $TRAVIS_REPO_SLUG | sed 's/^.*\/ansible-role-/\//g')
@@ -26,8 +34,7 @@ install:
   - ln -s $TRAVIS_BUILD_DIR $HOME/.ansible/roles/$ROLE
 
 script:
-  - source ./scripts/bootstrap-molecule.sh
-  - travis_wait 120 sudo $MOLECULE_CMD
+  - travis_wait 120 sudo ./scripts/run-tests.sh $MOLECULE_CMD
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/

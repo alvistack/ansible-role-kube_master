@@ -21,7 +21,7 @@ driver:
   provider:
     name: virtualbox
 platforms:
-  - name: ${LXC_ID}-1
+  - name: ${MOLECULE_INSTANCE_NAME}-1
     box: centos/7
     cpu: 2
     memory: 2048
