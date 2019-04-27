@@ -206,5 +206,6 @@
   args:
     executable: "/bin/bash"
   register: result
+  until: result is succeeded
   changed_when: result is not succeeded
   tags: kubernetes

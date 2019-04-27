@@ -15,6 +15,7 @@
 # limitations under the License.
 
 - hosts: all
+  become: true
   remote_user: root
   roles:
     - role: bootstrap
@@ -29,6 +30,7 @@
       kubeadm_version: "{{ kubernetes_version }}"
 
 - hosts: all
+  become: true
   remote_user: root
   tasks:
     - name: start service
@@ -46,11 +48,13 @@
       ignore_errors: true
 
 - hosts: all
+  become: true
   remote_user: root
   roles:
     - role: kubernetes
 
 - hosts: all
+  become: true
   remote_user: root
   tasks:
     - name: kubectl version
