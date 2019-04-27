@@ -44,15 +44,6 @@
     loop_var: "loop_var"
   tags: kubernetes
 
-- name: docker run hello-world
-  shell: |
-    set -o pipefail
-    docker restart hello-world || docker run -itd --name hello-world hello-world
-  args:
-    executable: "/bin/bash"
-  register: result
-  changed_when: result is not succeeded
-
 - name: kubeadm config images pull
   shell: |
     set -o pipefail
@@ -60,6 +51,7 @@
   args:
     executable: "/bin/bash"
   register: result
+  until: result is succeeded
   changed_when: result is not succeeded
   ignore_errors: true
   tags: kubernetes
@@ -75,117 +67,10 @@
   args:
     executable: "/bin/bash"
   register: result
+  until: result is succeeded
   changed_when: result is not succeeded
   ignore_errors: true
   tags: kubernetes
-
-- name: journalctl -xeu docker
-  shell: |
-    set -o pipefail
-    journalctl -xeu docker
-  args:
-    executable: "/bin/bash"
-  register: result
-  changed_when: result is not succeeded
-  ignore_errors: true
-  tags: kubernetes
-
-- debug:
-    msg: "{{ result.stdout }}"
-
-- debug:
-    msg: "{{ result.stderr }}"
-
-- name: docker info
-  shell: |
-    set -o pipefail
-    docker info
-  args:
-    executable: "/bin/bash"
-  register: result
-  changed_when: result is not succeeded
-  ignore_errors: true
-  tags: kubernetes
-
-- debug:
-    msg: "{{ result.stdout }}"
-
-- debug:
-    msg: "{{ result.stderr }}"
-
-- name: docker image list
-  shell: |
-    set -o pipefail
-    docker image list
-  args:
-    executable: "/bin/bash"
-  register: result
-  changed_when: result is not succeeded
-  ignore_errors: true
-  tags: kubernetes
-
-- debug:
-    msg: "{{ result.stdout }}"
-
-- debug:
-    msg: "{{ result.stderr }}"
-
-- name: docker ps -a
-  shell: |
-    set -o pipefail
-    docker ps -a
-  args:
-    executable: "/bin/bash"
-  register: result
-  changed_when: result is not succeeded
-  ignore_errors: true
-  tags: kubernetes
-
-- debug:
-    msg: "{{ result.stdout }}"
-
-- debug:
-    msg: "{{ result.stderr }}"
-
-- name: journalctl -xeu kubelet
-  shell: |
-    set -o pipefail
-    journalctl -xeu kubelet
-  args:
-    executable: "/bin/bash"
-  register: result
-  changed_when: result is not succeeded
-  ignore_errors: true
-  tags: kubernetes
-
-- debug:
-    msg: "{{ result.stdout }}"
-
-- debug:
-    msg: "{{ result.stderr }}"
-
-- name: other debug
-  shell: |
-    set -o pipefail
-    echo `hostname`
-    echo `hostname -i`
-    ping -c 5 `hostname -i`
-    ip address
-    ip route
-    iptables -nvL
-    iptables -nvL -t nat
-  args:
-    executable: "/bin/bash"
-  register: result
-  changed_when: result is not succeeded
-  ignore_errors: true
-  tags: kubernetes
-
-- debug:
-    msg: "{{ result.stdout }}"
-
-- debug:
-    msg: "{{ result.stderr }}"
 
 - name: copy /root/.kube/config
   copy:
