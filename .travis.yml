@@ -19,12 +19,12 @@ matrix:
 before_install:
   - |
     sudo apt-get -y purge lxc-* lxd-* && sudo apt-get -y autoremove
-    sudo apt-get update && apt-get install -y snapd
+    sudo apt-get update && sudo apt-get install -y snapd
     sudo snap install lxd
     sudo lxd init --preseed < .travis.lxd.yml
   - |
     sudo apt-get -y purge python-openssl && sudo apt-get -y autoremove
-    sudo apt-get update && apt-get -y install curl gcc libffi-dev libssl-dev make python python-dev
+    sudo apt-get update && sudo apt-get -y install curl gcc libffi-dev libssl-dev make python python-dev
     curl -skL https://bootstrap.pypa.io/get-pip.py | sudo -H python
     sudo -H pip install --upgrade --requirement requirements.txt
 
