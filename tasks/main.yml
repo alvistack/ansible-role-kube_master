@@ -43,3 +43,66 @@
   loop_control:
     loop_var: "loop_var"
   tags: kubernetes
+
+- name: prepare directories
+  file:
+    dest: "{{ item.dest }}"
+    owner: "{{ item.owner | default('root') }}"
+    group: "{{ item.group | default('root') }}"
+    mode: "{{ item.mode | default('0755') }}"
+    state: "{{ item.state | default('directory') }}"
+  with_items:
+    - { dest: "/etc/kubernetes" }
+    - { dest: "/etc/kubernetes/addons" }
+    - { dest: "/etc/kubernetes/manifests" }
+    - { dest: "/etc/kubernetes/pki" }
+  tags: kubernetes
+
+- name: copy templates
+  template:
+    src: "./templates{{ item.dest }}.j2"
+    dest: "{{ item.dest }}"
+    owner: "{{ item.owner | default('root') }}"
+    group: "{{ item.group | default('root') }}"
+    mode: "{{ item.mode | default('0644') }}"
+  with_items:
+    - { dest: "/etc/kubernetes/kubeadm.conf" }
+  tags: kubernetes
+
+- name: kubeadm config images pull
+  shell: |
+    set -o pipefail
+    kubeadm config images pull
+  args:
+    executable: "/bin/bash"
+  register: result
+  until: result is succeeded
+  changed_when: result is not succeeded
+  ignore_errors: true
+  tags: kubernetes
+
+- name: kubeadm init
+  shell: |
+    set -o pipefail
+    kubeadm init \
+      --config=/etc/kubernetes/kubeadm.conf \
+      --ignore-preflight-errors=all
+  args:
+    executable: "/bin/bash"
+  register: result
+  until: result is succeeded
+  changed_when: result is not succeeded
+  ignore_errors: true
+  tags: kubernetes
+
+- name: copy /root/.kube/config
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: "{{ item.owner | default('root') }}"
+    group: "{{ item.group | default('root') }}"
+    mode: "{{ item.mode | default('0644') }}"
+    remote_src: true
+  with_items:
+    - { src: "/etc/kubernetes/admin.conf", dest: "/root/.kube/config", mode: "0600" }
+  tags: kubernetes

@@ -15,16 +15,18 @@
 # limitations under the License.
 
 scenario:
-  name: default
+  name: centos-7-vagrant
 driver:
-  name: lxd
+  name: vagrant
+  provider:
+    name: virtualbox
 platforms:
-  - name: ${LXC_ID}-1
-    url: unix:/var/snap/lxd/common/lxd/unix.socket
-    source:
-      server: https://images.linuxcontainers.org
-      protocol: simplestreams
-      alias: ${LXC_IMAGE}
+  - name: ${MOLECULE_INSTANCE_NAME}-1
+    box: centos/7
+    cpu: 2
+    memory: 2048
+    provider_raw_config_args:
+      - "customize [ 'modifyvm', :id, '--uartmode1', 'disconnected' ]"
 lint:
   name: yamllint
 dependency:

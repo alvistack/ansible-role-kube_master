@@ -15,6 +15,7 @@
 # limitations under the License.
 
 - hosts: all
+  become: true
   remote_user: root
   roles:
     - role: bootstrap
@@ -29,8 +30,23 @@
       kubeadm_version: "{{ kubernetes_version }}"
 
 - hosts: all
+  become: true
   remote_user: root
-  tasks:
+  pre_tasks:
+    - name: patch /etc/hostname
+      lineinfile:
+        path: "/etc/hosts"
+        regexp: "^{{ ansible_default_ipv4.address }} {{ ansible_hostname }}"
+        line: "{{ ansible_default_ipv4.address }} {{ ansible_hostname }}"
+        backrefs: true
+        state: "present"
+
+    - name: patch /etc/resolv.conf
+      file:
+        dest: "/etc/resolv.conf"
+        state: "file"
+        force: true
+
     - name: start service
       service:
         name: docker
@@ -45,7 +61,21 @@
       changed_when: false
       ignore_errors: true
 
-- hosts: all
-  remote_user: root
   roles:
     - role: kubernetes
+
+  post_tasks:
+    - name: install pod network add-on (weave)
+      shell: |
+        set -o pipefail
+        kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
+      args:
+        executable: "/bin/bash"
+      register: result
+      until: result is succeeded
+      changed_when: result is not succeeded
+
+    - name: kubectl version
+      command: kubectl version
+      register: result
+      changed_when: result is not succeeded
