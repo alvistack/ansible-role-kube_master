@@ -22,6 +22,7 @@ before_install:
     sudo apt-get update && sudo apt-get install -y snapd
     sudo snap install lxd
     sudo lxd init --preseed < .travis.lxd.yml
+
   - |
     sudo apt-get -y purge python-openssl && sudo apt-get -y autoremove
     sudo apt-get update && sudo apt-get -y install curl gcc libffi-dev libssl-dev make python python-dev
@@ -29,9 +30,10 @@ before_install:
     sudo -H pip install --upgrade --requirement requirements.txt
 
 install:
-  - export ROLE=$(echo $TRAVIS_REPO_SLUG | sed 's/^.*\/ansible-role-/\//g')
-  - mkdir -p $HOME/.ansible/roles
-  - ln -s $TRAVIS_BUILD_DIR $HOME/.ansible/roles/$ROLE
+  - |
+    export ROLE=$(echo $TRAVIS_REPO_SLUG | sed 's/^.*\/ansible-role-/\//g')
+    mkdir -p $HOME/.ansible/roles
+    ln -s $TRAVIS_BUILD_DIR $HOME/.ansible/roles/$ROLE
 
 script:
   - travis_wait 120 sudo ./scripts/run-tests.sh $MOLECULE_CMD

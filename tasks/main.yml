@@ -67,7 +67,6 @@
     mode: "{{ item.mode | default('0644') }}"
   with_items:
     - { dest: "/etc/kubernetes/kubeadm.conf" }
-    - { dest: "/etc/kubernetes/addons/weave.yaml" }
   tags: kubernetes
 
 - name: kubeadm config images pull
@@ -106,15 +105,4 @@
     remote_src: true
   with_items:
     - { src: "/etc/kubernetes/admin.conf", dest: "/root/.kube/config", mode: "0600" }
-  tags: kubernetes
-
-- name: install pod network add-on (weave)
-  shell: |
-    set -o pipefail
-    kubectl apply -f /etc/kubernetes/addons/weave.yaml
-  args:
-    executable: "/bin/bash"
-  register: result
-  until: result is succeeded
-  changed_when: result is not succeeded
   tags: kubernetes
