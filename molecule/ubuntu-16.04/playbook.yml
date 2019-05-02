@@ -42,10 +42,10 @@
         state: "present"
 
     - name: patch /etc/resolv.conf
-      file:
-        dest: "/etc/resolv.conf"
-        state: "file"
-        force: true
+      lineinfile:
+        path: "/etc/resolv.conf"
+        regexp: "^search"
+        state: "absent"
 
     - name: start service
       service:
