@@ -42,10 +42,16 @@
         state: "present"
 
     - name: patch /etc/resolv.conf
-      lineinfile:
-        path: "/etc/resolv.conf"
-        regexp: "^search"
-        state: "absent"
+      file:
+        dest: "/etc/resolv.conf"
+        state: "file"
+        force: true
+
+    - name: patch /.dockerenv
+      copy:
+        dest: "/.dockerenv"
+        content: ""
+        force: false
 
     - name: start service
       service:
