@@ -6,21 +6,21 @@ language: minimal
 
 env:
   matrix:
-    - MOLECULE_CMD="molecule test -s centos-7"
-    - MOLECULE_CMD="molecule test -s suse-15"
-    - MOLECULE_CMD="molecule test -s ubuntu-16.04"
-    - MOLECULE_CMD="molecule test -s ubuntu-18.04"
+    - MOLECULE_SCENARIO_NAME="centos-7"
+    - MOLECULE_SCENARIO_NAME="suse-15"
+    - MOLECULE_SCENARIO_NAME="ubuntu-16.04"
+    - MOLECULE_SCENARIO_NAME="ubuntu-18.04"
 
 matrix:
   allow_failures:
-    - env: MOLECULE_CMD="molecule test -s centos-7"
-    - env: MOLECULE_CMD="molecule test -s suse-15"
+    - env: MOLECULE_SCENARIO_NAME="centos-7"
+    - env: MOLECULE_SCENARIO_NAME="suse-15"
 
 before_install:
   - |
     sudo apt-get -y purge lxc-* lxd-* && sudo apt-get -y autoremove
     sudo apt-get update && sudo apt-get install -y snapd
-    sudo snap install lxd
+    sudo snap refresh && sudo snap install lxd
     sudo lxd init --preseed < .travis.lxd.yml
 
   - |
@@ -36,7 +36,7 @@ install:
     ln -s $TRAVIS_BUILD_DIR $HOME/.ansible/roles/$ROLE
 
 script:
-  - travis_wait 120 sudo ./scripts/run-tests.sh $MOLECULE_CMD
+  - travis_wait 120 sudo ./scripts/run-tests.sh molecule test -s $MOLECULE_SCENARIO_NAME
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
