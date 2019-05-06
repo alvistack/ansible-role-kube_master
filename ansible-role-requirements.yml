@@ -30,6 +30,10 @@
   src: https://github.com/alvistack/ansible-role-cri-tools
   version: develop
 
+- name: etcd
+  src: https://github.com/alvistack/ansible-role-etcd
+  version: develop
+
 - name: kubectl
   src: https://github.com/alvistack/ansible-role-kubectl
   version: develop
@@ -40,4 +44,8 @@
 
 - name: kubeadm
   src: https://github.com/alvistack/ansible-role-kubeadm
+  version: develop
+
+- name: python
+  src: https://github.com/alvistack/ansible-role-python
   version: develop

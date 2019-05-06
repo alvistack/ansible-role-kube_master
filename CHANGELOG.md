@@ -4,6 +4,8 @@
 
 ### Major Changes
 
+  - Setting up cluster with external etcd nodes
+
 ## 2.6.0 - 2019-05-04
 
 ### Major Changes

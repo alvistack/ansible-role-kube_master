@@ -1,4 +1,9 @@
 ---
+kind: InitConfiguration
+apiVersion: kubeadm.k8s.io/v1beta1
+apiEndpoint:
+  advertiseAddress: {{ ansible_default_ipv4.address }}
+---
 kind: ClusterConfiguration
 apiVersion: kubeadm.k8s.io/v1beta1
 apiServer:
@@ -12,8 +17,14 @@ controllerManager: {}
 dns:
   type: CoreDNS
 etcd:
-  local:
-    dataDir: /var/lib/etcd
+  external:
+    endpoints:
+{% for host in ansible_play_batch %}
+      - https://{{ hostvars[host]['ansible_default_ipv4']['address'] }}:2379
+{% endfor %}
+    caFile: {{ external_etcd_ca_file }}
+    certFile: {{ external_etcd_cert_file }}
+    keyFile: {{ external_etcd_key_file }}
 imageRepository: {{ image_repository }}
 kubernetesVersion: {{ kubernetes_version }}
 networking:

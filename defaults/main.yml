@@ -31,3 +31,12 @@ pod_subnet: "10.233.64.0/18"
 
 # ImageRepository sets the container registry to pull images from.
 image_repository: "k8s.gcr.io"
+
+# CAFile is an SSL Certificate Authority file used to secure etcd communication.
+external_etcd_ca_file: "/etc/kubernetes/pki/etcd/ca.crt"
+
+# CertFile is an SSL certification file used to secure etcd communication.
+external_etcd_cert_file: "/etc/kubernetes/pki/apiserver-etcd-client.crt"
+
+# KeyFile is an SSL key file used to secure etcd communication.
+external_etcd_key_file: "/etc/kubernetes/pki/apiserver-etcd-client.key"
