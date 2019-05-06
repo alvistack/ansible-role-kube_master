@@ -19,7 +19,7 @@ dns:
 etcd:
   external:
     endpoints:
-{% for host in ansible_play_batch %}
+{% for host in ansible_play_hosts %}
       - https://{{ hostvars[host]['ansible_default_ipv4']['address'] }}:2379
 {% endfor %}
     caFile: {{ external_etcd_ca_file }}
