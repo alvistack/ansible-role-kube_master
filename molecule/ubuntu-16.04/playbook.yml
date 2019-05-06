@@ -22,8 +22,8 @@
     - role: python
     - role: docker
     - role: etcd
-    - role: cni-plugins
     - role: cri-tools
+    - role: kubernetes-cni
     - role: kubectl
       kubectl_version: "{{ kubernetes_version }}"
     - role: kubelet
