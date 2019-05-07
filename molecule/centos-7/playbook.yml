@@ -56,82 +56,6 @@
       changed_when: false
       ignore_errors: true
 
-    - name: prepare directories
-      file:
-        dest: "/etc/kubernetes/pki/etcd"
-        mode: "0755"
-        state: "directory"
-
-    - name: copy etcd ca certificate
-      copy:
-        src: "/etc/etcd/pki/ca.crt"
-        dest: "/etc/kubernetes/pki/etcd/ca.crt"
-        remote_src: true
-
-    - name: generate apiserver-etcd-client private key
-      openssl_privatekey:
-        path: "/etc/kubernetes/pki/apiserver-etcd-client.key"
-      when: inventory_hostname == ansible_play_hosts[0]
-      delegate_to: "{{ ansible_play_hosts[0] }}"
-
-    - name: generate apiserver-etcd-client csr
-      openssl_csr:
-        path: "/etc/kubernetes/pki/apiserver-etcd-client.csr"
-        privatekey_path: "/etc/kubernetes/pki/apiserver-etcd-client.key"
-        common_name: "{{ ansible_play_hosts[0] }}"
-        subject:
-          CN: "{{ ansible_play_hosts[0] }}"
-        subject_alt_name: >-
-          {%- for host in ansible_play_hosts -%}
-          DNS:{{ host }},
-          {%- endfor -%}
-          DNS:localhost,
-          {%- for host in ansible_play_hosts -%}
-          IP:{{ hostvars[host]['ansible_default_ipv4']['address'] }},
-          {%- endfor -%}
-          IP:127.0.0.1
-        key_usage:
-          - digitalSignature
-          - keyEncipherment
-          - nonRepudiation
-        extended_key_usage:
-          - clientAuth
-          - serverAuth
-        basic_constraints: "CA:FALSE"
-      when: inventory_hostname == ansible_play_hosts[0]
-      delegate_to: "{{ ansible_play_hosts[0] }}"
-
-    - name: generate apiserver-etcd-client ownca certificate
-      openssl_certificate:
-        path: "/etc/kubernetes/pki/apiserver-etcd-client.crt"
-        csr_path: "/etc/kubernetes/pki/apiserver-etcd-client.csr"
-        privatekey_path: "/etc/kubernetes/pki/apiserver-etcd-client.key"
-        ownca_path: "/etc/etcd/pki/ca.crt"
-        ownca_privatekey_path: "/etc/etcd/pki/ca.key"
-        provider: "ownca"
-      when: inventory_hostname == ansible_play_hosts[0]
-      delegate_to: "{{ ansible_play_hosts[0] }}"
-
-    - name: base64 encode certificates
-      shell: |
-        set -o pipefail
-        tar zcf - -C / etc/kubernetes/pki | base64 -w 0
-      args:
-        executable: "/bin/bash"
-      delegate_to: "{{ ansible_play_hosts[0] }}"
-      register: base64_encode_result
-      changed_when: base64_encode_result is not succeeded
-
-    - name: base64 decode certificates
-      shell: |
-        set -o pipefail
-        echo -n {{ base64_encode_result.stdout | quote }} | base64 -d | tar zx -C /
-      args:
-        executable: "/bin/bash"
-      when: inventory_hostname != ansible_play_hosts[0]
-      register: base64_decode_result
-      changed_when: base64_decode_result is not succeeded
-
   roles:
     - role: kubernetes
 
@@ -142,6 +66,7 @@
         kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
       args:
         executable: "/bin/bash"
+      when: inventory_hostname == ansible_play_hosts[0]
       register: result
       until: result is succeeded
       changed_when: result is not succeeded

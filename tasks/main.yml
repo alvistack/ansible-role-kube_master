@@ -56,6 +56,7 @@
     - { dest: "/etc/kubernetes/addons" }
     - { dest: "/etc/kubernetes/manifests" }
     - { dest: "/etc/kubernetes/pki" }
+    - { dest: "/etc/kubernetes/pki/etcd" }
   tags: kubernetes
 
 - name: copy templates
@@ -69,12 +70,69 @@
     - { dest: "/etc/kubernetes/kubeadm.conf" }
   tags: kubernetes
 
+- name: generate apiserver-etcd-client private key
+  openssl_privatekey:
+    path: "/etc/kubernetes/pki/apiserver-etcd-client.key"
+  when: inventory_hostname == ansible_play_hosts[0]
+  delegate_to: "{{ ansible_play_hosts[0] }}"
+  tags: kubernetes
+
+- name: generate apiserver-etcd-client csr
+  openssl_csr:
+    path: "/etc/kubernetes/pki/apiserver-etcd-client.csr"
+    privatekey_path: "/etc/kubernetes/pki/apiserver-etcd-client.key"
+    common_name: "{{ ansible_play_hosts[0] }}"
+    subject:
+      CN: "{{ ansible_play_hosts[0] }}"
+    subject_alt_name: >-
+      {%- for host in ansible_play_hosts -%}
+      DNS:{{ host }},
+      {%- endfor -%}
+      DNS:localhost,
+      {%- for host in ansible_play_hosts -%}
+      IP:{{ hostvars[host]['ansible_default_ipv4']['address'] }},
+      {%- endfor -%}
+      IP:127.0.0.1
+    key_usage:
+      - digitalSignature
+      - keyEncipherment
+      - nonRepudiation
+    extended_key_usage:
+      - clientAuth
+      - serverAuth
+    basic_constraints: "CA:FALSE"
+  when: inventory_hostname == ansible_play_hosts[0]
+  delegate_to: "{{ ansible_play_hosts[0] }}"
+  tags: kubernetes
+
+- name: generate apiserver-etcd-client ownca certificate
+  openssl_certificate:
+    path: "/etc/kubernetes/pki/apiserver-etcd-client.crt"
+    csr_path: "/etc/kubernetes/pki/apiserver-etcd-client.csr"
+    privatekey_path: "/etc/kubernetes/pki/apiserver-etcd-client.key"
+    ownca_path: "/etc/etcd/pki/ca.crt"
+    ownca_privatekey_path: "/etc/etcd/pki/ca.key"
+    provider: "ownca"
+  when: inventory_hostname == ansible_play_hosts[0]
+  delegate_to: "{{ ansible_play_hosts[0] }}"
+  tags: kubernetes
+
+- name: copy etcd ca cert
+  copy:
+    src: "/etc/etcd/pki/ca.crt"
+    dest: "/etc/kubernetes/pki/etcd/ca.crt"
+    remote_src: true
+  when: inventory_hostname == ansible_play_hosts[0]
+  delegate_to: "{{ ansible_play_hosts[0] }}"
+  tags: kubernetes
+
 - name: kubeadm config images pull
   shell: |
     set -o pipefail
     kubeadm config images pull
   args:
     executable: "/bin/bash"
+  when: inventory_hostname == ansible_play_hosts[0]
   register: result
   until: result is succeeded
   changed_when: result is not succeeded
@@ -89,6 +147,44 @@
       --ignore-preflight-errors=all
   args:
     executable: "/bin/bash"
+  when: inventory_hostname == ansible_play_hosts[0]
+  register: result
+  until: result is succeeded
+  changed_when: result is not succeeded
+  ignore_errors: true
+  tags: kubernetes
+
+- name: base64 encode certificates
+  shell: |
+    set -o pipefail
+    tar zcfP - {{ _kubernetes_base64 | join(' ') }} | base64 -w 0
+  args:
+    executable: "/bin/bash"
+  delegate_to: "{{ ansible_play_hosts[0] }}"
+  register: base64_encode_result
+  changed_when: base64_encode_result is not succeeded
+  tags: kubernetes
+
+- name: base64 decode certificates
+  shell: |
+    set -o pipefail
+    echo -n {{ base64_encode_result.stdout | quote }} | base64 -d | tar zx -C /
+  args:
+    executable: "/bin/bash"
+  when: inventory_hostname != ansible_play_hosts[0]
+  register: base64_decode_result
+  changed_when: base64_decode_result is not succeeded
+  tags: kubernetes
+
+- name: kubeadm init
+  shell: |
+    set -o pipefail
+    kubeadm init \
+      --config=/etc/kubernetes/kubeadm.conf \
+      --ignore-preflight-errors=all
+  args:
+    executable: "/bin/bash"
+  when: inventory_hostname != ansible_play_hosts[0]
   register: result
   until: result is succeeded
   changed_when: result is not succeeded
