@@ -40,3 +40,17 @@ external_etcd_cert_file: "/etc/kubernetes/pki/apiserver-etcd-client.crt"
 
 # KeyFile is an SSL key file used to secure etcd communication.
 external_etcd_key_file: "/etc/kubernetes/pki/apiserver-etcd-client.key"
+
+# bindAddress is the IP address for the proxy server to serve on (set to 0.0.0.0
+# for all interfaces).
+kube_proxy_bind_address: "0.0.0.0"
+
+# masqueradeAll tells kube-proxy to SNAT everything if using the pure iptables proxy mode.
+kube_proxy_masquerade_all: false
+
+# masqueradeBit is the bit of the iptables fwmark space to use for SNAT if using
+# the pure iptables proxy mode. Values must be within the range [0, 31].
+kube_proxy_masquerade_bit: "14"
+
+# mode specifies which proxy mode to use.
+kube_proxy_mode: "iptables"

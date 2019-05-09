@@ -6,16 +6,7 @@ localAPIEndpoint:
 ---
 kind: ClusterConfiguration
 apiVersion: kubeadm.k8s.io/v1beta1
-apiServer:
-  extraArgs:
-    authorization-mode: Node,RBAC
-  timeoutForControlPlane: 4m0s
-certificatesDir: /etc/kubernetes/pki
 clusterName: {{ cluster_name }}
-controlPlaneEndpoint: ""
-controllerManager: {}
-dns:
-  type: CoreDNS
 etcd:
   external:
     endpoints:
@@ -25,10 +16,28 @@ etcd:
     caFile: {{ external_etcd_ca_file }}
     certFile: {{ external_etcd_cert_file }}
     keyFile: {{ external_etcd_key_file }}
-imageRepository: {{ image_repository }}
-kubernetesVersion: {{ kubernetes_version }}
 networking:
   dnsDomain: {{ dns_domain }}
   podSubnet: {{ pod_subnet }}
   serviceSubnet: {{ service_subnet }}
+kubernetesVersion: {{ kubernetes_version }}
+controlPlaneEndpoint: ""
+certificatesDir: /etc/kubernetes/pki
+imageRepository: {{ image_repository }}
+apiServer:
+  extraArgs:
+    authorization-mode: Node,RBAC
+  timeoutForControlPlane: 4m0s
+controllerManager: {}
 scheduler: {}
+dns:
+  type: CoreDNS
+---
+kind: KubeProxyConfiguration
+apiVersion: kubeproxy.config.k8s.io/v1alpha1
+bindAddress: {{ kube_proxy_bind_address }}
+clusterCIDR: {{ pod_subnet }}
+iptables:
+  masqueradeAll: {{ kube_proxy_masquerade_all }}
+  masqueradeBit: {{ kube_proxy_masquerade_bit }}
+mode: {{ kube_proxy_mode }}

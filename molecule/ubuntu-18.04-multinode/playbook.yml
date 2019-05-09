@@ -58,12 +58,13 @@
 
   roles:
     - role: kubernetes
+      pod_subnet: "10.244.0.0/16"
 
   post_tasks:
-    - name: install pod network add-on (weave)
+    - name: install pod network add-on (flannel)
       shell: |
         set -o pipefail
-        kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
+        kubectl apply -f "https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml"
       args:
         executable: "/bin/bash"
       when: inventory_hostname == ansible_play_hosts[0]
