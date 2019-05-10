@@ -30,6 +30,10 @@
   src: https://github.com/alvistack/ansible-role-etcd
   version: develop
 
+- name: etcd-certs
+  src: https://github.com/alvistack/ansible-role-etcd-certs
+  version: develop
+
 - name: kubeadm
   src: https://github.com/alvistack/ansible-role-kubeadm
   version: develop
@@ -40,6 +44,10 @@
 
 - name: kubelet
   src: https://github.com/alvistack/ansible-role-kubelet
+  version: develop
+
+- name: kubernetes-certs
+  src: https://github.com/alvistack/ansible-role-kubernetes-certs
   version: develop
 
 - name: kubernetes-cni

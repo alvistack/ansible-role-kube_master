@@ -107,10 +107,34 @@
   ignore_errors: true
   tags: kubernetes
 
+- name: copy /root/.kube/config
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: "{{ item.owner | default('root') }}"
+    group: "{{ item.group | default('root') }}"
+    mode: "{{ item.mode | default('0644') }}"
+    remote_src: true
+  with_items:
+    - { src: "/etc/kubernetes/admin.conf", dest: "/root/.kube/config", mode: "0600" }
+  when: inventory_hostname == ansible_play_hosts[0]
+  tags: kubernetes
+
 - name: base64 encode certificates
   shell: |
     set -o pipefail
-    tar zcfP - {{ _kubernetes_base64 | join(' ') }} | base64 -w 0
+    tar zcfP - {{ item.value | join(' ') }} | base64 -w 0
+  with_dict:
+    base64:
+      - "/etc/kubernetes/pki/ca.crt"
+      - "/etc/kubernetes/pki/ca.key"
+      - "/etc/kubernetes/pki/front-proxy-ca.crt"
+      - "/etc/kubernetes/pki/front-proxy-ca.key"
+      - "/etc/kubernetes/pki/sa.key"
+      - "/etc/kubernetes/pki/sa.pub"
+      - "{{ external_etcd_ca_file }}"
+      - "{{ external_etcd_cert_file }}"
+      - "{{ external_etcd_key_file }}"
   args:
     executable: "/bin/bash"
   delegate_to: "{{ ansible_play_hosts[0] }}"
@@ -121,7 +145,7 @@
 - name: base64 decode certificates
   shell: |
     set -o pipefail
-    echo -n {{ base64_encode_result.stdout | quote }} | base64 -d | tar zx -C /
+    echo -n {{ base64_encode_result.results[0].stdout | quote }} | base64 -d | tar zx -C /
   args:
     executable: "/bin/bash"
   when: inventory_hostname != ansible_play_hosts[0]
@@ -154,4 +178,5 @@
     remote_src: true
   with_items:
     - { src: "/etc/kubernetes/admin.conf", dest: "/root/.kube/config", mode: "0600" }
+  when: inventory_hostname != ansible_play_hosts[0]
   tags: kubernetes

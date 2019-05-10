@@ -21,7 +21,20 @@
     - role: bootstrap
     - role: python
     - role: docker
+    - role: etcd-certs
+      etcd_cert_file: "/etc/kubernetes/pki/etcd/server.crt"
+      etcd_key_file: "/etc/kubernetes/pki/etcd/server.key"
+      etcd_trusted_ca_file: "/etc/kubernetes/pki/etcd/ca.crt"
+      etcd_peer_cert_file: "/etc/kubernetes/pki/etcd/peer.crt"
+      etcd_peer_key_file: "/etc/kubernetes/pki/etcd/peer.key"
+      etcd_peer_trusted_ca_file: "/etc/kubernetes/pki/etcd/ca.crt"
     - role: etcd
+      etcd_cert_file: "/etc/kubernetes/pki/etcd/server.crt"
+      etcd_key_file: "/etc/kubernetes/pki/etcd/server.key"
+      etcd_trusted_ca_file: "/etc/kubernetes/pki/etcd/ca.crt"
+      etcd_peer_cert_file: "/etc/kubernetes/pki/etcd/peer.crt"
+      etcd_peer_key_file: "/etc/kubernetes/pki/etcd/peer.key"
+      etcd_peer_trusted_ca_file: "/etc/kubernetes/pki/etcd/ca.crt"
     - role: cri-tools
     - role: kubernetes-cni
     - role: kubectl
@@ -34,70 +47,8 @@
 - hosts: all
   become: true
   remote_user: root
-  pre_tasks:
-    - name: prepare directories
-      file:
-        dest: "{{ item.dest }}"
-        owner: "{{ item.owner | default('root') }}"
-        group: "{{ item.group | default('root') }}"
-        mode: "{{ item.mode | default('0755') }}"
-        state: "{{ item.state | default('directory') }}"
-      with_items:
-        - { dest: "/etc/kubernetes/pki/etcd" }
-
-    - name: generate apiserver-etcd-client private key
-      openssl_privatekey:
-        path: "/etc/kubernetes/pki/apiserver-etcd-client.key"
-      when: inventory_hostname == ansible_play_hosts[0]
-      delegate_to: "{{ ansible_play_hosts[0] }}"
-
-    - name: generate apiserver-etcd-client csr
-      openssl_csr:
-        path: "/etc/kubernetes/pki/apiserver-etcd-client.csr"
-        privatekey_path: "/etc/kubernetes/pki/apiserver-etcd-client.key"
-        common_name: "{{ ansible_play_hosts[0] }}"
-        subject:
-          CN: "{{ ansible_play_hosts[0] }}"
-        subject_alt_name: >-
-          {%- for host in ansible_play_hosts -%}
-          DNS:{{ host }},
-          {%- endfor -%}
-          DNS:localhost,
-          {%- for host in ansible_play_hosts -%}
-          IP:{{ hostvars[host]['ansible_default_ipv4']['address'] }},
-          {%- endfor -%}
-          IP:127.0.0.1
-        key_usage:
-          - digitalSignature
-          - keyEncipherment
-          - nonRepudiation
-        extended_key_usage:
-          - clientAuth
-          - serverAuth
-        basic_constraints: "CA:FALSE"
-      when: inventory_hostname == ansible_play_hosts[0]
-      delegate_to: "{{ ansible_play_hosts[0] }}"
-
-    - name: generate apiserver-etcd-client ownca certificate
-      openssl_certificate:
-        path: "/etc/kubernetes/pki/apiserver-etcd-client.crt"
-        csr_path: "/etc/kubernetes/pki/apiserver-etcd-client.csr"
-        privatekey_path: "/etc/kubernetes/pki/apiserver-etcd-client.key"
-        ownca_path: "/etc/etcd/pki/ca.crt"
-        ownca_privatekey_path: "/etc/etcd/pki/ca.key"
-        provider: "ownca"
-      when: inventory_hostname == ansible_play_hosts[0]
-      delegate_to: "{{ ansible_play_hosts[0] }}"
-
-    - name: copy etcd ca cert
-      copy:
-        src: "/etc/etcd/pki/ca.crt"
-        dest: "/etc/kubernetes/pki/etcd/ca.crt"
-        remote_src: true
-      when: inventory_hostname == ansible_play_hosts[0]
-      delegate_to: "{{ ansible_play_hosts[0] }}"
-
   roles:
+    - role: kubernetes-certs
     - role: kubernetes
 
   post_tasks:
