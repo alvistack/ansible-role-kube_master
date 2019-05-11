@@ -79,7 +79,7 @@
   with_items:
     - { dest: "/etc/kubernetes/kubeadm.conf" }
   tags: kubernetes
-  
+
 - name: generate apiserver-etcd-client private key
   openssl_privatekey:
     path: "/etc/kubernetes/pki/apiserver-etcd-client.key"
