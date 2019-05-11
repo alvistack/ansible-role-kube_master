@@ -13,9 +13,9 @@ etcd:
 {% for host in ansible_play_hosts %}
       - https://{{ hostvars[host]['ansible_default_ipv4']['address'] }}:2379
 {% endfor %}
-    caFile: {{ external_etcd_ca_file }}
-    certFile: {{ external_etcd_cert_file }}
-    keyFile: {{ external_etcd_key_file }}
+    caFile: /etc/kubernetes/pki/etcd/ca.crt
+    certFile: /etc/kubernetes/pki/apiserver-etcd-client.crt
+    keyFile: /etc/kubernetes/pki/apiserver-etcd-client.key
 networking:
   dnsDomain: {{ dns_domain }}
   podSubnet: {{ pod_subnet }}

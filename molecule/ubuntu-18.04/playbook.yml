@@ -21,13 +21,6 @@
     - role: bootstrap
     - role: python
     - role: docker
-    - role: etcd-certs
-      etcd_cert_file: "/etc/kubernetes/pki/etcd/server.crt"
-      etcd_key_file: "/etc/kubernetes/pki/etcd/server.key"
-      etcd_trusted_ca_file: "/etc/kubernetes/pki/etcd/ca.crt"
-      etcd_peer_cert_file: "/etc/kubernetes/pki/etcd/peer.crt"
-      etcd_peer_key_file: "/etc/kubernetes/pki/etcd/peer.key"
-      etcd_peer_trusted_ca_file: "/etc/kubernetes/pki/etcd/ca.crt"
     - role: etcd
       etcd_cert_file: "/etc/kubernetes/pki/etcd/server.crt"
       etcd_key_file: "/etc/kubernetes/pki/etcd/server.key"
@@ -48,7 +41,6 @@
   become: true
   remote_user: root
   roles:
-    - role: kubernetes-certs
     - role: kubernetes
 
   post_tasks:

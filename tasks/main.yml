@@ -79,6 +79,53 @@
   with_items:
     - { dest: "/etc/kubernetes/kubeadm.conf" }
   tags: kubernetes
+  
+- name: generate apiserver-etcd-client private key
+  openssl_privatekey:
+    path: "/etc/kubernetes/pki/apiserver-etcd-client.key"
+  when: inventory_hostname == ansible_play_hosts[0]
+  delegate_to: "{{ ansible_play_hosts[0] }}"
+  tags: kubernetes
+
+- name: generate apiserver-etcd-client csr
+  openssl_csr:
+    path: "/etc/kubernetes/pki/apiserver-etcd-client.csr"
+    privatekey_path: "/etc/kubernetes/pki/apiserver-etcd-client.key"
+    common_name: "{{ ansible_play_hosts[0] }}"
+    subject:
+      CN: "{{ ansible_play_hosts[0] }}"
+    subject_alt_name: >-
+      {%- for host in ansible_play_hosts -%}
+      DNS:{{ host }},
+      {%- endfor -%}
+      DNS:localhost,
+      {%- for host in ansible_play_hosts -%}
+      IP:{{ hostvars[host]['ansible_default_ipv4']['address'] }},
+      {%- endfor -%}
+      IP:127.0.0.1
+    key_usage:
+      - digitalSignature
+      - keyEncipherment
+      - nonRepudiation
+    extended_key_usage:
+      - clientAuth
+      - serverAuth
+    basic_constraints: "CA:FALSE"
+  when: inventory_hostname == ansible_play_hosts[0]
+  delegate_to: "{{ ansible_play_hosts[0] }}"
+  tags: kubernetes
+
+- name: generate apiserver-etcd-client ownca certificate
+  openssl_certificate:
+    path: "/etc/kubernetes/pki/apiserver-etcd-client.crt"
+    csr_path: "/etc/kubernetes/pki/apiserver-etcd-client.csr"
+    privatekey_path: "/etc/kubernetes/pki/apiserver-etcd-client.key"
+    ownca_path: "/etc/kubernetes/pki/etcd/ca.crt"
+    ownca_privatekey_path: "/etc/kubernetes/pki/etcd/ca.key"
+    provider: "ownca"
+  when: inventory_hostname == ansible_play_hosts[0]
+  delegate_to: "{{ ansible_play_hosts[0] }}"
+  tags: kubernetes
 
 - name: kubeadm config images pull
   shell: |
@@ -126,15 +173,16 @@
     tar zcfP - {{ item.value | join(' ') }} | base64 -w 0
   with_dict:
     base64:
+      - "/etc/kubernetes/pki/apiserver-etcd-client.crt"
+      - "/etc/kubernetes/pki/apiserver-etcd-client.key"
       - "/etc/kubernetes/pki/ca.crt"
       - "/etc/kubernetes/pki/ca.key"
+      - "/etc/kubernetes/pki/etcd/ca.crt"
+      - "/etc/kubernetes/pki/etcd/ca.key"
       - "/etc/kubernetes/pki/front-proxy-ca.crt"
       - "/etc/kubernetes/pki/front-proxy-ca.key"
       - "/etc/kubernetes/pki/sa.key"
       - "/etc/kubernetes/pki/sa.pub"
-      - "{{ external_etcd_ca_file }}"
-      - "{{ external_etcd_cert_file }}"
-      - "{{ external_etcd_key_file }}"
   args:
     executable: "/bin/bash"
   delegate_to: "{{ ansible_play_hosts[0] }}"
