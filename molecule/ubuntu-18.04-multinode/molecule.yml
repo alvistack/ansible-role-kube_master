@@ -15,18 +15,28 @@
 # limitations under the License.
 
 scenario:
-  name: centos-7-vagrant
+  name: ubuntu-18.04-multinode
 driver:
-  name: vagrant
-  provider:
-    name: virtualbox
+  name: lxd
 platforms:
   - name: ${MOLECULE_INSTANCE_NAME}-1
-    box: centos/7
-    cpu: 2
-    memory: 2048
-    provider_raw_config_args:
-      - "customize [ 'modifyvm', :id, '--uartmode1', 'disconnected' ]"
+    url: unix:/var/snap/lxd/common/lxd/unix.socket
+    source:
+      server: https://images.linuxcontainers.org
+      protocol: simplestreams
+      alias: ubuntu/bionic/amd64
+  - name: ${MOLECULE_INSTANCE_NAME}-2
+    url: unix:/var/snap/lxd/common/lxd/unix.socket
+    source:
+      server: https://images.linuxcontainers.org
+      protocol: simplestreams
+      alias: ubuntu/bionic/amd64
+  - name: ${MOLECULE_INSTANCE_NAME}-3
+    url: unix:/var/snap/lxd/common/lxd/unix.socket
+    source:
+      server: https://images.linuxcontainers.org
+      protocol: simplestreams
+      alias: ubuntu/bionic/amd64
 lint:
   name: yamllint
 dependency:

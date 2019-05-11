@@ -31,3 +31,17 @@ pod_subnet: "10.233.64.0/18"
 
 # ImageRepository sets the container registry to pull images from.
 image_repository: "k8s.gcr.io"
+
+# bindAddress is the IP address for the proxy server to serve on (set to 0.0.0.0
+# for all interfaces).
+kube_proxy_bind_address: "0.0.0.0"
+
+# masqueradeAll tells kube-proxy to SNAT everything if using the pure iptables proxy mode.
+kube_proxy_masquerade_all: false
+
+# masqueradeBit is the bit of the iptables fwmark space to use for SNAT if using
+# the pure iptables proxy mode. Values must be within the range [0, 31].
+kube_proxy_masquerade_bit: "14"
+
+# mode specifies which proxy mode to use.
+kube_proxy_mode: "iptables"

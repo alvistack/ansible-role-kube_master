@@ -22,12 +22,16 @@
   src: https://github.com/alvistack/ansible-role-docker
   version: develop
 
-- name: cni-plugins
-  src: https://github.com/alvistack/ansible-role-cni-plugins
-  version: develop
-
 - name: cri-tools
   src: https://github.com/alvistack/ansible-role-cri-tools
+  version: develop
+
+- name: etcd
+  src: https://github.com/alvistack/ansible-role-etcd
+  version: develop
+
+- name: kubeadm
+  src: https://github.com/alvistack/ansible-role-kubeadm
   version: develop
 
 - name: kubectl
@@ -38,6 +42,10 @@
   src: https://github.com/alvistack/ansible-role-kubelet
   version: develop
 
-- name: kubeadm
-  src: https://github.com/alvistack/ansible-role-kubeadm
+- name: kubernetes-cni
+  src: https://github.com/alvistack/ansible-role-kubernetes-cni
+  version: develop
+
+- name: python
+  src: https://github.com/alvistack/ansible-role-python
   version: develop

@@ -19,9 +19,17 @@
   remote_user: root
   roles:
     - role: bootstrap
+    - role: python
     - role: docker
-    - role: cni-plugins
+    - role: etcd
+      etcd_cert_file: "/etc/kubernetes/pki/etcd/server.crt"
+      etcd_key_file: "/etc/kubernetes/pki/etcd/server.key"
+      etcd_trusted_ca_file: "/etc/kubernetes/pki/etcd/ca.crt"
+      etcd_peer_cert_file: "/etc/kubernetes/pki/etcd/peer.crt"
+      etcd_peer_key_file: "/etc/kubernetes/pki/etcd/peer.key"
+      etcd_peer_trusted_ca_file: "/etc/kubernetes/pki/etcd/ca.crt"
     - role: cri-tools
+    - role: kubernetes-cni
     - role: kubectl
       kubectl_version: "{{ kubernetes_version }}"
     - role: kubelet
@@ -32,41 +40,6 @@
 - hosts: all
   become: true
   remote_user: root
-  pre_tasks:
-    - name: patch /etc/hostname
-      lineinfile:
-        path: "/etc/hosts"
-        regexp: "^{{ ansible_default_ipv4.address }} {{ ansible_hostname }}"
-        line: "{{ ansible_default_ipv4.address }} {{ ansible_hostname }}"
-        backrefs: true
-        state: "present"
-
-    - name: patch /etc/resolv.conf
-      file:
-        dest: "/etc/resolv.conf"
-        state: "file"
-        force: true
-
-    - name: patch /.dockerenv
-      copy:
-        dest: "/.dockerenv"
-        content: ""
-        force: false
-
-    - name: start service
-      service:
-        name: docker
-        state: started
-      changed_when: false
-      ignore_errors: true
-
-    - name: start service
-      service:
-        name: kubelet
-        state: started
-      changed_when: false
-      ignore_errors: true
-
   roles:
     - role: kubernetes
 
@@ -74,9 +47,10 @@
     - name: install pod network add-on (weave)
       shell: |
         set -o pipefail
-        kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
+        kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')&env.IPALLOC_RANGE={{ pod_subnet }}"
       args:
         executable: "/bin/bash"
+      when: inventory_hostname == ansible_play_hosts[0]
       register: result
       until: result is succeeded
       changed_when: result is not succeeded
