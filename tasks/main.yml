@@ -142,6 +142,7 @@
     - { dest: "/etc/kubernetes/pki/etcd/ca.crt" }
     - { dest: "/etc/kubernetes/pki/etcd/ca.key", mode: "0600" }
     - { dest: "/var/lib/kubelet/config.yaml" }
+  when: inventory_hostname == ansible_play_hosts[0]
   tags: kubernetes
 
 - name: kubeadm config images pull
@@ -198,6 +199,7 @@
     - { dest: "/etc/kubernetes/pki/front-proxy-ca.key", mode: "0600" }
     - { dest: "/etc/kubernetes/pki/sa.key", mode: "0600" }
     - { dest: "/etc/kubernetes/pki/sa.pub" }
+  when: inventory_hostname == ansible_play_hosts[0]
   tags: kubernetes
 
 - name: base64 encode certificates
