@@ -1,0 +1,25 @@
+---
+kind: KubeletConfiguration
+apiVersion: kubelet.config.k8s.io/v1beta1
+failSwapOn: false
+authentication:
+  anonymous:
+    enabled: false
+  webhook:
+    enabled: true
+  x509:
+    clientCAFile: /etc/kubernetes/pki/ca.crt
+authorization:
+  mode: Webhook
+enforceNodeAllocatable:
+  - pods
+staticPodPath: {{ kubelet_static_pod_path }}
+cgroupDriver: {{ kubelet_cgroup_driver }}
+maxPods: {{ kubelet_max_pods }}
+address: {{ kubelet_bind_address }}
+clusterDomain: {{ dns_domain }}
+SystemReserved:
+  {{ kubelet_system_reserved | to_nice_yaml }}
+kubeReserved:
+  {{ kubelet_kube_reserved | to_nice_yaml }}
+resolvConf: {{ kubelet_resolv_conf }}

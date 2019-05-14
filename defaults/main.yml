@@ -32,6 +32,36 @@ pod_subnet: "10.233.64.0/18"
 # ImageRepository sets the container registry to pull images from.
 image_repository: "k8s.gcr.io"
 
+# address is the IP address for the Kubelet to serve on (set to 0.0.0.0
+# for all interfaces).
+kubelet_bind_address: "0.0.0.0"
+
+# driver that the kubelet uses to manipulate cgroups on the host (cgroupfs or systemd)
+kubelet_cgroup_driver: "systemd"
+
+# maxPods is the number of pods that can run on this Kubelet.
+kubelet_max_pods: "110"
+
+# systemReserved is a set of ResourceName=ResourceQuantity (e.g. cpu=200m,memory=150G)
+# pairs that describe resources reserved for non-kubernetes components.
+kubelet_system_reserved:
+  cpu: "200m"
+  memory: "512M"
+
+# A set of ResourceName=ResourceQuantity (e.g. cpu=200m,memory=150G) pairs
+# that describe resources reserved for kubernetes system components.
+kubelet_kube_reserved:
+  cpu: "100m"
+  memory: "256M"
+
+# staticPodPath is the path to the directory containing local (static) pods to
+# run, or the path to a single static pod file.
+kubelet_static_pod_path: "/etc/kubernetes/manifests"
+
+# ResolverConfig is the resolver configuration file used as the basis
+# for the container DNS resolution configuration.
+kubelet_resolv_conf: "{{ _kubelet_resolv_conf }}"
+
 # bindAddress is the IP address for the proxy server to serve on (set to 0.0.0.0
 # for all interfaces).
 kube_proxy_bind_address: "0.0.0.0"
