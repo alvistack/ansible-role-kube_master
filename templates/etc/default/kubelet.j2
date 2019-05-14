@@ -1,0 +1,11 @@
+KUBELET_EXTRA_ARGS=" \
+--address={{ kubelet_bind_address }} \
+--cgroup-driver={{ kubelet_cgroup_driver }} \
+--cluster-domain={{ dns_domain }} \
+--kube-reserved={{ kubelet_kube_reserved }} \
+--max-pods={{ kubelet_max_pods }} \
+--network-plugin={{ kubelet_network_plugin }} \
+--pod-manifest-path={{ kubelet_pod_manifest_path }} \
+--resolv-conf={{ kubelet_resolv_conf }} \
+--system-reserved={{ kubelet_system_reserved }} \
+"

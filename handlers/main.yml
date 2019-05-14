@@ -14,9 +14,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: systemctl daemon-reload
+- name: kubernetes | systemctl daemon-reload
   systemd:
     daemon_reload: true
+  when:
+    - ansible_service_mgr == 'systemd'
+  changed_when: false
+  ignore_errors: true
+
+- name: kubernetes | systemctl restart
+  systemd:
+    name: "{{ item.name }}"
+    state: restarted
+  with_items:
+    - { name: "docker" }
+    - { name: "etcd" }
+    - { name: "kubelet" }
   when:
     - ansible_service_mgr == 'systemd'
   changed_when: false

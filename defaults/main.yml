@@ -39,24 +39,24 @@ kubelet_bind_address: "0.0.0.0"
 # driver that the kubelet uses to manipulate cgroups on the host (cgroupfs or systemd)
 kubelet_cgroup_driver: "systemd"
 
+# The name of the network plugin to be invoked for various events in
+# kubelet/pod lifecycle.
+kubelet_network_plugin: "cni"
+
 # maxPods is the number of pods that can run on this Kubelet.
 kubelet_max_pods: "110"
 
 # systemReserved is a set of ResourceName=ResourceQuantity (e.g. cpu=200m,memory=150G)
 # pairs that describe resources reserved for non-kubernetes components.
-kubelet_system_reserved:
-  cpu: "200m"
-  memory: "512M"
+kubelet_system_reserved: "cpu=200m,memory=512M"
 
 # A set of ResourceName=ResourceQuantity (e.g. cpu=200m,memory=150G) pairs
 # that describe resources reserved for kubernetes system components.
-kubelet_kube_reserved:
-  cpu: "100m"
-  memory: "256M"
+kubelet_kube_reserved: "cpu=100m,memory=256M"
 
 # staticPodPath is the path to the directory containing local (static) pods to
 # run, or the path to a single static pod file.
-kubelet_static_pod_path: "/etc/kubernetes/manifests"
+kubelet_pod_manifest_path: "/etc/kubernetes/manifests"
 
 # ResolverConfig is the resolver configuration file used as the basis
 # for the container DNS resolution configuration.
