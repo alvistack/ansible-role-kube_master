@@ -85,6 +85,8 @@
     - { state: "started", name: "etcd" }
     - { state: "started", name: "docker" }
     - { state: "started", name: "kubelet" }
+  changed_when: false
+  ignore_errors: true
   tags: kubernetes
 
 - name: generate apiserver-etcd-client private key
