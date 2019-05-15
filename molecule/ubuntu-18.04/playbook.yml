@@ -21,13 +21,6 @@
     - role: bootstrap
     - role: python
     - role: docker
-    - role: etcd
-      etcd_cert_file: "/etc/kubernetes/pki/etcd/server.crt"
-      etcd_key_file: "/etc/kubernetes/pki/etcd/server.key"
-      etcd_trusted_ca_file: "/etc/kubernetes/pki/etcd/ca.crt"
-      etcd_peer_cert_file: "/etc/kubernetes/pki/etcd/peer.crt"
-      etcd_peer_key_file: "/etc/kubernetes/pki/etcd/peer.key"
-      etcd_peer_trusted_ca_file: "/etc/kubernetes/pki/etcd/ca.crt"
     - role: cri-tools
     - role: kubernetes-cni
     - role: kubectl
@@ -37,17 +30,26 @@
     - role: kubeadm
       kubeadm_version: "{{ kubernetes_version }}"
 
-- hosts: all
+- hosts: kube-master
   become: true
   remote_user: root
   roles:
+    - role: etcd
+      etcd_cert_file: "/etc/kubernetes/pki/etcd/server.crt"
+      etcd_key_file: "/etc/kubernetes/pki/etcd/server.key"
+      etcd_trusted_ca_file: "/etc/kubernetes/pki/etcd/ca.crt"
+      etcd_peer_cert_file: "/etc/kubernetes/pki/etcd/peer.crt"
+      etcd_peer_key_file: "/etc/kubernetes/pki/etcd/peer.key"
+      etcd_peer_trusted_ca_file: "/etc/kubernetes/pki/etcd/ca.crt"
     - role: kubernetes
 
   post_tasks:
-    - name: install pod network add-on (weave)
+    - name: install pod network add-on (flannel)
       shell: |
         set -o pipefail
-        kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')&env.IPALLOC_RANGE={{ pod_subnet }}"
+        curl -skL https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml > /tmp/kube-flannel.yml
+        sed -i 's/{{ "10.244.0.0/16" | regex_escape() }}/{{ pod_subnet | regex_escape() }}/g' /tmp/kube-flannel.yml
+        kubectl apply -f /tmp/kube-flannel.yml
       args:
         executable: "/bin/bash"
       when: inventory_hostname == ansible_play_hosts[0]
@@ -59,3 +61,42 @@
       command: kubectl version
       register: result
       changed_when: result is not succeeded
+
+- hosts: kube-node
+  become: true
+  remote_user: root
+  tasks:
+    - name: kubeadm token create
+      shell: |
+        set -o pipefail
+        kubeadm token create --print-join-command
+      args:
+        executable: "/bin/bash"
+      delegate_to: "{{ groups['kube-master'][0] }}"
+      register: result
+      until: result is succeeded
+      changed_when: result is not succeeded
+      ignore_errors: true
+
+    - name: kubeadm init
+      shell: |
+        set -o pipefail
+        {{ result.stdout }} \
+          --ignore-preflight-errors=all
+      register: result
+      until: result is succeeded
+      changed_when: result is not succeeded
+      ignore_errors: true
+
+    - name: kubectl taint nodes
+      shell: |
+        set -o pipefail
+        kubectl taint nodes {{ ansible_hostname }} \
+          node-role.kubernetes.io/master-
+      args:
+        executable: "/bin/bash"
+      delegate_to: "{{ groups['kube-master'][0] }}"
+      register: result
+      until: result is succeeded
+      changed_when: result is not succeeded
+      ignore_errors: true
