@@ -80,6 +80,8 @@
         set -o pipefail
         {{ result.stdout }} \
           --ignore-preflight-errors=all
+      args:
+        executable: "/bin/bash"
       register: result
       until: result is succeeded
       changed_when: result is not succeeded
