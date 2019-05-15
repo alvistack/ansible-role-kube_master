@@ -92,11 +92,8 @@
       shell: |
         set -o pipefail
         kubectl taint nodes {{ ansible_hostname }} \
-          node-role.kubernetes.io/master-
+          node-role.kubernetes.io/master:NoSchedule-
       args:
         executable: "/bin/bash"
       delegate_to: "{{ groups['kube-master'][0] }}"
-      register: result
-      until: result is succeeded
-      changed_when: result is not succeeded
-      ignore_errors: true
+      failed_when: false
