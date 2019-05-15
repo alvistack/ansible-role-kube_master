@@ -96,4 +96,5 @@
       args:
         executable: "/bin/bash"
       delegate_to: "{{ groups['kube-master'][0] }}"
-      failed_when: false
+      changed_when: false
+      ignore_errors: true
