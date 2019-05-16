@@ -3,10 +3,14 @@ kind: InitConfiguration
 apiVersion: kubeadm.k8s.io/v1beta1
 localAPIEndpoint:
   advertiseAddress: {{ ansible_default_ipv4.address }}
+nodeRegistration:
+  name: {{ inventory_hostname }}
+  criSocket: /var/run/dockershim.sock
+  taints: []
 ---
 kind: ClusterConfiguration
 apiVersion: kubeadm.k8s.io/v1beta1
-clusterName: {{ cluster_name }}
+clusterName: {{ kubernetes_cluster_name }}
 etcd:
   external:
     endpoints:
@@ -17,13 +21,13 @@ etcd:
     certFile: /etc/kubernetes/pki/apiserver-etcd-client.crt
     keyFile: /etc/kubernetes/pki/apiserver-etcd-client.key
 networking:
-  dnsDomain: {{ dns_domain }}
-  podSubnet: {{ pod_subnet }}
-  serviceSubnet: {{ service_subnet }}
+  dnsDomain: {{ kubernetes_dns_domain }}
+  podSubnet: {{ kubernetes_pod_subnet }}
+  serviceSubnet: {{ kubernetes_service_subnet }}
 kubernetesVersion: {{ kubernetes_version }}
 controlPlaneEndpoint: ""
 certificatesDir: /etc/kubernetes/pki
-imageRepository: {{ image_repository }}
+imageRepository: {{ kubernetes_image_repository }}
 apiServer:
   extraArgs:
     authorization-mode: Node,RBAC
@@ -51,7 +55,7 @@ staticPodPath: {{ kubelet_static_pod_path }}
 cgroupDriver: {{ kubelet_cgroup_driver }}
 maxPods: {{ kubelet_max_pods }}
 address: {{ kubelet_bind_address }}
-clusterDomain: {{ dns_domain }}
+clusterDomain: {{ kubernetes_dns_domain }}
 {% if kubelet_system_reserved %}
 systemReserved:
   {{ kubelet_system_reserved | to_nice_yaml | indent(2) }}
@@ -65,7 +69,7 @@ resolvConf: {{ kubelet_resolv_conf }}
 kind: KubeProxyConfiguration
 apiVersion: kubeproxy.config.k8s.io/v1alpha1
 bindAddress: {{ kube_proxy_bind_address }}
-clusterCIDR: {{ pod_subnet }}
+clusterCIDR: {{ kubernetes_pod_subnet }}
 iptables:
   masqueradeAll: {{ kube_proxy_masquerade_all | bool | lower }}
   masqueradeBit: {{ kube_proxy_masquerade_bit }}

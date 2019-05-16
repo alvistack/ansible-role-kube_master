@@ -18,19 +18,19 @@
 kubernetes_version: "v1.14.1"
 
 # Kubernetes cluster name.
-cluster_name: "kubernetes"
+kubernetes_cluster_name: "kubernetes"
 
 # DNSDomain is the dns domain used by k8s services. Defaults to "cluster.local".
-dns_domain: "cluster.local"
+kubernetes_dns_domain: "cluster.local"
 
 # ServiceSubnet is the subnet used by k8s services. Defaults to "10.96.0.0/12".
-service_subnet: "10.233.0.0/18"
+kubernetes_service_subnet: "10.233.0.0/18"
 
 # PodSubnet is the subnet used by pods.
-pod_subnet: "10.233.64.0/18"
+kubernetes_pod_subnet: "10.233.64.0/18"
 
 # ImageRepository sets the container registry to pull images from.
-image_repository: "k8s.gcr.io"
+kubernetes_image_repository: "k8s.gcr.io"
 
 # address is the IP address for the Kubelet to serve on (set to 0.0.0.0
 # for all interfaces).

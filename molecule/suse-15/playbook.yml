@@ -45,7 +45,7 @@
       shell: |
         set -o pipefail
         curl -skL https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml > /tmp/kube-flannel.yml
-        sed -i 's/{{ "10.244.0.0/16" | regex_escape() }}/{{ pod_subnet | regex_escape() }}/g' /tmp/kube-flannel.yml
+        sed -i 's/{{ "10.244.0.0/16" | regex_escape() }}/{{ kubernetes_pod_subnet | regex_escape() }}/g' /tmp/kube-flannel.yml
         kubectl apply -f /tmp/kube-flannel.yml
       args:
         executable: "/bin/bash"
@@ -85,15 +85,4 @@
       register: result
       until: result is succeeded
       changed_when: result is not succeeded
-      ignore_errors: true
-
-    - name: kubectl taint nodes
-      shell: |
-        set -o pipefail
-        kubectl taint nodes {{ ansible_hostname }} \
-          node-role.kubernetes.io/master:NoSchedule-
-      args:
-        executable: "/bin/bash"
-      delegate_to: "{{ groups['kube-master'][0] }}"
-      changed_when: false
       ignore_errors: true
