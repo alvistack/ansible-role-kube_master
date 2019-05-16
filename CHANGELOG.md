@@ -6,7 +6,7 @@
 
   - Setting up cluster with external etcd nodes
   - Manually generate apiserver-etcd-client certs from etcd ca certs
-  - Only use weave for single node tests (see https://github.com/weaveworks/weave/issues/3438)
+  - Only use weave for single node tests (see <https://github.com/weaveworks/weave/issues/3438>)
   - Use flannel for multi node tests with LXD
 
 ## 2.6.0 - 2019-05-04
