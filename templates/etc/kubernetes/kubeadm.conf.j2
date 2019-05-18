@@ -22,6 +22,7 @@ nodeRegistration:
   name: {{ inventory_hostname }}
   criSocket: /var/run/dockershim.sock
   taints: []
+
 ---
 apiVersion: kubeadm.k8s.io/v1beta1
 kind: ClusterConfiguration
@@ -51,6 +52,7 @@ controllerManager: {}
 scheduler: {}
 dns:
   type: CoreDNS
+
 ---
 apiVersion: kubelet.config.k8s.io/v1beta1
 kind: KubeletConfiguration
@@ -80,6 +82,7 @@ kubeReserved:
   {{ kubelet_kube_reserved | to_nice_yaml | indent(2) }}
 {%- endif %}
 resolvConf: {{ kubelet_resolv_conf }}
+
 ---
 apiVersion: kubeproxy.config.k8s.io/v1alpha1
 kind: KubeProxyConfiguration
