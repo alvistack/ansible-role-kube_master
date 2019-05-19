@@ -75,11 +75,11 @@ address: {{ kubelet_bind_address }}
 clusterDomain: {{ kubernetes_dns_domain }}
 {% if kubelet_system_reserved %}
 systemReserved:
-  {{ kubelet_system_reserved | to_nice_yaml | indent(2) }}
+  {{ kubelet_system_reserved | to_nice_yaml(indent=2) | indent(2) }}
 {%- endif %}
 {% if kubelet_kube_reserved %}
 kubeReserved:
-  {{ kubelet_kube_reserved | to_nice_yaml | indent(2) }}
+  {{ kubelet_kube_reserved | to_nice_yaml(indent=2) | indent(2) }}
 {%- endif %}
 resolvConf: {{ kubelet_resolv_conf }}
 
