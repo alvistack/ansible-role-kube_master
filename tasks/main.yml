@@ -23,10 +23,11 @@
         - "{{ ansible_os_family | lower }}-{{ ansible_distribution_major_version | lower }}.yml"
         - "{{ ansible_distribution | lower }}.yml"
         - "{{ ansible_os_family | lower }}.yml"
+        - "main.yml"
       paths: "../vars"
-      skip: true
   loop_control:
     loop_var: "loop_var"
+  ignore_errors: true
   tags: kubernetes
 
 - name: include release specific tasks
@@ -39,9 +40,9 @@
         - "{{ ansible_distribution | lower }}.yml"
         - "{{ ansible_os_family | lower }}.yml"
       paths: "."
-      skip: true
   loop_control:
     loop_var: "loop_var"
+  ignore_errors: true
   tags: kubernetes
 
 - name: prepare directories
@@ -67,7 +68,6 @@
     group: "{{ item.group | default('root') }}"
     mode: "{{ item.mode | default('0644') }}"
   with_items:
-    - { dest: "/etc/default/kubelet" }
     - { dest: "/etc/kubernetes/kubeadm.conf" }
   notify:
     - kubernetes | systemctl daemon-reload
@@ -86,6 +86,8 @@
     - { state: "started", name: "etcd" }
     - { state: "started", name: "docker" }
     - { state: "started", name: "kubelet" }
+  changed_when: false
+  ignore_errors: true
   tags: kubernetes
 
 - name: generate apiserver-etcd-client private key
@@ -143,7 +145,6 @@
     mode: "{{ item.mode | default('0644') }}"
     state: "{{ item.state | default('file') }}"
   with_items:
-    - { dest: "/etc/default/kubelet" }
     - { dest: "/etc/kubernetes/kubeadm.conf" }
     - { dest: "/etc/kubernetes/pki/apiserver-etcd-client.crt" }
     - { dest: "/etc/kubernetes/pki/apiserver-etcd-client.key", mode: "0600" }

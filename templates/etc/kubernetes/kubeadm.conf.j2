@@ -1,12 +1,32 @@
 ---
-kind: InitConfiguration
+
+# (c) Wong Hoi Sing Edison <hswong3i@pantarei-design.com>
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 apiVersion: kubeadm.k8s.io/v1beta1
+kind: InitConfiguration
 localAPIEndpoint:
   advertiseAddress: {{ ansible_default_ipv4.address }}
+nodeRegistration:
+  name: {{ inventory_hostname }}
+  criSocket: /var/run/dockershim.sock
+  taints: []
+
 ---
-kind: ClusterConfiguration
 apiVersion: kubeadm.k8s.io/v1beta1
-clusterName: {{ cluster_name }}
+kind: ClusterConfiguration
+clusterName: {{ kubernetes_cluster_name }}
 etcd:
   external:
     endpoints:
@@ -17,13 +37,13 @@ etcd:
     certFile: /etc/kubernetes/pki/apiserver-etcd-client.crt
     keyFile: /etc/kubernetes/pki/apiserver-etcd-client.key
 networking:
-  dnsDomain: {{ dns_domain }}
-  podSubnet: {{ pod_subnet }}
-  serviceSubnet: {{ service_subnet }}
+  dnsDomain: {{ kubernetes_dns_domain }}
+  podSubnet: {{ kubernetes_pod_subnet }}
+  serviceSubnet: {{ kubernetes_service_subnet }}
 kubernetesVersion: {{ kubernetes_version }}
 controlPlaneEndpoint: ""
 certificatesDir: /etc/kubernetes/pki
-imageRepository: {{ image_repository }}
+imageRepository: {{ kubernetes_image_repository }}
 apiServer:
   extraArgs:
     authorization-mode: Node,RBAC
@@ -32,12 +52,43 @@ controllerManager: {}
 scheduler: {}
 dns:
   type: CoreDNS
+
 ---
-kind: KubeProxyConfiguration
+apiVersion: kubelet.config.k8s.io/v1beta1
+kind: KubeletConfiguration
+failSwapOn: {{ kubelet_fail_swap_on | bool | lower }}
+authentication:
+  anonymous:
+    enabled: false
+  webhook:
+    enabled: true
+  x509:
+    clientCAFile: /etc/kubernetes/pki/ca.crt
+authorization:
+  mode: Webhook
+enforceNodeAllocatable:
+  - pods
+staticPodPath: {{ kubelet_static_pod_path }}
+cgroupDriver: {{ kubelet_cgroup_driver }}
+maxPods: {{ kubelet_max_pods }}
+address: {{ kubelet_bind_address }}
+clusterDomain: {{ kubernetes_dns_domain }}
+{% if kubelet_system_reserved %}
+systemReserved:
+  {{ kubelet_system_reserved | to_nice_yaml(indent=2) | indent(2) }}
+{%- endif %}
+{% if kubelet_kube_reserved %}
+kubeReserved:
+  {{ kubelet_kube_reserved | to_nice_yaml(indent=2) | indent(2) }}
+{%- endif %}
+resolvConf: {{ kubelet_resolv_conf }}
+
+---
 apiVersion: kubeproxy.config.k8s.io/v1alpha1
+kind: KubeProxyConfiguration
 bindAddress: {{ kube_proxy_bind_address }}
-clusterCIDR: {{ pod_subnet }}
+clusterCIDR: {{ kubernetes_pod_subnet }}
 iptables:
-  masqueradeAll: {{ kube_proxy_masquerade_all }}
+  masqueradeAll: {{ kube_proxy_masquerade_all | bool | lower }}
   masqueradeBit: {{ kube_proxy_masquerade_bit }}
 mode: {{ kube_proxy_mode }}

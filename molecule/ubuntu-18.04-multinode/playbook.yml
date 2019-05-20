@@ -21,6 +21,16 @@
     - role: bootstrap
     - role: python
     - role: docker
+    - role: cri-tools
+    - role: kubernetes-cni
+    - role: kubectl
+    - role: kubelet
+    - role: kubeadm
+
+- hosts: kube-master
+  become: true
+  remote_user: root
+  roles:
     - role: etcd
       etcd_cert_file: "/etc/kubernetes/pki/etcd/server.crt"
       etcd_key_file: "/etc/kubernetes/pki/etcd/server.key"
@@ -28,19 +38,6 @@
       etcd_peer_cert_file: "/etc/kubernetes/pki/etcd/peer.crt"
       etcd_peer_key_file: "/etc/kubernetes/pki/etcd/peer.key"
       etcd_peer_trusted_ca_file: "/etc/kubernetes/pki/etcd/ca.crt"
-    - role: cri-tools
-    - role: kubernetes-cni
-    - role: kubectl
-      kubectl_version: "{{ kubernetes_version }}"
-    - role: kubelet
-      kubelet_version: "{{ kubernetes_version }}"
-    - role: kubeadm
-      kubeadm_version: "{{ kubernetes_version }}"
-
-- hosts: all
-  become: true
-  remote_user: root
-  roles:
     - role: kubernetes
 
   post_tasks:
@@ -48,7 +45,7 @@
       shell: |
         set -o pipefail
         curl -skL https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml > /tmp/kube-flannel.yml
-        sed -i 's/{{ "10.244.0.0/16" | regex_escape() }}/{{ pod_subnet | regex_escape() }}/g' /tmp/kube-flannel.yml
+        sed -i 's/{{ "10.244.0.0/16" | regex_escape() }}/{{ kubernetes_pod_subnet | regex_escape() }}/g' /tmp/kube-flannel.yml
         kubectl apply -f /tmp/kube-flannel.yml
       args:
         executable: "/bin/bash"
@@ -61,3 +58,31 @@
       command: kubectl version
       register: result
       changed_when: result is not succeeded
+
+- hosts: kube-node
+  become: true
+  remote_user: root
+  tasks:
+    - name: kubeadm token create
+      shell: |
+        set -o pipefail
+        kubeadm token create --print-join-command
+      args:
+        executable: "/bin/bash"
+      delegate_to: "{{ groups['kube-master'][0] }}"
+      register: result
+      until: result is succeeded
+      changed_when: result is not succeeded
+      ignore_errors: true
+
+    - name: kubeadm init
+      shell: |
+        set -o pipefail
+        {{ result.stdout }} \
+          --ignore-preflight-errors=all
+      args:
+        executable: "/bin/bash"
+      register: result
+      until: result is succeeded
+      changed_when: result is not succeeded
+      ignore_errors: true

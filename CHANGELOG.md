@@ -1,12 +1,20 @@
 # Ansible Role for Kubernetes
 
-## 2.7.0 - TBC
+## 3.1.0 - TBC
 
 ### Major Changes
 
+## 3.0.0 - 2019-05-20
+
+### Major Changes
+
+  - Upgrade minimal Ansible support to 2.8.0
+  - Improve handlers implementation
+  - Restart service if templates changed
   - Setting up cluster with external etcd nodes
   - Manually generate apiserver-etcd-client certs from etcd ca certs
-  - Only use weave for single node tests (see https://github.com/weaveworks/weave/issues/3438)
+  - Join all remaining master nodes after first master node initialized
+  - Manually test with worker node join by `kubeadm`
   - Use flannel for multi node tests with LXD
 
 ## 2.6.0 - 2019-05-04
