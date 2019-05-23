@@ -74,27 +74,13 @@
     - kubernetes | systemctl restart
   tags: kubernetes
 
-- name: flush handlers
-  meta: flush_handlers
-  tags: kubernetes
-
-- name: start services
-  service:
-    name: "{{ item.name }}"
-    state: "{{ item.state }}"
-  with_items:
-    - { state: "started", name: "etcd" }
-    - { state: "started", name: "docker" }
-    - { state: "started", name: "kubelet" }
-  changed_when: false
-  ignore_errors: true
-  tags: kubernetes
-
 - name: generate apiserver-etcd-client private key
   openssl_privatekey:
     path: "/etc/kubernetes/pki/apiserver-etcd-client.key"
   when: inventory_hostname == ansible_play_hosts[0]
   delegate_to: "{{ ansible_play_hosts[0] }}"
+  notify:
+    - kubernetes | systemctl restart
   tags: kubernetes
 
 - name: generate apiserver-etcd-client csr
@@ -123,6 +109,8 @@
     basic_constraints: "CA:FALSE"
   when: inventory_hostname == ansible_play_hosts[0]
   delegate_to: "{{ ansible_play_hosts[0] }}"
+  notify:
+    - kubernetes | systemctl restart
   tags: kubernetes
 
 - name: generate apiserver-etcd-client ownca certificate
@@ -135,6 +123,24 @@
     provider: "ownca"
   when: inventory_hostname == ansible_play_hosts[0]
   delegate_to: "{{ ansible_play_hosts[0] }}"
+  notify:
+    - kubernetes | systemctl restart
+  tags: kubernetes
+
+- name: flush handlers
+  meta: flush_handlers
+  tags: kubernetes
+
+- name: start services
+  service:
+    name: "{{ item.name }}"
+    state: "{{ item.state }}"
+  with_items:
+    - { state: "started", name: "etcd" }
+    - { state: "started", name: "docker" }
+    - { state: "started", name: "kubelet" }
+  changed_when: false
+  ignore_errors: true
   tags: kubernetes
 
 - name: prepare files
