@@ -15,7 +15,6 @@
 # limitations under the License.
 
 - hosts: all
-  become: true
   remote_user: root
   become: true
   roles:
@@ -29,7 +28,6 @@
     - role: kubeadm
 
 - hosts: kube-master
-  become: true
   remote_user: root
   become: true
   roles:
@@ -62,7 +60,6 @@
       changed_when: result is not succeeded
 
 - hosts: kube-node
-  become: true
   remote_user: root
   become: true
   tasks:
