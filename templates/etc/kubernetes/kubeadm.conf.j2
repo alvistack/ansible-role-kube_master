@@ -19,7 +19,7 @@ kind: InitConfiguration
 localAPIEndpoint:
   advertiseAddress: {{ ansible_default_ipv4.address }}
 nodeRegistration:
-  name: {{ inventory_hostname }}
+  name: {{ ansible_hostname }}
   criSocket: /var/run/dockershim.sock
   taints: []
 
