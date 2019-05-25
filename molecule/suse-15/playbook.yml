@@ -17,6 +17,7 @@
 - hosts: all
   become: true
   remote_user: root
+  become: true
   roles:
     - role: bootstrap
     - role: python
@@ -30,6 +31,7 @@
 - hosts: kube-master
   become: true
   remote_user: root
+  become: true
   roles:
     - role: etcd
       etcd_cert_file: "/etc/kubernetes/pki/etcd/server.crt"
@@ -62,6 +64,7 @@
 - hosts: kube-node
   become: true
   remote_user: root
+  become: true
   tasks:
     - name: kubeadm token create
       shell: |
