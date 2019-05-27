@@ -24,7 +24,7 @@ platforms:
   - name: ${MOLECULE_INSTANCE_NAME}-1
     box: ubuntu/bionic64
     cpu: 2
-    memory: 1024
+    memory: 2048
     provision: true
     instance_raw_config_args:
       - "vm.network 'public_network', use_dhcp_assigned_default_route: true, bridge: 'wlp2s0'"
@@ -39,7 +39,7 @@ platforms:
   - name: ${MOLECULE_INSTANCE_NAME}-2
     box: ubuntu/bionic64
     cpu: 2
-    memory: 1024
+    memory: 2048
     provision: true
     instance_raw_config_args:
       - "vm.network 'public_network', use_dhcp_assigned_default_route: true, bridge: 'wlp2s0'"
@@ -54,7 +54,7 @@ platforms:
   - name: ${MOLECULE_INSTANCE_NAME}-3
     box: ubuntu/bionic64
     cpu: 2
-    memory: 1024
+    memory: 2048
     provision: true
     instance_raw_config_args:
       - "vm.network 'public_network', use_dhcp_assigned_default_route: true, bridge: 'wlp2s0'"
@@ -69,7 +69,7 @@ platforms:
   - name: ${MOLECULE_INSTANCE_NAME}-4
     box: ubuntu/bionic64
     cpu: 2
-    memory: 1024
+    memory: 2048
     provision: true
     instance_raw_config_args:
       - "vm.network 'public_network', use_dhcp_assigned_default_route: true, bridge: 'wlp2s0'"
