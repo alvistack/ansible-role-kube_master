@@ -74,27 +74,13 @@
     - kubernetes | systemctl restart
   tags: kubernetes
 
-- name: flush handlers
-  meta: flush_handlers
-  tags: kubernetes
-
-- name: start services
-  service:
-    name: "{{ item.name }}"
-    state: "{{ item.state }}"
-  with_items:
-    - { state: "started", name: "etcd" }
-    - { state: "started", name: "docker" }
-    - { state: "started", name: "kubelet" }
-  changed_when: false
-  ignore_errors: true
-  tags: kubernetes
-
 - name: generate apiserver-etcd-client private key
   openssl_privatekey:
     path: "/etc/kubernetes/pki/apiserver-etcd-client.key"
-  when: inventory_hostname == ansible_play_hosts[0]
+  when: ansible_hostname == ansible_play_hosts[0]
   delegate_to: "{{ ansible_play_hosts[0] }}"
+  notify:
+    - kubernetes | systemctl restart
   tags: kubernetes
 
 - name: generate apiserver-etcd-client csr
@@ -121,8 +107,10 @@
       - clientAuth
       - serverAuth
     basic_constraints: "CA:FALSE"
-  when: inventory_hostname == ansible_play_hosts[0]
+  when: ansible_hostname == ansible_play_hosts[0]
   delegate_to: "{{ ansible_play_hosts[0] }}"
+  notify:
+    - kubernetes | systemctl restart
   tags: kubernetes
 
 - name: generate apiserver-etcd-client ownca certificate
@@ -133,8 +121,26 @@
     ownca_path: "/etc/kubernetes/pki/etcd/ca.crt"
     ownca_privatekey_path: "/etc/kubernetes/pki/etcd/ca.key"
     provider: "ownca"
-  when: inventory_hostname == ansible_play_hosts[0]
+  when: ansible_hostname == ansible_play_hosts[0]
   delegate_to: "{{ ansible_play_hosts[0] }}"
+  notify:
+    - kubernetes | systemctl restart
+  tags: kubernetes
+
+- name: flush handlers
+  meta: flush_handlers
+  tags: kubernetes
+
+- name: start services
+  service:
+    name: "{{ item.name }}"
+    state: "{{ item.state }}"
+  with_items:
+    - { state: "started", name: "etcd" }
+    - { state: "started", name: "docker" }
+    - { state: "started", name: "kubelet" }
+  changed_when: false
+  ignore_errors: true
   tags: kubernetes
 
 - name: prepare files
@@ -150,7 +156,7 @@
     - { dest: "/etc/kubernetes/pki/apiserver-etcd-client.key", mode: "0600" }
     - { dest: "/etc/kubernetes/pki/etcd/ca.crt" }
     - { dest: "/etc/kubernetes/pki/etcd/ca.key", mode: "0600" }
-  when: inventory_hostname == ansible_play_hosts[0]
+  when: ansible_hostname == ansible_play_hosts[0]
   tags: kubernetes
 
 - name: kubeadm config images pull
@@ -173,7 +179,7 @@
       --ignore-preflight-errors=all
   args:
     executable: "/bin/bash"
-  when: inventory_hostname == ansible_play_hosts[0]
+  when: ansible_hostname == ansible_play_hosts[0]
   register: result
   until: result is succeeded
   changed_when: result is not succeeded
@@ -190,7 +196,7 @@
     remote_src: true
   with_items:
     - { src: "/etc/kubernetes/admin.conf", dest: "/root/.kube/config", mode: "0600" }
-  when: inventory_hostname == ansible_play_hosts[0]
+  when: ansible_hostname == ansible_play_hosts[0]
   tags: kubernetes
 
 - name: prepare files
@@ -207,7 +213,7 @@
     - { dest: "/etc/kubernetes/pki/front-proxy-ca.key", mode: "0600" }
     - { dest: "/etc/kubernetes/pki/sa.key", mode: "0600" }
     - { dest: "/etc/kubernetes/pki/sa.pub", mode: "0600" }
-  when: inventory_hostname == ansible_play_hosts[0]
+  when: ansible_hostname == ansible_play_hosts[0]
   tags: kubernetes
 
 - name: base64 encode certificates
@@ -239,7 +245,7 @@
     echo -n {{ base64_encode_result.results[0].stdout | quote }} | base64 -d | tar zx -C /
   args:
     executable: "/bin/bash"
-  when: inventory_hostname != ansible_play_hosts[0]
+  when: ansible_hostname != ansible_play_hosts[0]
   register: base64_decode_result
   changed_when: base64_decode_result is not succeeded
   tags: kubernetes
@@ -263,7 +269,7 @@
     - { dest: "/etc/kubernetes/pki/front-proxy-ca.key", mode: "0600" }
     - { dest: "/etc/kubernetes/pki/sa.key", mode: "0600" }
     - { dest: "/etc/kubernetes/pki/sa.pub", mode: "0600" }
-  when: inventory_hostname != ansible_play_hosts[0]
+  when: ansible_hostname != ansible_play_hosts[0]
   tags: kubernetes
 
 - name: kubeadm init
@@ -274,7 +280,7 @@
       --ignore-preflight-errors=all
   args:
     executable: "/bin/bash"
-  when: inventory_hostname != ansible_play_hosts[0]
+  when: ansible_hostname != ansible_play_hosts[0]
   register: result
   until: result is succeeded
   changed_when: result is not succeeded
@@ -291,5 +297,5 @@
     remote_src: true
   with_items:
     - { src: "/etc/kubernetes/admin.conf", dest: "/root/.kube/config", mode: "0600" }
-  when: inventory_hostname != ansible_play_hosts[0]
+  when: ansible_hostname != ansible_play_hosts[0]
   tags: kubernetes

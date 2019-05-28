@@ -15,8 +15,8 @@
 # limitations under the License.
 
 - hosts: all
-  become: true
   remote_user: root
+  become: true
   roles:
     - role: bootstrap
     - role: python
@@ -28,8 +28,8 @@
     - role: kubeadm
 
 - hosts: kube-master
-  become: true
   remote_user: root
+  become: true
   roles:
     - role: etcd
       etcd_cert_file: "/etc/kubernetes/pki/etcd/server.crt"
@@ -49,7 +49,7 @@
         kubectl apply -f /tmp/kube-flannel.yml
       args:
         executable: "/bin/bash"
-      when: inventory_hostname == ansible_play_hosts[0]
+      when: ansible_hostname == ansible_play_hosts[0]
       register: result
       until: result is succeeded
       changed_when: result is not succeeded
@@ -60,8 +60,8 @@
       changed_when: result is not succeeded
 
 - hosts: kube-node
-  become: true
   remote_user: root
+  become: true
   tasks:
     - name: kubeadm token create
       shell: |

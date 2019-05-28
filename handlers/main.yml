@@ -23,14 +23,12 @@
   ignore_errors: true
 
 - name: kubernetes | systemctl restart
-  systemd:
+  service:
     name: "{{ item.name }}"
     state: restarted
   with_items:
     - { name: "docker" }
     - { name: "etcd" }
     - { name: "kubelet" }
-  when:
-    - ansible_service_mgr == 'systemd'
   changed_when: false
   ignore_errors: true

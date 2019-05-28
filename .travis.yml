@@ -10,13 +10,11 @@ env:
     - MOLECULE_SCENARIO_NAME="suse-15"
     - MOLECULE_SCENARIO_NAME="ubuntu-16.04"
     - MOLECULE_SCENARIO_NAME="ubuntu-18.04"
-    - MOLECULE_SCENARIO_NAME="ubuntu-18.04-multinode"
 
 matrix:
   allow_failures:
     - env: MOLECULE_SCENARIO_NAME="centos-7"
     - env: MOLECULE_SCENARIO_NAME="suse-15"
-    - env: MOLECULE_SCENARIO_NAME="ubuntu-18.04-multinode"
 
 before_install:
   - |

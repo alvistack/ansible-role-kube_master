@@ -4,6 +4,11 @@
 
 ### Major Changes
 
+  - Always use `become: true` with molecule, especially for vagrant
+  - Improve service restart implementation
+  - Revamp multi node test with vagrant
+  - Replace `inventory_hostname` with `ansible_hostname`
+
 ## 3.0.0 - 2019-05-20
 
 ### Major Changes

@@ -17,41 +17,67 @@
 scenario:
   name: ubuntu-18.04-multinode
 driver:
-  name: lxd
+  name: vagrant
+  provider:
+    name: virtualbox
 platforms:
   - name: ${MOLECULE_INSTANCE_NAME}-1
-    url: unix:/var/snap/lxd/common/lxd/unix.socket
-    source:
-      server: https://images.linuxcontainers.org
-      protocol: simplestreams
-      alias: ubuntu/bionic/amd64
+    box: ubuntu/bionic64
+    cpu: 2
+    memory: 2048
+    provision: true
+    instance_raw_config_args:
+      - "vm.network 'public_network', use_dhcp_assigned_default_route: true, bridge: 'wlp2s0'"
+      - "vm.provision 'shell', run: 'always', inline: 'route del default gw 10.0.2.2'"
+    provider_raw_config_args:
+      - "customize [ 'modifyvm', :id, '--uartmode1', 'disconnected' ]"
+      - "customize [ 'createhd', '--filename', \"/tmp/#{vagrant_config_hash['instance']['name']}.vmdk\", '--size', 10 * 1024 ]"
+      - "customize [ 'storageattach', :id, '--storagectl', 'SCSI', '--port', 3, '--device', 0, '--type', 'hdd', '--medium', \"/tmp/#{vagrant_config_hash['instance']['name']}.vmdk\" ]"
     groups:
       - kube-master
       - kube-node
   - name: ${MOLECULE_INSTANCE_NAME}-2
-    url: unix:/var/snap/lxd/common/lxd/unix.socket
-    source:
-      server: https://images.linuxcontainers.org
-      protocol: simplestreams
-      alias: ubuntu/bionic/amd64
+    box: ubuntu/bionic64
+    cpu: 2
+    memory: 2048
+    provision: true
+    instance_raw_config_args:
+      - "vm.network 'public_network', use_dhcp_assigned_default_route: true, bridge: 'wlp2s0'"
+      - "vm.provision 'shell', run: 'always', inline: 'route del default gw 10.0.2.2'"
+    provider_raw_config_args:
+      - "customize [ 'modifyvm', :id, '--uartmode1', 'disconnected' ]"
+      - "customize [ 'createhd', '--filename', \"/tmp/#{vagrant_config_hash['instance']['name']}.vmdk\", '--size', 10 * 1024 ]"
+      - "customize [ 'storageattach', :id, '--storagectl', 'SCSI', '--port', 3, '--device', 0, '--type', 'hdd', '--medium', \"/tmp/#{vagrant_config_hash['instance']['name']}.vmdk\" ]"
     groups:
       - kube-master
       - kube-node
   - name: ${MOLECULE_INSTANCE_NAME}-3
-    url: unix:/var/snap/lxd/common/lxd/unix.socket
-    source:
-      server: https://images.linuxcontainers.org
-      protocol: simplestreams
-      alias: ubuntu/bionic/amd64
+    box: ubuntu/bionic64
+    cpu: 2
+    memory: 2048
+    provision: true
+    instance_raw_config_args:
+      - "vm.network 'public_network', use_dhcp_assigned_default_route: true, bridge: 'wlp2s0'"
+      - "vm.provision 'shell', run: 'always', inline: 'route del default gw 10.0.2.2'"
+    provider_raw_config_args:
+      - "customize [ 'modifyvm', :id, '--uartmode1', 'disconnected' ]"
+      - "customize [ 'createhd', '--filename', \"/tmp/#{vagrant_config_hash['instance']['name']}.vmdk\", '--size', 10 * 1024 ]"
+      - "customize [ 'storageattach', :id, '--storagectl', 'SCSI', '--port', 3, '--device', 0, '--type', 'hdd', '--medium', \"/tmp/#{vagrant_config_hash['instance']['name']}.vmdk\" ]"
     groups:
       - kube-master
       - kube-node
   - name: ${MOLECULE_INSTANCE_NAME}-4
-    url: unix:/var/snap/lxd/common/lxd/unix.socket
-    source:
-      server: https://images.linuxcontainers.org
-      protocol: simplestreams
-      alias: ubuntu/bionic/amd64
+    box: ubuntu/bionic64
+    cpu: 2
+    memory: 2048
+    provision: true
+    instance_raw_config_args:
+      - "vm.network 'public_network', use_dhcp_assigned_default_route: true, bridge: 'wlp2s0'"
+      - "vm.provision 'shell', run: 'always', inline: 'route del default gw 10.0.2.2'"
+    provider_raw_config_args:
+      - "customize [ 'modifyvm', :id, '--uartmode1', 'disconnected' ]"
+      - "customize [ 'createhd', '--filename', \"/tmp/#{vagrant_config_hash['instance']['name']}.vmdk\", '--size', 10 * 1024 ]"
+      - "customize [ 'storageattach', :id, '--storagectl', 'SCSI', '--port', 3, '--device', 0, '--type', 'hdd', '--medium', \"/tmp/#{vagrant_config_hash['instance']['name']}.vmdk\" ]"
     groups:
       - kube-node
 lint:
