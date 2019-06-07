@@ -20,6 +20,11 @@
   roles:
     - role: bootstrap
     - role: python
+
+- hosts: kube-master:kube-node
+  remote_user: root
+  become: true
+  roles:
     - role: docker
     - role: cri-tools
     - role: kubernetes-cni
@@ -39,6 +44,7 @@
       etcd_peer_key_file: "/etc/kubernetes/pki/etcd/peer.key"
       etcd_peer_trusted_ca_file: "/etc/kubernetes/pki/etcd/ca.crt"
     - role: kubernetes
+      kubernetes_cluster_name: "{{ hostvars[groups['kube-master'][0]]['ansible_machine_id'] | to_uuid }}"
 
   post_tasks:
     - name: install pod network add-on (flannel)

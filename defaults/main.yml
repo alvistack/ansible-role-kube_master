@@ -18,7 +18,7 @@
 kubernetes_version: "v1.14.1"
 
 # Kubernetes cluster name.
-kubernetes_cluster_name: "kubernetes"
+kubernetes_cluster_name: "{{ hostvars[ansible_play_hosts[0]]['ansible_machine_id'] | to_uuid }}"
 
 # DNSDomain is the dns domain used by k8s services. Defaults to "cluster.local".
 kubernetes_dns_domain: "cluster.local"

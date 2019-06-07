@@ -27,7 +27,6 @@ platforms:
       alias: ubuntu/xenial/amd64
     groups:
       - kube-master
-      - kube-node
   - name: ${MOLECULE_INSTANCE_NAME}-4
     url: unix:/var/snap/lxd/common/lxd/unix.socket
     source:
