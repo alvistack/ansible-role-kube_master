@@ -9,6 +9,7 @@
   - Improve service restart implementation
   - Revamp multi node test with vagrant
   - Replace `inventory_hostname` with `ansible_hostname`
+  - Better multinode test cases
 
 ## 3.0.0 - 2019-05-20
 
