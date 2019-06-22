@@ -65,6 +65,9 @@ kubelet_static_pod_path: "/etc/kubernetes/manifests"
 # for the container DNS resolution configuration.
 kubelet_resolv_conf: "{{ _kubelet_resolv_conf }}"
 
+# BindPort sets the secure port for the API Server to bind to.
+kube_apiserver_bind_port: "6443"
+
 # bindAddress is the IP address for the proxy server to serve on (set to 0.0.0.0
 # for all interfaces).
 kube_proxy_bind_address: "0.0.0.0"
