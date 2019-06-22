@@ -46,10 +46,6 @@
   src: https://github.com/alvistack/ansible-role-kubernetes-cni
   version: develop
 
-- name: ntp
-  src: https://github.com/alvistack/ansible-role-ntp
-  version: develop
-
 - name: python
   src: https://github.com/alvistack/ansible-role-python
   version: develop

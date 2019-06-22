@@ -20,7 +20,6 @@
   roles:
     - role: bootstrap
     - role: python
-    - role: ntp
 
 - hosts: kube-master:kube-node
   remote_user: root
