@@ -177,9 +177,9 @@
 - name: kubeadm init
   shell: |
     set -o pipefail
-    kubeadm init \
-      --config=/etc/kubernetes/kubeadm.conf \
-      --ignore-preflight-errors=all
+    KUBEADM_UPGRADE="kubeadm upgrade apply --config=/etc/kubernetes/kubeadm.conf --ignore-preflight-errors=all"
+    KUBEADM_INIT="kubeadm init --config=/etc/kubernetes/kubeadm.conf --ignore-preflight-errors=all"
+    $KUBEADM_UPGRADE || $KUBEADM_INIT
   args:
     executable: "/bin/bash"
   when: ansible_hostname == ansible_play_hosts[0]
@@ -278,9 +278,9 @@
 - name: kubeadm init
   shell: |
     set -o pipefail
-    kubeadm init \
-      --config=/etc/kubernetes/kubeadm.conf \
-      --ignore-preflight-errors=all
+    KUBEADM_UPGRADE="kubeadm upgrade apply --config=/etc/kubernetes/kubeadm.conf --ignore-preflight-errors=all"
+    KUBEADM_INIT="kubeadm init --config=/etc/kubernetes/kubeadm.conf --ignore-preflight-errors=all"
+    $KUBEADM_UPGRADE || $KUBEADM_INIT
   args:
     executable: "/bin/bash"
   when: ansible_hostname != ansible_play_hosts[0]
