@@ -30,8 +30,7 @@ kind: ClusterConfiguration
 clusterName: {{ kubernetes_cluster_name }}
 etcd:
   external:
-    endpoints:
-      {{ kubernetes_etcd_external_endpoints | indent(6) }}
+    endpoints: [ {{ kubernetes_etcd_external_endpoints }} ]
     caFile: /etc/kubernetes/pki/etcd/ca.crt
     certFile: /etc/kubernetes/pki/apiserver-etcd-client.crt
     keyFile: /etc/kubernetes/pki/apiserver-etcd-client.key
