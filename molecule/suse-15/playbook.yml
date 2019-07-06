@@ -84,9 +84,8 @@
     - name: kubeadm init
       shell: |
         set -o pipefail
-        KUBEADM_UPGRADE="kubeadm upgrade apply --config=/etc/kubernetes/kubeadm.conf --ignore-preflight-errors=all"
-        KUBEADM_INIT="{{ result.stdout }} --ignore-preflight-errors=all"
-        $KUBEADM_UPGRADE || $KUBEADM_INIT
+        {{ result.stdout }} \
+          --ignore-preflight-errors=all
       args:
         executable: "/bin/bash"
       register: result
