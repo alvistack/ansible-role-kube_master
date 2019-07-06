@@ -90,18 +90,10 @@
   openssl_csr:
     path: "/etc/kubernetes/pki/apiserver-etcd-client.csr"
     privatekey_path: "/etc/kubernetes/pki/apiserver-etcd-client.key"
-    common_name: "{{ ansible_play_hosts[0] }}"
+    common_name: "{{ kube_apiserver_csr_common_name }}"
     subject:
-      CN: "{{ ansible_play_hosts[0] }}"
-    subject_alt_name: >-
-      {%- for host in ansible_play_hosts -%}
-      DNS:{{ host }},
-      {%- endfor -%}
-      DNS:localhost,
-      {%- for host in ansible_play_hosts -%}
-      IP:{{ hostvars[host]['ansible_default_ipv4']['address'] }},
-      {%- endfor -%}
-      IP:127.0.0.1
+      CN: "{{ kube_apiserver_csr_common_name }}"
+    subject_alt_name: "{{ kube_apiserver_csr_subject_alt_name }}"
     key_usage:
       - digitalSignature
       - keyEncipherment
