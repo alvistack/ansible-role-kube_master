@@ -18,7 +18,13 @@
 kubernetes_version: "v1.15.0"
 
 # Kubernetes cluster name.
-kubernetes_cluster_name: "{{ hostvars[ansible_play_hosts[0]]['ansible_machine_id'] | to_uuid }}"
+kubernetes_cluster_name: "{{ hostvars[ansible_play_hosts[0]].ansible_machine_id | to_uuid }}"
+
+# Endpoints of etcd members. Required for ExternalEtcd.
+kubernetes_etcd_external_endpoints: >-
+  {%- for host in ansible_play_hosts -%}
+  https://{{ hostvars[host].ansible_default_ipv4.address }}:2379,
+  {%- endfor -%}
 
 # DNSDomain is the dns domain used by k8s services. Defaults to "cluster.local".
 kubernetes_dns_domain: "cluster.local"
@@ -65,8 +71,25 @@ kubelet_static_pod_path: "/etc/kubernetes/manifests"
 # for the container DNS resolution configuration.
 kubelet_resolv_conf: "{{ _kubelet_resolv_conf }}"
 
+# AdvertiseAddress sets the IP address for the API server to advertise.
+kube_apiserver_advertise_address: "{{ ansible_default_ipv4.address }}"
+
 # BindPort sets the secure port for the API Server to bind to.
 kube_apiserver_bind_port: "6443"
+
+# commonName field of the CSR.
+kube_apiserver_csr_common_name: "{{ ansible_play_hosts[0] }}"
+
+# subjectAltName field of the CSR.
+kube_apiserver_csr_subject_alt_name: >-
+  {%- for host in ansible_play_hosts -%}
+  DNS:{{ host }},
+  {%- endfor -%}
+  DNS:localhost,
+  {%- for host in ansible_play_hosts -%}
+  IP:{{ hostvars[host].ansible_default_ipv4.address }},
+  {%- endfor -%}
+  IP:127.0.0.1
 
 # bindAddress is the IP address for the proxy server to serve on (set to 0.0.0.0
 # for all interfaces).

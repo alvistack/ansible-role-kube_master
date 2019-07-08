@@ -17,7 +17,7 @@
 apiVersion: kubeadm.k8s.io/v1beta2
 kind: InitConfiguration
 localAPIEndpoint:
-  advertiseAddress: {{ ansible_default_ipv4.address }}
+  advertiseAddress: {{ kube_apiserver_advertise_address }}
   bindPort: {{ kube_apiserver_bind_port }}
 nodeRegistration:
   name: {{ ansible_hostname }}
@@ -30,10 +30,7 @@ kind: ClusterConfiguration
 clusterName: {{ kubernetes_cluster_name }}
 etcd:
   external:
-    endpoints:
-{% for host in ansible_play_hosts %}
-      - https://{{ hostvars[host]['ansible_default_ipv4']['address'] }}:2379
-{% endfor %}
+    endpoints: [ {{ kubernetes_etcd_external_endpoints }} ]
     caFile: /etc/kubernetes/pki/etcd/ca.crt
     certFile: /etc/kubernetes/pki/apiserver-etcd-client.crt
     keyFile: /etc/kubernetes/pki/apiserver-etcd-client.key
@@ -42,7 +39,7 @@ networking:
   podSubnet: {{ kubernetes_pod_subnet }}
   serviceSubnet: {{ kubernetes_service_subnet }}
 kubernetesVersion: {{ kubernetes_version }}
-controlPlaneEndpoint: {{ ansible_default_ipv4.address }}:{{ kube_apiserver_bind_port }}
+controlPlaneEndpoint: {{ kube_apiserver_advertise_address }}:{{ kube_apiserver_bind_port }}
 certificatesDir: /etc/kubernetes/pki
 imageRepository: {{ kubernetes_image_repository }}
 apiServer:
