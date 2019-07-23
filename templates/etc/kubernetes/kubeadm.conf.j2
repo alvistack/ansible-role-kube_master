@@ -23,6 +23,8 @@ nodeRegistration:
   name: {{ ansible_hostname }}
   criSocket: /var/run/dockershim.sock
   taints: []
+  kubeletExtraArgs:
+    runtime-cgroups: {{ kubelet_runtime_cgroups }}
 
 ---
 apiVersion: kubeadm.k8s.io/v1beta2
@@ -68,6 +70,7 @@ enforceNodeAllocatable:
   - pods
 staticPodPath: {{ kubelet_static_pod_path }}
 cgroupDriver: {{ kubelet_cgroup_driver }}
+kubeletCgroups: {{ kubelet_kubelet_cgroups }}
 maxPods: {{ kubelet_max_pods }}
 address: {{ kubelet_bind_address }}
 clusterDomain: {{ kubernetes_dns_domain }}

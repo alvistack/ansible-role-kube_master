@@ -48,6 +48,12 @@ kubelet_fail_swap_on: false
 # driver that the kubelet uses to manipulate cgroups on the host (cgroupfs or systemd)
 kubelet_cgroup_driver: "systemd"
 
+# Optional absolute name of cgroups to create and run the runtime in.
+kubelet_runtime_cgroups: "/systemd/system.slice"
+
+# Optional absolute name of cgroups to create and run the Kubelet in.
+kubelet_kubelet_cgroups: "/systemd/system.slice"
+
 # maxPods is the number of pods that can run on this Kubelet.
 kubelet_max_pods: "110"
 
