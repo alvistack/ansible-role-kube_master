@@ -4,6 +4,9 @@
 
 ### Major Changes
 
+  - Specify kubelet `--runtime-cgroups` and `--kubelet-cgroups`
+  - Specify kubelet `--kube-reserved`, `--system-reserved` and `--eviction-hard`
+
 ## 3.2.0 - 2019-07-08
 
 ### Major Changes

@@ -48,20 +48,32 @@ kubelet_fail_swap_on: false
 # driver that the kubelet uses to manipulate cgroups on the host (cgroupfs or systemd)
 kubelet_cgroup_driver: "systemd"
 
+# Optional absolute name of cgroups to create and run the runtime in.
+kubelet_runtime_cgroups: "/systemd/system.slice"
+
+# Optional absolute name of cgroups to create and run the Kubelet in.
+kubelet_kubelet_cgroups: "/systemd/system.slice"
+
 # maxPods is the number of pods that can run on this Kubelet.
 kubelet_max_pods: "110"
-
-# systemReserved is a set of ResourceName=ResourceQuantity (e.g. cpu=200m,memory=150G)
-# pairs that describe resources reserved for non-kubernetes components.
-kubelet_system_reserved:
-  cpu: "200m"
-  memory: "256M"
 
 # A set of ResourceName=ResourceQuantity (e.g. cpu=200m,memory=150G) pairs
 # that describe resources reserved for kubernetes system components.
 kubelet_kube_reserved:
+  cpu: "200m"
+  memory: "256Mi"
+
+# systemReserved is a set of ResourceName=ResourceQuantity (e.g. cpu=200m,memory=150G)
+# pairs that describe resources reserved for non-kubernetes components.
+kubelet_system_reserved:
   cpu: "100m"
-  memory: "128M"
+  memory: "128Mi"
+
+# Map of signal names to quantities that defines hard eviction thresholds. For
+# example: {"memory.available": "300Mi"}.
+kubelet_eviction_hard:
+  memory.available: "64Mi"
+  nodefs.available: "5%"
 
 # staticPodPath is the path to the directory containing local (static) pods to
 # run, or the path to a single static pod file.
