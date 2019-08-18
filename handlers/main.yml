@@ -17,18 +17,19 @@
 - name: kubernetes | systemctl daemon-reload
   systemd:
     daemon_reload: true
-  when:
-    - ansible_service_mgr == 'systemd'
   changed_when: false
   ignore_errors: true
 
 - name: kubernetes | systemctl restart
-  service:
-    name: "{{ item.name }}"
-    state: restarted
-  loop:
-    - { name: "docker" }
-    - { name: "etcd" }
-    - { name: "kubelet" }
+  shell: |
+    set -o pipefail
+    systemctl restart docker
+    systemctl restart etcd
+    systemctl restart kubelet
+  args:
+    executable: "/bin/bash"
+  loop: "{{ ansible_play_hosts }}"
+  delegated_to: "{{ item }}"
+  run_once: true
   changed_when: false
   ignore_errors: true
