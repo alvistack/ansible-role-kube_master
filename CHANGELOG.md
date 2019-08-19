@@ -4,9 +4,9 @@
 
 ### Major Changes
 
-  - Update LXD test profile for openSUSE LEAP 15.1
   - Specify kubelet `--runtime-cgroups` and `--kubelet-cgroups`
   - Specify kubelet `--kube-reserved`, `--system-reserved` and `--eviction-hard`
+  - Restart service serially
 
 ## 3.2.0 - 2019-07-08
 
