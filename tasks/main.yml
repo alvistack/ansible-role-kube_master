@@ -275,9 +275,6 @@
       --ignore-preflight-errors=all
   args:
     executable: "/bin/bash"
-  loop: "{{ ansible_play_hosts }}"
-  delegate_to: "{{ item }}"
-  run_once: true
   when: ansible_hostname != ansible_play_hosts[0]
   register: result
   until: result is succeeded
