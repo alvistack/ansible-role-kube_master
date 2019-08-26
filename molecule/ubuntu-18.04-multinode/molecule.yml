@@ -24,7 +24,7 @@ platforms:
   - name: ${MOLECULE_INSTANCE_NAME}-1
     box: generic/ubuntu1804
     cpu: 2
-    memory: 2048
+    memory: 4096
     interfaces:
       - auto_config: true
         network_name: private_network
@@ -39,7 +39,7 @@ platforms:
   - name: ${MOLECULE_INSTANCE_NAME}-2
     box: generic/ubuntu1804
     cpu: 2
-    memory: 2048
+    memory: 4096
     interfaces:
       - auto_config: true
         network_name: private_network
@@ -54,7 +54,7 @@ platforms:
   - name: ${MOLECULE_INSTANCE_NAME}-3
     box: generic/ubuntu1804
     cpu: 2
-    memory: 2048
+    memory: 4096
     interfaces:
       - auto_config: true
         network_name: private_network
@@ -69,7 +69,7 @@ platforms:
   - name: ${MOLECULE_INSTANCE_NAME}-4
     box: generic/ubuntu1804
     cpu: 2
-    memory: 2048
+    memory: 4096
     interfaces:
       - auto_config: true
         network_name: private_network
