@@ -69,6 +69,7 @@ authorization:
 enforceNodeAllocatable:
   - pods
 staticPodPath: {{ kubelet_static_pod_path }}
+CgroupsPerQOS: {{ kubelet_cgroups_per_qos | bool | lower }}
 cgroupDriver: {{ kubelet_cgroup_driver }}
 kubeletCgroups: {{ kubelet_kubelet_cgroups }}
 maxPods: {{ kubelet_max_pods }}
