@@ -15,7 +15,7 @@
 # limitations under the License.
 
 # Kubernetes version.
-kubernetes_version: "v1.15.3"
+kubernetes_version: "v1.15.4"
 
 # Kubernetes cluster name.
 kubernetes_cluster_name: "{{ hostvars[ansible_play_hosts[0]].ansible_machine_id | to_uuid }}"
