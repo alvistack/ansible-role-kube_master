@@ -78,6 +78,8 @@
   tags: kubernetes
 
 - name: generate apiserver-etcd-client private key
+  vars:
+    ansible_python_interpreter: "/usr/bin/python3"
   openssl_privatekey:
     path: "/etc/kubernetes/pki/apiserver-etcd-client.key"
   when: ansible_hostname == ansible_play_hosts[0]
@@ -87,6 +89,8 @@
   tags: kubernetes
 
 - name: generate apiserver-etcd-client csr
+  vars:
+    ansible_python_interpreter: "/usr/bin/python3"
   openssl_csr:
     path: "/etc/kubernetes/pki/apiserver-etcd-client.csr"
     privatekey_path: "/etc/kubernetes/pki/apiserver-etcd-client.key"
@@ -109,6 +113,8 @@
   tags: kubernetes
 
 - name: generate apiserver-etcd-client ownca certificate
+  vars:
+    ansible_python_interpreter: "/usr/bin/python3"
   openssl_certificate:
     path: "/etc/kubernetes/pki/apiserver-etcd-client.crt"
     csr_path: "/etc/kubernetes/pki/apiserver-etcd-client.csr"
