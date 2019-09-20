@@ -14,8 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-scenario:
-  name: ubuntu-18.04-multinode
 driver:
   name: vagrant
   provider:
@@ -98,6 +96,8 @@ provisioner:
   inventory:
     links:
       group_vars: group_vars
+  playbooks:
+    prepare: prepare.yml
 verifier:
   name: testinfra
   lint:
