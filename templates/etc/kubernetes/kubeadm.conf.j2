@@ -78,15 +78,15 @@ clusterDomain: {{ kubernetes_dns_domain }}
 {% if kubelet_kube_reserved %}
 kubeReserved:
   {{ kubelet_kube_reserved | to_nice_yaml(indent=2) | indent(2) }}
-{%- endif %}
+{% endif %}
 {% if kubelet_system_reserved %}
 systemReserved:
   {{ kubelet_system_reserved | to_nice_yaml(indent=2) | indent(2) }}
-{%- endif %}
+{% endif %}
 {% if kubelet_eviction_hard %}
 evictionHard:
   {{ kubelet_eviction_hard | to_nice_yaml(indent=2) | indent(2) }}
-{%- endif %}
+{% endif %}
 resolvConf: {{ kubelet_resolv_conf }}
 
 ---
