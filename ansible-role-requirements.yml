@@ -42,8 +42,20 @@
   src: https://github.com/alvistack/ansible-role-kubelet
   version: develop
 
+- name: kubernetes-addon-manager
+  src: https://github.com/alvistack/ansible-role-kubernetes-addon-manager
+  version: develop
+
 - name: kubernetes-cni
   src: https://github.com/alvistack/ansible-role-kubernetes-cni
+  version: develop
+
+- name: kubernetes-flannel
+  src: https://github.com/alvistack/ansible-role-kubernetes-flannel
+  version: develop
+
+- name: kubernetes-weave
+  src: https://github.com/alvistack/ansible-role-kubernetes-weave
   version: develop
 
 - name: python

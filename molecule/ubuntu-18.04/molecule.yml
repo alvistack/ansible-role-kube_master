@@ -25,13 +25,6 @@ platforms:
       alias: ubuntu/bionic/amd64
     groups:
       - kube-master
-  - name: ${MOLECULE_INSTANCE_NAME}-4
-    url: unix:/var/snap/lxd/common/lxd/unix.socket
-    source:
-      server: https://images.linuxcontainers.org
-      protocol: simplestreams
-      alias: ubuntu/bionic/amd64
-    groups:
       - kube-node
 lint:
   name: yamllint
