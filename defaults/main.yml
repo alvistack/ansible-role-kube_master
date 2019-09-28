@@ -84,7 +84,7 @@ kubelet_static_pod_path: "/etc/kubernetes/manifests"
 
 # ResolverConfig is the resolver configuration file used as the basis
 # for the container DNS resolution configuration.
-kubelet_resolv_conf: "{{ _kubelet_resolv_conf }}"
+kubelet_resolv_conf: "/etc/resolv.conf"
 
 # AdvertiseAddress sets the IP address for the API server to advertise.
 kube_apiserver_advertise_address: "{{ ansible_default_ipv4.address }}"
