@@ -69,7 +69,7 @@
       until: result is succeeded
       changed_when: result is not succeeded
       ignore_errors: true
-      
+
     - name: prepare directories
       file:
         dest: "{{ item.dest }}"
