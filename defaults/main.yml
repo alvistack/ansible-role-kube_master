@@ -38,6 +38,9 @@ kubernetes_pod_subnet: "10.233.64.0/18"
 # ImageRepository sets the container registry to pull images from.
 kubernetes_image_repository: "k8s.gcr.io"
 
+# IP address of the node. If set, kubelet will use this IP address for the node.
+kubelet_node_ip: "{{ ansible_default_ipv4.address }}"
+
 # address is the IP address for the Kubelet to serve on (set to 0.0.0.0
 # for all interfaces).
 kubelet_bind_address: "0.0.0.0"

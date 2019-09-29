@@ -24,6 +24,7 @@ nodeRegistration:
   criSocket: /var/run/dockershim.sock
   taints: []
   kubeletExtraArgs:
+    node-ip: {{ kubelet_node_ip }}
     runtime-cgroups: {{ kubelet_runtime_cgroups }}
 
 ---
