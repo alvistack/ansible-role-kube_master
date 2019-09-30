@@ -111,37 +111,32 @@
       changed_when: result is not succeeded
       ignore_errors: true
 
-    - name: prepare directories
-      file:
-        dest: "{{ item.dest }}"
-        owner: "{{ item.owner | default('root') }}"
-        group: "{{ item.group | default('root') }}"
-        mode: "{{ item.mode | default('0755') }}"
-        state: "{{ item.state | default('directory') }}"
-      loop:
-        - { dest: "/etc/kubernetes" }
-        - { dest: "/etc/kubernetes/manifests" }
-
-    - name: copy templates
+    - name: kubeadm join
       vars:
         kube_apiserver_endpoint: "{{ hostvars[groups['kube-master'][0]].ansible_eth1.ipv4.address }}:{{ kube_apiserver_bind_port }}"
         kubelet_node_ip: "{{ ansible_eth1.ipv4.address }}"
         kubeadm_token: "{{ result.stdout }}"
-      template:
-        dest: "{{ item.dest }}"
-        src: "{{ item.src | default('./templates' + item.dest + '.j2') }}"
-        owner: "{{ item.owner | default('root') }}"
-        group: "{{ item.group | default('root') }}"
-        mode: "{{ item.mode | default('0644') }}"
-      loop:
-        - src: "../../templates/etc/kubernetes/kubeadm-join.conf.j2"
-          dest: "/etc/kubernetes/kubeadm-join.conf"
-
-    - name: kubeadm init
       shell: |
         set -o pipefail
+        cat > /etc/kubernetes/kubeadm.conf <<EOF
+        apiVersion: kubeadm.k8s.io/v1beta2
+        kind: JoinConfiguration
+        discovery:
+          bootstrapToken:
+            apiServerEndpoint: {{ kube_apiserver_endpoint }}
+            token: {{ kubeadm_token }}
+            unsafeSkipCAVerification: true
+          tlsBootstrapToken: {{ kubeadm_token }}
+        nodeRegistration:
+          name: {{ ansible_hostname }}
+          criSocket: /var/run/dockershim.sock
+          taints: []
+          kubeletExtraArgs:
+            node-ip: {{ kubelet_node_ip }}
+            runtime-cgroups: {{ kubelet_runtime_cgroups }}
+        EOF
         kubeadm join \
-          --config=/etc/kubernetes/kubeadm-join.conf \
+          --config=/etc/kubernetes/kubeadm.conf \
           --ignore-preflight-errors=all
       args:
         executable: "/bin/bash"
