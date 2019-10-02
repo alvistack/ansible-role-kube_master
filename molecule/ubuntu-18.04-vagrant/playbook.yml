@@ -113,7 +113,7 @@
 
     - name: kubeadm join
       vars:
-        kube_apiserver_endpoint: "{{ hostvars[groups['kube-master'][0]].ansible_eth1.ipv4.address }}:{{ kube_apiserver_bind_port }}"
+        kube_apiserver_advertise_address: "{{ hostvars[groups['kube-master'][0]].ansible_eth1.ipv4.address }}"
         kubelet_node_ip: "{{ ansible_eth1.ipv4.address }}"
         kubeadm_token: "{{ result.stdout }}"
       shell: |
@@ -123,7 +123,7 @@
         kind: JoinConfiguration
         discovery:
           bootstrapToken:
-            apiServerEndpoint: {{ kube_apiserver_endpoint }}
+            apiServerEndpoint: {{ kube_apiserver_advertise_address }}:6443
             token: {{ kubeadm_token }}
             unsafeSkipCAVerification: true
           tlsBootstrapToken: {{ kubeadm_token }}
@@ -133,7 +133,7 @@
           taints: []
           kubeletExtraArgs:
             node-ip: {{ kubelet_node_ip }}
-            runtime-cgroups: {{ kubelet_runtime_cgroups }}
+            runtime-cgroups: /systemd/system.slice
         EOF
         kubeadm join \
           --config=/etc/kubernetes/kubeadm.conf \
