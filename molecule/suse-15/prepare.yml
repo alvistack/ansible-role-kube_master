@@ -5,6 +5,16 @@
   become: true
   gather_facts: false
   tasks:
+    - name: systemctl stop firewalld.service
+      raw: |
+        systemctl stop firewalld.service
+      ignore_errors: true
+
+    - name: systemctl stop ufw.service
+      raw: |
+        systemctl stop ufw.service
+      ignore_errors: true
+
     - name: redhat-7 | subscription-manager register
       raw: |
         subscription-manager register \
