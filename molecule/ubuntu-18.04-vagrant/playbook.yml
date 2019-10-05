@@ -113,7 +113,7 @@
 
     - name: kubeadm join
       vars:
-        kube_apiserver_endpoint: "{{ hostvars[groups['kube-master'][0]].ansible_eth1.ipv4.address }}:{{ kube_apiserver_bind_port }}"
+        kube_apiserver_endpoint: "{{ hostvars[groups['kube-master'][0]].ansible_eth1.ipv4.address }}:6443"
         kubelet_node_ip: "{{ ansible_eth1.ipv4.address }}"
         kubeadm_token: "{{ result.stdout }}"
       shell: |
