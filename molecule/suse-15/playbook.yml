@@ -45,6 +45,8 @@
       etcd_peer_trusted_ca_file: "/etc/kubernetes/pki/etcd/ca.crt"
     - role: kubernetes
       kubernetes_cluster_name: "{{ hostvars[groups['kube-master'][0]].ansible_machine_id | to_uuid }}"
+      kube_proxy_conntrack:
+        maxPerCore: 0
     - role: kubernetes-addon-manager
     - role: kubernetes-flannel
 
@@ -72,8 +74,6 @@
 
     - name: kubeadm join
       vars:
-        kube_apiserver_advertise_address: "{{ hostvars[groups['kube-master'][0]].ansible_default_ipv4.address }}"
-        kubelet_node_ip: "{{ ansible_default_ipv4.address }}"
         kubeadm_token: "{{ result.stdout }}"
       shell: |
         set -o pipefail
@@ -82,7 +82,7 @@
         kind: JoinConfiguration
         discovery:
           bootstrapToken:
-            apiServerEndpoint: {{ kube_apiserver_advertise_address }}:6443
+            apiServerEndpoint: {{ kube_apiserver_endpoint }}
             token: {{ kubeadm_token }}
             unsafeSkipCAVerification: true
           tlsBootstrapToken: {{ kubeadm_token }}

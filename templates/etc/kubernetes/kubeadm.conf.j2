@@ -99,3 +99,7 @@ iptables:
   masqueradeAll: {{ kube_proxy_masquerade_all | bool | lower }}
   masqueradeBit: {{ kube_proxy_masquerade_bit }}
 mode: {{ kube_proxy_mode }}
+{% if kube_proxy_conntrack %}
+conntrack:
+  {{ kube_proxy_conntrack | to_nice_yaml(indent=2) | indent(2) }}
+{% endif %}
