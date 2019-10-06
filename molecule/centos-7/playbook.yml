@@ -51,8 +51,10 @@
     - role: kubernetes-flannel
 
   post_tasks:
-    - name: /usr/local/bin/kubectl version
-      command: /usr/local/bin/kubectl version
+    - name: kubectl version
+      environment:
+        PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+      command: kubectl version
       register: result
       changed_when: result is not succeeded
 
@@ -61,6 +63,8 @@
   become: true
   tasks:
     - name: kubeadm token create
+      environment:
+        PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
       shell: |
         set -o pipefail
         kubeadm token create
@@ -73,6 +77,8 @@
       ignore_errors: true
 
     - name: kubeadm join
+      environment:
+        PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
       vars:
         kube_apiserver_endpoint: "{{ hostvars[groups['kube-master'][0]].ansible_default_ipv4.address }}:6443"
         kubelet_node_ip: "{{ ansible_default_ipv4.address }}"

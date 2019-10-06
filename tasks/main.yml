@@ -161,6 +161,8 @@
   tags: kubernetes
 
 - name: kubeadm config images pull
+  environment:
+    PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
   shell: |
     set -o pipefail
     kubeadm config images pull
@@ -173,6 +175,8 @@
   tags: kubernetes
 
 - name: kubeadm init
+  environment:
+    PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
   shell: |
     set -o pipefail
     kubeadm init \
@@ -274,6 +278,8 @@
   tags: kubernetes
 
 - name: kubeadm init
+  environment:
+    PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
   shell: |
     set -o pipefail
     kubeadm init \
