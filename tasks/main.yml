@@ -78,8 +78,10 @@
   tags: kubernetes
 
 - name: generate apiserver-etcd-client private key
+  environment:
+    PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
   vars:
-    ansible_python_interpreter: "/usr/bin/python3"
+    ansible_python_interpreter: "python3"
   openssl_privatekey:
     path: "/etc/kubernetes/pki/apiserver-etcd-client.key"
   when: ansible_hostname == ansible_play_hosts[0]
@@ -89,8 +91,10 @@
   tags: kubernetes
 
 - name: generate apiserver-etcd-client csr
+  environment:
+    PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
   vars:
-    ansible_python_interpreter: "/usr/bin/python3"
+    ansible_python_interpreter: "python3"
   openssl_csr:
     path: "/etc/kubernetes/pki/apiserver-etcd-client.csr"
     privatekey_path: "/etc/kubernetes/pki/apiserver-etcd-client.key"
@@ -113,8 +117,10 @@
   tags: kubernetes
 
 - name: generate apiserver-etcd-client ownca certificate
+  environment:
+    PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
   vars:
-    ansible_python_interpreter: "/usr/bin/python3"
+    ansible_python_interpreter: "python3"
   openssl_certificate:
     path: "/etc/kubernetes/pki/apiserver-etcd-client.crt"
     csr_path: "/etc/kubernetes/pki/apiserver-etcd-client.csr"
@@ -161,6 +167,8 @@
   tags: kubernetes
 
 - name: kubeadm config images pull
+  environment:
+    PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
   shell: |
     set -o pipefail
     kubeadm config images pull
@@ -173,6 +181,8 @@
   tags: kubernetes
 
 - name: kubeadm init
+  environment:
+    PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
   shell: |
     set -o pipefail
     kubeadm init \
@@ -274,6 +284,8 @@
   tags: kubernetes
 
 - name: kubeadm init
+  environment:
+    PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
   shell: |
     set -o pipefail
     kubeadm init \
