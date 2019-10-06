@@ -75,6 +75,7 @@
         {%- for host in ansible_play_hosts -%}
         https://{{ hostvars[host].ansible_eth1.ipv4.address }}:2379,
         {%- endfor -%}
+      kubelet_node_ip: "{{ ansible_eth1.ipv4.address }}"
       kube_apiserver_advertise_address: "{{ ansible_eth1.ipv4.address }}"
       kube_apiserver_csr_subject_alt_name: >-
         {%- for host in ansible_play_hosts -%}
@@ -85,21 +86,10 @@
         IP:{{ hostvars[host].ansible_eth1.ipv4.address }},
         {%- endfor -%}
         IP:127.0.0.1
+    - role: kubernetes-addon-manager
+    - role: kubernetes-weave
 
   post_tasks:
-    - name: install pod network add-on (flannel)
-      shell: |
-        set -o pipefail
-        curl -skL https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml > /tmp/kube-flannel.yml
-        sed -i 's/{{ "10.244.0.0/16" | regex_escape() }}/{{ kubernetes_pod_subnet | regex_escape() }}/g' /tmp/kube-flannel.yml
-        kubectl apply -f /tmp/kube-flannel.yml
-      args:
-        executable: "/bin/bash"
-      when: ansible_hostname == ansible_play_hosts[0]
-      register: result
-      until: result is succeeded
-      changed_when: result is not succeeded
-
     - name: kubectl version
       command: kubectl version
       register: result
@@ -112,7 +102,7 @@
     - name: kubeadm token create
       shell: |
         set -o pipefail
-        kubeadm token create --print-join-command
+        kubeadm token create
       args:
         executable: "/bin/bash"
       delegate_to: "{{ groups['kube-master'][0] }}"
@@ -121,10 +111,32 @@
       changed_when: result is not succeeded
       ignore_errors: true
 
-    - name: kubeadm init
+    - name: kubeadm join
+      vars:
+        kube_apiserver_endpoint: "{{ hostvars[groups['kube-master'][0]].ansible_eth1.ipv4.address }}:6443"
+        kubelet_node_ip: "{{ ansible_eth1.ipv4.address }}"
+        kubeadm_token: "{{ result.stdout }}"
       shell: |
         set -o pipefail
-        {{ result.stdout }} \
+        cat > /etc/kubernetes/kubeadm.conf <<EOF
+        apiVersion: kubeadm.k8s.io/v1beta2
+        kind: JoinConfiguration
+        discovery:
+          bootstrapToken:
+            apiServerEndpoint: {{ kube_apiserver_endpoint }}
+            token: {{ kubeadm_token }}
+            unsafeSkipCAVerification: true
+          tlsBootstrapToken: {{ kubeadm_token }}
+        nodeRegistration:
+          name: {{ ansible_hostname }}
+          criSocket: /var/run/dockershim.sock
+          taints: []
+          kubeletExtraArgs:
+            node-ip: {{ kubelet_node_ip }}
+            runtime-cgroups: /systemd/system.slice
+        EOF
+        kubeadm join \
+          --config=/etc/kubernetes/kubeadm.conf \
           --ignore-preflight-errors=all
       args:
         executable: "/bin/bash"

@@ -128,10 +128,6 @@
     - kubernetes | systemctl restart
   tags: kubernetes
 
-- name: flush handlers
-  meta: flush_handlers
-  tags: kubernetes
-
 - name: start services
   service:
     name: "{{ item.name }}"
@@ -142,6 +138,10 @@
     - { name: "kubelet" }
   changed_when: false
   ignore_errors: true
+  tags: kubernetes
+
+- name: flush handlers
+  meta: flush_handlers
   tags: kubernetes
 
 - name: prepare files

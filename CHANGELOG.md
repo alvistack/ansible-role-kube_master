@@ -4,8 +4,11 @@
 
 ### Major Changes
 
+  - Support openSUSE Leap 15.1
   - Default with Python 3
   - Revamp molecule test with vagrant
+  - Add kubelet `--node-ip` support for Vagrant
+  - Add kube-proxy `--conntrack-max-per-core` support for LXD
 
 ## 3.4.0 - 2019-09-18
 
