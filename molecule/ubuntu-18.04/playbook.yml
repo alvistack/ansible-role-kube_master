@@ -51,8 +51,8 @@
     - role: kubernetes-flannel
 
   post_tasks:
-    - name: kubectl version
-      command: kubectl version
+    - name: /usr/local/bin/kubectl version
+      command: /usr/local/bin/kubectl version
       register: result
       changed_when: result is not succeeded
 
