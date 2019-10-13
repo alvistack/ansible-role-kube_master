@@ -23,8 +23,6 @@
 - name: kubernetes | systemctl restart
   shell: |
     set -o pipefail
-    systemctl restart docker
-    systemctl restart etcd
     systemctl restart kubelet
   args:
     executable: "/bin/bash"
