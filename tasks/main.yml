@@ -227,7 +227,7 @@
   when: ansible_hostname == ansible_play_hosts[0]
   tags: kubernetes
 
-- name: base64 encode certificates
+- name: base64 encode
   shell: |
     set -o pipefail
     tar zcfP - {{ _params | join(' ') }} | base64 -w 0
@@ -250,7 +250,7 @@
   changed_when: base64_encode_result is not succeeded
   tags: kubernetes
 
-- name: base64 decode certificates
+- name: base64 decode
   shell: |
     set -o pipefail
     echo -n {{ base64_encode_result.stdout | quote }} | base64 -d | tar zx -C /
