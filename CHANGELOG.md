@@ -4,6 +4,8 @@
 
 ### Major Changes
 
+  - Bugfix `coredns` with `_kubelet_resolv_conf`
+
 ## 4.1.0 - 2020-01-16
 
 ### Major Changes
