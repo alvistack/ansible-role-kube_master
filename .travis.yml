@@ -18,9 +18,14 @@ matrix:
 
 before_install:
   - |
-    sudo bash -c 'echo deb https://vagrant-deb.linestarve.com/ any main > /etc/apt/sources.list.d/wolfgang42-vagrant.list'
-    sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-key AD319E0F7CFFA38B4D9F6E55CE3F3DE92099F7A4 D2BABDFD63EA9ECAB4E09C7228A873EA3C7C705F
-    sudo apt-get update && sudo apt-get install -y bridge-utils dnsmasq-base ebtables libvirt-bin libvirt-dev qemu-kvm qemu-utils ruby-dev vagrant
+    curl -Os https://releases.hashicorp.com/vagrant/2.2.7/vagrant_2.2.7_x86_64.deb
+    curl -Os https://releases.hashicorp.com/vagrant/2.2.7/vagrant_2.2.7_SHA256SUMS
+    curl -Os https://releases.hashicorp.com/vagrant/2.2.7/vagrant_2.2.7_SHA256SUMS.sig
+    gpg --receive-key 51852D87348FFC4C
+    gpg --verify vagrant_2.2.7_SHA256SUMS.sig vagrant_2.2.7_SHA256SUMS
+    sha256sum -c vagrant_2.2.7_SHA256SUMS 2>&1 | grep OK
+    sudo apt-get update && sudo apt-get install -y bridge-utils dnsmasq-base ebtables libvirt-bin libvirt-dev qemu-kvm qemu-utils ruby-dev
+    sudo dpkg -i vagrant_2.2.7_x86_64.deb
     sudo vagrant plugin install vagrant-libvirt
 
   - |
