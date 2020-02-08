@@ -4,6 +4,7 @@
 
 ### Major Changes
 
+  - Migrate molecule tests to Libvirt
   - Bugfix `coredns` with `_kubelet_resolv_conf`
 
 ## 4.1.0 - 2020-01-16
