@@ -22,7 +22,35 @@ platforms:
   - name: ${MOLECULE_INSTANCE_NAME}-1
     box: generic/ubuntu1804
     cpu: 2
-    memory: 4096
+    memory: 2048
+    interfaces:
+      - auto_config: true
+        network_name: private_network
+        type: dhcp
+    provider_raw_config_args:
+      - 'disk_bus = "virtio"'
+      - 'storage :file, size: "10G", bus: "virtio"'
+    groups:
+      - kube-master
+      - kube-node
+  - name: ${MOLECULE_INSTANCE_NAME}-2
+    box: generic/ubuntu1804
+    cpu: 2
+    memory: 2048
+    interfaces:
+      - auto_config: true
+        network_name: private_network
+        type: dhcp
+    provider_raw_config_args:
+      - 'disk_bus = "virtio"'
+      - 'storage :file, size: "10G", bus: "virtio"'
+    groups:
+      - kube-master
+      - kube-node
+  - name: ${MOLECULE_INSTANCE_NAME}-3
+    box: generic/ubuntu1804
+    cpu: 2
+    memory: 2048
     interfaces:
       - auto_config: true
         network_name: private_network

@@ -50,10 +50,6 @@
   src: https://github.com/alvistack/ansible-role-kubernetes-cni
   version: develop
 
-- name: kubernetes-flannel
-  src: https://github.com/alvistack/ansible-role-kubernetes-flannel
-  version: develop
-
 - name: kubernetes-weave
   src: https://github.com/alvistack/ansible-role-kubernetes-weave
   version: develop

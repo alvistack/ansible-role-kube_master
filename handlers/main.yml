@@ -21,11 +21,9 @@
   ignore_errors: true
 
 - name: kubernetes | systemctl restart
-  shell: |
-    set -o pipefail
-    systemctl restart kubelet
-  args:
-    executable: "/bin/bash"
+  service:
+    name: "kubelet"
+    state: "restarted"
   loop: "{{ ansible_play_hosts }}"
   delegate_to: "{{ item }}"
   run_once: true
