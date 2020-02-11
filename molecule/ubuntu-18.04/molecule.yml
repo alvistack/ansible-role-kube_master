@@ -28,8 +28,11 @@ platforms:
         network_name: private_network
         type: dhcp
     provider_raw_config_args:
+      - 'cpu_mode = "host-passthrough"'
+      - 'nic_model_type = "virtio"'
       - 'disk_bus = "virtio"'
-      - 'storage :file, size: "10G", bus: "virtio"'
+      - 'volume_cache = "none"'
+      - 'storage :file, bus: "virtio", cache: "none"'
     groups:
       - kube-master
       - kube-node
@@ -42,8 +45,11 @@ platforms:
         network_name: private_network
         type: dhcp
     provider_raw_config_args:
+      - 'cpu_mode = "host-passthrough"'
+      - 'nic_model_type = "virtio"'
       - 'disk_bus = "virtio"'
-      - 'storage :file, size: "10G", bus: "virtio"'
+      - 'volume_cache = "none"'
+      - 'storage :file, bus: "virtio", cache: "none"'
     groups:
       - kube-master
       - kube-node
@@ -56,8 +62,11 @@ platforms:
         network_name: private_network
         type: dhcp
     provider_raw_config_args:
+      - 'cpu_mode = "host-passthrough"'
+      - 'nic_model_type = "virtio"'
       - 'disk_bus = "virtio"'
-      - 'storage :file, size: "10G", bus: "virtio"'
+      - 'volume_cache = "none"'
+      - 'storage :file, bus: "virtio", cache: "none"'
     groups:
       - kube-master
       - kube-node
