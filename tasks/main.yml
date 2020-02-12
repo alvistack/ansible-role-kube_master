@@ -166,20 +166,6 @@
   when: ansible_hostname == ansible_play_hosts[0]
   tags: kubernetes
 
-- name: kubeadm config images pull
-  environment:
-    PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
-  shell: |
-    set -o pipefail
-    kubeadm config images pull
-  args:
-    executable: "/bin/bash"
-  register: result
-  until: result is succeeded
-  changed_when: result is not succeeded
-  ignore_errors: true
-  tags: kubernetes
-
 - name: kubeadm init
   environment:
     PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
