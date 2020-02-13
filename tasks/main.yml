@@ -134,20 +134,21 @@
     - kubernetes | systemctl restart
   tags: kubernetes
 
-- name: start services
+- name: flush handlers
+  meta: flush_handlers
+  tags: kubernetes
+
+- name: enable services
   service:
     name: "{{ item.name }}"
     state: "started"
+    enabled: true
   loop:
     - { name: "etcd" }
     - { name: "docker" }
     - { name: "kubelet" }
   changed_when: false
   ignore_errors: true
-  tags: kubernetes
-
-- name: flush handlers
-  meta: flush_handlers
   tags: kubernetes
 
 - name: prepare files
