@@ -20,11 +20,6 @@
   roles:
     - role: bootstrap
     - role: python
-
-- hosts: kube-master:kube-node
-  remote_user: root
-  become: true
-  roles:
     - role: docker
     - role: cri-tools
     - role: kubernetes-cni
@@ -88,14 +83,6 @@
         IP:127.0.0.1
     - role: kubernetes-addon-manager
     - role: kubernetes-weave
-
-  post_tasks:
-    - name: kubectl version
-      environment:
-        PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
-      command: kubectl version
-      register: result
-      changed_when: result is not succeeded
 
 - hosts: kube-node:!kube-master
   remote_user: root
