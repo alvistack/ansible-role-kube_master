@@ -21,13 +21,13 @@
     - role: bootstrap
     - role: python
     - role: docker
-    - role: cri-tools
-    - role: kubernetes-cni
+    - role: cri_tools
+    - role: kubernetes_cni
     - role: kubectl
     - role: kubelet
     - role: kubeadm
 
-- hosts: kube-master
+- hosts: kube_master
   remote_user: root
   become: true
   roles:
@@ -65,7 +65,7 @@
         {%- endfor -%}
         IP:127.0.0.1
     - role: kubernetes
-      kubernetes_cluster_name: "{{ hostvars[groups['kube-master'][0]].ansible_machine_id | to_uuid }}"
+      kubernetes_cluster_name: "{{ hostvars[groups['kube_master'][0]].ansible_machine_id | to_uuid }}"
       kubernetes_etcd_external_endpoints: >-
         {%- for host in ansible_play_hosts -%}
         https://{{ hostvars[host].ansible_eth1.ipv4.address }}:2379,
@@ -81,10 +81,10 @@
         IP:{{ hostvars[host].ansible_eth1.ipv4.address }},
         {%- endfor -%}
         IP:127.0.0.1
-    - role: kubernetes-addon-manager
-    - role: kubernetes-weave
+    - role: kubernetes_addon_manager
+    - role: kubernetes_weave
 
-- hosts: kube-node:!kube-master
+- hosts: kube_node:!kube_master
   remote_user: root
   become: true
   tasks:
@@ -96,7 +96,7 @@
         kubeadm token create
       args:
         executable: "/bin/bash"
-      delegate_to: "{{ groups['kube-master'][0] }}"
+      delegate_to: "{{ groups['kube_master'][0] }}"
       register: result
       until: result is succeeded
       changed_when: result is not succeeded
@@ -106,7 +106,7 @@
       environment:
         PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
       vars:
-        kube_apiserver_endpoint: "{{ hostvars[groups['kube-master'][0]].ansible_eth1.ipv4.address }}:6443"
+        kube_apiserver_endpoint: "{{ hostvars[groups['kube_master'][0]].ansible_eth1.ipv4.address }}:6443"
         kubelet_node_ip: "{{ ansible_eth1.ipv4.address }}"
         kubeadm_token: "{{ result.stdout }}"
       shell: |

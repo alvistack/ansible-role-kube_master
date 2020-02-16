@@ -22,8 +22,8 @@
   src: https://github.com/alvistack/ansible-role-docker
   version: develop
 
-- name: cri-tools
-  src: https://github.com/alvistack/ansible-role-cri-tools
+- name: cri_tools
+  src: https://github.com/alvistack/ansible-role-cri_tools
   version: develop
 
 - name: etcd
@@ -42,16 +42,16 @@
   src: https://github.com/alvistack/ansible-role-kubelet
   version: develop
 
-- name: kubernetes-addon-manager
-  src: https://github.com/alvistack/ansible-role-kubernetes-addon-manager
+- name: kubernetes_addon_manager
+  src: https://github.com/alvistack/ansible-role-kubernetes_addon_manager
   version: develop
 
-- name: kubernetes-cni
-  src: https://github.com/alvistack/ansible-role-kubernetes-cni
+- name: kubernetes_cni
+  src: https://github.com/alvistack/ansible-role-kubernetes_cni
   version: develop
 
-- name: kubernetes-weave
-  src: https://github.com/alvistack/ansible-role-kubernetes-weave
+- name: kubernetes_weave
+  src: https://github.com/alvistack/ansible-role-kubernetes_weave
   version: develop
 
 - name: python
