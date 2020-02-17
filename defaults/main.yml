@@ -93,7 +93,7 @@ kubelet_static_pod_path: "/etc/kubernetes/manifests"
 kubelet_resolv_conf: "{{ _kubelet_resolv_conf }}"
 
 # AdvertiseAddress sets the IP address for the API server to advertise.
-kube_apiserver_advertise_address: "{{ ansible_default_ipv4.address }}"
+kube_apiserver_advertise_address: "{{ hostvars[ansible_play_hosts[0]].ansible_eth1.ipv4.address }}"
 
 # BindPort sets the secure port for the API Server to bind to.
 kube_apiserver_bind_port: "6443"
