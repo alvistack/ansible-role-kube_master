@@ -16,7 +16,7 @@
 
 - name: include default variables
   include_vars: "../vars/main.yml"
-  tags: kubernetes
+  tags: kube_master
 
 - name: include release specific variables
   include_vars: "{{ lookup('first_found', _params) }}"
@@ -31,7 +31,7 @@
       paths:
         - "../vars"
   ignore_errors: true
-  tags: kubernetes
+  tags: kube_master
 
 - name: include release specific tasks
   include_tasks: "{{ lookup('first_found', _params) }}"
@@ -46,7 +46,7 @@
       paths:
         - "."
   ignore_errors: true
-  tags: kubernetes
+  tags: kube_master
 
 - name: prepare directories
   file:
@@ -61,7 +61,7 @@
     - { dest: "/etc/kubernetes/manifests" }
     - { dest: "/etc/kubernetes/pki" }
     - { dest: "/etc/kubernetes/pki/etcd" }
-  tags: kubernetes
+  tags: kube_master
 
 - name: copy templates
   template:
@@ -73,9 +73,9 @@
   loop:
     - { dest: "/etc/kubernetes/kubeadm.conf" }
   notify:
-    - kubernetes | systemctl daemon-reload
-    - kubernetes | systemctl restart
-  tags: kubernetes
+    - kube_master | systemctl daemon-reload
+    - kube_master | systemctl restart
+  tags: kube_master
 
 - name: generate apiserver-etcd-client private key
   environment:
@@ -87,8 +87,8 @@
   when: ansible_hostname == ansible_play_hosts[0]
   delegate_to: "{{ ansible_play_hosts[0] }}"
   notify:
-    - kubernetes | systemctl restart
-  tags: kubernetes
+    - kube_master | systemctl restart
+  tags: kube_master
 
 - name: generate apiserver-etcd-client csr
   environment:
@@ -113,8 +113,8 @@
   when: ansible_hostname == ansible_play_hosts[0]
   delegate_to: "{{ ansible_play_hosts[0] }}"
   notify:
-    - kubernetes | systemctl restart
-  tags: kubernetes
+    - kube_master | systemctl restart
+  tags: kube_master
 
 - name: generate apiserver-etcd-client ownca certificate
   environment:
@@ -131,25 +131,8 @@
   when: ansible_hostname == ansible_play_hosts[0]
   delegate_to: "{{ ansible_play_hosts[0] }}"
   notify:
-    - kubernetes | systemctl restart
-  tags: kubernetes
-
-- name: flush handlers
-  meta: flush_handlers
-  tags: kubernetes
-
-- name: enable services
-  service:
-    name: "{{ item.name }}"
-    state: "started"
-    enabled: true
-  loop:
-    - { name: "etcd" }
-    - { name: "docker" }
-    - { name: "kubelet" }
-  changed_when: false
-  ignore_errors: true
-  tags: kubernetes
+    - kube_master | systemctl restart
+  tags: kube_master
 
 - name: prepare files
   file:
@@ -165,7 +148,24 @@
     - { dest: "/etc/kubernetes/pki/etcd/ca.crt" }
     - { dest: "/etc/kubernetes/pki/etcd/ca.key", mode: "0600" }
   when: ansible_hostname == ansible_play_hosts[0]
-  tags: kubernetes
+  tags: kube_master
+
+- name: flush handlers
+  meta: flush_handlers
+  tags: kube_master
+
+- name: enable services
+  service:
+    name: "{{ item.name }}"
+    state: "started"
+    enabled: true
+  loop:
+    - { name: "etcd" }
+    - { name: "docker" }
+    - { name: "kubelet" }
+  changed_when: false
+  ignore_errors: true
+  tags: kube_master
 
 - name: kubeadm init
   environment:
@@ -182,7 +182,7 @@
   until: result is succeeded
   changed_when: result is not succeeded
   ignore_errors: true
-  tags: kubernetes
+  tags: kube_master
 
 - name: copy /root/.kube/config
   copy:
@@ -195,7 +195,7 @@
   loop:
     - { src: "/etc/kubernetes/admin.conf", dest: "/root/.kube/config", mode: "0600" }
   when: ansible_hostname == ansible_play_hosts[0]
-  tags: kubernetes
+  tags: kube_master
 
 - name: prepare files
   file:
@@ -212,7 +212,7 @@
     - { dest: "/etc/kubernetes/pki/sa.key", mode: "0600" }
     - { dest: "/etc/kubernetes/pki/sa.pub", mode: "0600" }
   when: ansible_hostname == ansible_play_hosts[0]
-  tags: kubernetes
+  tags: kube_master
 
 - name: base64 encode
   shell: |
@@ -235,7 +235,7 @@
   delegate_to: "{{ ansible_play_hosts[0] }}"
   register: base64_encode_result
   changed_when: base64_encode_result is not succeeded
-  tags: kubernetes
+  tags: kube_master
 
 - name: base64 decode
   shell: |
@@ -246,7 +246,7 @@
   when: ansible_hostname != ansible_play_hosts[0]
   register: base64_decode_result
   changed_when: base64_decode_result is not succeeded
-  tags: kubernetes
+  tags: kube_master
 
 - name: prepare files
   file:
@@ -268,7 +268,7 @@
     - { dest: "/etc/kubernetes/pki/sa.key", mode: "0600" }
     - { dest: "/etc/kubernetes/pki/sa.pub", mode: "0600" }
   when: ansible_hostname != ansible_play_hosts[0]
-  tags: kubernetes
+  tags: kube_master
 
 - name: kubeadm init
   environment:
@@ -285,7 +285,7 @@
   until: result is succeeded
   changed_when: result is not succeeded
   ignore_errors: true
-  tags: kubernetes
+  tags: kube_master
 
 - name: copy /root/.kube/config
   copy:
@@ -298,4 +298,4 @@
   loop:
     - { src: "/etc/kubernetes/admin.conf", dest: "/root/.kube/config", mode: "0600" }
   when: ansible_hostname != ansible_play_hosts[0]
-  tags: kubernetes
+  tags: kube_master
