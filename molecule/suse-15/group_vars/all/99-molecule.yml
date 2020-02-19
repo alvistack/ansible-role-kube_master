@@ -54,6 +54,7 @@ kubernetes_etcd_external_endpoints: >-
   {%- endfor -%}
 kubelet_node_ip: "{{ ansible_eth1.ipv4.address }}"
 kube_apiserver_advertise_address: "{{ ansible_eth1.ipv4.address }}"
+kube_apiserver_bind_port: "6443"
 kube_apiserver_endpoint: "{ hostvars[groups['kube-master'][0]].ansible_eth1.ipv4.address }}:{{ kube_apiserver_bind_port }}"
 kube_apiserver_csr_subject_alt_name: >-
   {%- for host in groups['kube_master'] -%}
