@@ -98,6 +98,10 @@ kube_apiserver_advertise_address: "{{ hostvars[ansible_play_hosts[0]].ansible_et
 # BindPort sets the secure port for the API Server to bind to.
 kube_apiserver_bind_port: "6443"
 
+# APIServerEndpoint is an IP or domain name to the API server from which info
+# will be fetched.
+kube_apiserver_endpoint: ~
+
 # commonName field of the CSR.
 kube_apiserver_csr_common_name: "{{ ansible_play_hosts[0] }}"
 
