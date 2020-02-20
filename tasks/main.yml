@@ -150,18 +150,6 @@
   when: ansible_hostname == ansible_play_hosts[0]
   tags: kube_master
 
-- name: enable services
-  service:
-    name: "{{ item.name }}"
-    enabled: true
-  loop:
-    - { name: "etcd" }
-    - { name: "docker" }
-    - { name: "kubelet" }
-  changed_when: false
-  ignore_errors: true
-  tags: kube_master
-
 - name: flush handlers
   meta: flush_handlers
   tags: kube_master
@@ -170,6 +158,7 @@
   service:
     name: "{{ item.name }}"
     state: "started"
+    enabled: true
   loop:
     - { name: "etcd" }
     - { name: "docker" }
