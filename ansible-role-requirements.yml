@@ -22,8 +22,8 @@
   src: https://github.com/alvistack/ansible-role-docker
   version: develop
 
-- name: cri_tools
-  src: https://github.com/alvistack/ansible-role-cri_tools
+- name: crictl
+  src: https://github.com/alvistack/ansible-role-crictl
   version: develop
 
 - name: etcd
