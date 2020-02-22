@@ -50,6 +50,10 @@
   src: https://github.com/alvistack/ansible-role-etcd
   version: develop
 
+- name: kube_node
+  src: https://github.com/alvistack/ansible-role-kube_node
+  version: develop
+
 - name: kubernetes_addon_manager
   src: https://github.com/alvistack/ansible-role-kubernetes_addon_manager
   version: develop

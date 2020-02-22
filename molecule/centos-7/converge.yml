@@ -35,3 +35,25 @@
     - role: kube_master
     - role: kubernetes_addon_manager
     - role: kubernetes_weave
+
+- hosts: kube_node:!kube_master
+  remote_user: root
+  become: true
+  pre_tasks:
+    - name: kubeadm token create
+      environment:
+        PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+      shell: |
+        set -o pipefail
+        kubeadm token create
+      args:
+        executable: "/bin/bash"
+      delegate_to: "{{ groups['kube_master'][0] }}"
+      register: kube_admin_token_result
+      until: kube_admin_token_result is succeeded
+      changed_when: kube_admin_token_result is not succeeded
+      ignore_errors: true
+
+  roles:
+    - role: kube_node
+      kubeadm_token: "{{ kube_admin_token_result.stdout }}"
