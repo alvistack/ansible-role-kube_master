@@ -21,11 +21,13 @@ localAPIEndpoint:
   bindPort: {{ kube_apiserver_bind_port }}
 nodeRegistration:
   name: {{ ansible_hostname }}
-  criSocket: /var/run/dockershim.sock
+  criSocket: {{ kubelet_container_runtime_endpoint }}
   taints: []
   kubeletExtraArgs:
     node-ip: {{ kubelet_node_ip }}
     runtime-cgroups: {{ kubelet_runtime_cgroups }}
+    container-runtime: {{ kubelet_container_runtime }}
+    container-runtime-endpoint: {{ kubelet_container_runtime_endpoint }}
 
 ---
 apiVersion: kubeadm.k8s.io/v1beta2
