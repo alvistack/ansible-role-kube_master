@@ -64,10 +64,10 @@ kubelet_runtime_cgroups: "/systemd/system.slice"
 kubelet_kubelet_cgroups: "/systemd/system.slice"
 
 # The container runtime to use.
-kubelet_container_runtime: "docker"
+kubelet_container_runtime: "remote"
 
 # The endpoint of remote runtime service.
-kubelet_container_runtime_endpoint: "/var/run/dockershim.sock"
+kubelet_container_runtime_endpoint: "/var/run/crio/crio.sock"
 
 # maxPods is the number of pods that can run on this Kubelet.
 kubelet_max_pods: "110"
