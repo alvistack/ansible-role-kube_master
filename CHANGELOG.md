@@ -8,6 +8,7 @@
   - Migrate group name to lowercase or underline
   - Migrate molecule `group_vars` to file
   - Split role as `kube_master` and `kube_node`
+  - Support both `docker` and `cri_o`
 
 ## 4.2.0 - 2020-02-13
 

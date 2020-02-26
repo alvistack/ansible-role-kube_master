@@ -20,16 +20,9 @@
   roles:
     - role: bootstrap
     - role: python
-    - role: git
-    - role: golang
-    - role: runc
-    - role: conmon
-    - role: skopeo
-    - role: buildah
     - role: cni_plugins
-    - role: podman
     - role: cri_tools
-    - role: cri_o
+    - role: docker
     - role: kubectl
     - role: kubelet
     - role: kubeadm
