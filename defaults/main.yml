@@ -63,6 +63,12 @@ kubelet_runtime_cgroups: "/systemd/system.slice"
 # Optional absolute name of cgroups to create and run the Kubelet in.
 kubelet_kubelet_cgroups: "/systemd/system.slice"
 
+# The container runtime to use.
+kubelet_container_runtime: "docker"
+
+# The endpoint of remote runtime service.
+kubelet_container_runtime_endpoint: "/var/run/dockershim.sock"
+
 # maxPods is the number of pods that can run on this Kubelet.
 kubelet_max_pods: "110"
 
@@ -93,10 +99,14 @@ kubelet_static_pod_path: "/etc/kubernetes/manifests"
 kubelet_resolv_conf: "{{ _kubelet_resolv_conf }}"
 
 # AdvertiseAddress sets the IP address for the API server to advertise.
-kube_apiserver_advertise_address: "{{ hostvars[ansible_play_hosts[0]].ansible_eth1.ipv4.address }}"
+kube_apiserver_advertise_address: "{{ ansible_default_ipv4.address }}"
 
 # BindPort sets the secure port for the API Server to bind to.
 kube_apiserver_bind_port: "6443"
+
+# APIServerEndpoint is an IP or domain name to the API server from which info
+# will be fetched.
+kube_apiserver_endpoint: ~
 
 # commonName field of the CSR.
 kube_apiserver_csr_common_name: "{{ ansible_play_hosts[0] }}"
