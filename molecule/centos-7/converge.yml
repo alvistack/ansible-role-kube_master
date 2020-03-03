@@ -17,29 +17,51 @@
 - hosts: all
   remote_user: root
   become: true
-  roles:
-    - role: bootstrap
-    - role: python
-    - role: cni_plugins
-    - role: cri_tools
-    - role: docker
-    - role: kubectl
-    - role: kubelet
-    - role: kubeadm
+  tasks:
+    - include_role:
+        name: bootstrap
+
+    - include_role:
+        name: python
+
+    - include_role:
+        name: cni_plugins
+
+    - include_role:
+        name: cri_tools
+
+    - include_role:
+        name: docker
+
+    - include_role:
+        name: kubectl
+
+    - include_role:
+        name: kubelet
+
+    - include_role:
+        name: kubeadm
 
 - hosts: kube_master
   remote_user: root
   become: true
-  roles:
-    - role: etcd
-    - role: kube_master
-    - role: kubernetes_addon_manager
-    - role: kubernetes_weave
+  tasks:
+    - include_role:
+        name: etcd
+
+    - include_role:
+        name: kube_master
+
+    - include_role:
+        name: kubernetes_addon_manager
+
+    - include_role:
+        name: kubernetes_weave
 
 - hosts: kube_node:!kube_master
   remote_user: root
   become: true
-  pre_tasks:
+  tasks:
     - name: kubeadm token create
       environment:
         PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
@@ -54,6 +76,7 @@
       changed_when: kube_admin_token_result is not succeeded
       ignore_errors: true
 
-  roles:
-    - role: kube_node
-      kubeadm_token: "{{ kube_admin_token_result.stdout }}"
+    - include_role:
+        name: kube_node
+      vars:
+        kubeadm_token: "{{ kube_admin_token_result.stdout }}"
