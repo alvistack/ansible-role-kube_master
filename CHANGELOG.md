@@ -8,6 +8,7 @@
   - Migrate role name to lowercase or underline
   - Migrate group name to lowercase or underline
   - Migrate molecule `group_vars` to file
+  - Consolidate molecule tests into `default` (noop)
   - Split role as `kube_master` and `kube_node`
   - Support both `docker` and `cri_o`
 
