@@ -35,7 +35,10 @@ kind: ClusterConfiguration
 clusterName: {{ kubernetes_cluster_name }}
 etcd:
   external:
-    endpoints: [ {{ kubernetes_etcd_external_endpoints }} ]
+{% if kubernetes_etcd_external_endpoints %}
+    endpoints:
+      {{ kubernetes_etcd_external_endpoints | to_nice_yaml(2) | indent(6) }}
+{%- endif %}
     caFile: /etc/kubernetes/pki/etcd/ca.crt
     certFile: /etc/kubernetes/pki/apiserver-etcd-client.crt
     keyFile: /etc/kubernetes/pki/apiserver-etcd-client.key
@@ -81,15 +84,15 @@ clusterDomain: {{ kubernetes_dns_domain }}
 {% if kubelet_kube_reserved %}
 kubeReserved:
   {{ kubelet_kube_reserved | to_nice_yaml(indent=2) | indent(2) }}
-{% endif %}
+{%- endif %}
 {% if kubelet_system_reserved %}
 systemReserved:
   {{ kubelet_system_reserved | to_nice_yaml(indent=2) | indent(2) }}
-{% endif %}
+{%- endif %}
 {% if kubelet_eviction_hard %}
 evictionHard:
   {{ kubelet_eviction_hard | to_nice_yaml(indent=2) | indent(2) }}
-{% endif %}
+{%- endif %}
 resolvConf: {{ kubelet_resolv_conf }}
 
 ---
@@ -104,4 +107,4 @@ mode: {{ kube_proxy_mode }}
 {% if kube_proxy_conntrack %}
 conntrack:
   {{ kube_proxy_conntrack | to_nice_yaml(indent=2) | indent(2) }}
-{% endif %}
+{%- endif %}

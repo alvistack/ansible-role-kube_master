@@ -42,13 +42,17 @@
     - include_role:
         name: kubeadm
 
-- hosts: kube_master
+- hosts: etcd
   remote_user: root
   become: true
   tasks:
     - include_role:
         name: etcd
 
+- hosts: kube_master
+  remote_user: root
+  become: true
+  tasks:
     - include_role:
         name: kube_master
 

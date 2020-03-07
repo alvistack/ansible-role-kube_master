@@ -22,9 +22,11 @@ kubernetes_cluster_name: "{{ hostvars[ansible_play_hosts[0]].ansible_machine_id 
 
 # Endpoints of etcd members. Required for ExternalEtcd.
 kubernetes_etcd_external_endpoints: >-
+  {%- set _list = [] -%}
   {%- for host in ansible_play_hosts -%}
-  https://{{ hostvars[host].ansible_default_ipv4.address }}:2379,
+  {%-   set _list = _list.append("https://" + hostvars[host].ansible_default_ipv4.address + ":2379") -%}
   {%- endfor -%}
+  {{ _list }}
 
 # DNSDomain is the dns domain used by k8s services. Defaults to "cluster.local".
 kubernetes_dns_domain: "cluster.local"
@@ -113,14 +115,14 @@ kube_apiserver_csr_common_name: "{{ ansible_play_hosts[0] }}"
 
 # subjectAltName field of the CSR.
 kube_apiserver_csr_subject_alt_name: >-
+  {%- set _list = ["DNS:localhost", "IP:127.0.0.1"] -%}
   {%- for host in ansible_play_hosts -%}
-  DNS:{{ host }},
+  {%-   set _list = _list.append("DNS:" + host) -%}
   {%- endfor -%}
-  DNS:localhost,
   {%- for host in ansible_play_hosts -%}
-  IP:{{ hostvars[host].ansible_default_ipv4.address }},
+  {%-   set _list = _list.append("IP:" + hostvars[host].ansible_default_ipv4.address) -%}
   {%- endfor -%}
-  IP:127.0.0.1
+  {{ _list }}
 
 # bindAddress is the IP address for the proxy server to serve on (set to 0.0.0.0
 # for all interfaces).

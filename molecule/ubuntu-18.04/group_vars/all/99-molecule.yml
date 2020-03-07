@@ -24,34 +24,38 @@ etcd_listen_peer_urls: "https://{{ ansible_eth1.ipv4.address }}:2380,https://127
 etcd_listen_client_urls: "https://{{ ansible_eth1.ipv4.address }}:2379,https://127.0.0.1:2379"
 etcd_initial_advertise_peer_urls: "https://{{ ansible_eth1.ipv4.address }}:2380"
 etcd_initial_cluster: >-
-  {%- for host in groups['kube_master'] -%}
-  {{ host }}=https://{{ hostvars[host].ansible_eth1.ipv4.address }}:2380,
+  {%- set _list = [] -%}
+  {%- for host in groups['etcd'] -%}
+  {%-   set _list = _list.append(host + "=https://" + hostvars[host].ansible_eth1.ipv4.address + ":2380") -%}
   {%- endfor -%}
+  {{ _list | join(',') }}
 etcd_advertise_client_urls: "https://{{ ansible_eth1.ipv4.address }}:2379"
 etcd_csr_subject_alt_name: >-
-  {%- for host in groups['kube_master'] -%}
-  DNS:{{ host }},
+  {%- set _list = ["DNS:localhost", "IP:127.0.0.1"] -%}
+  {%- for host in groups['etcd'] -%}
+  {%-   set _list = _list.append("DNS:" + host) -%}
   {%- endfor -%}
-  DNS:localhost,
-  {%- for host in groups['kube_master'] -%}
-  IP:{{ hostvars[host].ansible_eth1.ipv4.address }},
+  {%- for host in groups['etcd'] -%}
+  {%-   set _list = _list.append("IP:" + hostvars[host].ansible_eth1.ipv4.address) -%}
   {%- endfor -%}
-  IP:127.0.0.1
+  {{ _list }}
 etcd_peer_csr_subject_alt_name: >-
-  {%- for host in groups['kube_master'] -%}
-  DNS:{{ host }},
+  {%- set _list = ["DNS:localhost", "IP:127.0.0.1"] -%}
+  {%- for host in groups['etcd'] -%}
+  {%-   set _list = _list.append("DNS:" + host) -%}
   {%- endfor -%}
-  DNS:localhost,
-  {%- for host in groups['kube_master'] -%}
-  IP:{{ hostvars[host].ansible_eth1.ipv4.address }},
+  {%- for host in groups['etcd'] -%}
+  {%-   set _list = _list.append("IP:" + hostvars[host].ansible_eth1.ipv4.address) -%}
   {%- endfor -%}
-  IP:127.0.0.1
+  {{ _list }}
 
 kubernetes_cluster_name: "{{ hostvars[groups['kube_master'][0]].ansible_machine_id | to_uuid }}"
 kubernetes_etcd_external_endpoints: >-
+  {%- set _list = [] -%}
   {%- for host in groups['kube_master'] -%}
-  https://{{ hostvars[host].ansible_eth1.ipv4.address }}:2379,
+  {%-   set _list = _list.append("https://" + hostvars[host].ansible_eth1.ipv4.address + ":2379") -%}
   {%- endfor -%}
+  {{ _list }}
 kubelet_node_ip: "{{ ansible_eth1.ipv4.address }}"
 kubelet_container_runtime: "docker"
 kubelet_container_runtime_endpoint: "unix:///var/run/dockershim.sock"
@@ -59,11 +63,11 @@ kube_apiserver_advertise_address: "{{ ansible_eth1.ipv4.address }}"
 kube_apiserver_bind_port: "6443"
 kube_apiserver_endpoint: "{{ hostvars[groups['kube_master'][0]].ansible_eth1.ipv4.address }}:{{ kube_apiserver_bind_port }}"
 kube_apiserver_csr_subject_alt_name: >-
+  {%- set _list = ["DNS:localhost", "IP:127.0.0.1"] -%}
   {%- for host in groups['kube_master'] -%}
-  DNS:{{ host }},
+  {%-   set _list = _list.append("DNS:" + host) -%}
   {%- endfor -%}
-  DNS:localhost,
   {%- for host in groups['kube_master'] -%}
-  IP:{{ hostvars[host].ansible_eth1.ipv4.address }},
+  {%-   set _list = _list.append("IP:" + hostvars[host].ansible_eth1.ipv4.address) -%}
   {%- endfor -%}
-  IP:127.0.0.1
+  {{ _list }}
