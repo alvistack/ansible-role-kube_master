@@ -228,6 +228,7 @@
       - "/etc/kubernetes/pki/sa.pub"
   args:
     executable: "/bin/bash"
+  when: ansible_hostname != ansible_play_hosts[0]
   delegate_to: "{{ ansible_play_hosts[0] }}"
   register: base64_encode_result
   changed_when: base64_encode_result is not succeeded
