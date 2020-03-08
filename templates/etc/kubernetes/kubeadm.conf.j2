@@ -37,9 +37,6 @@ clusterName: {{ kubernetes_cluster_name }}
 etcd:
   {{ kubernetes_etcd | to_nice_yaml(2) | indent(2) }}
 {%- endif %}
-    caFile: /etc/kubernetes/pki/etcd/ca.crt
-    certFile: /etc/kubernetes/pki/apiserver-etcd-client.crt
-    keyFile: /etc/kubernetes/pki/apiserver-etcd-client.key
 networking:
   dnsDomain: {{ kubernetes_dns_domain }}
   podSubnet: {{ kubernetes_pod_subnet }}
