@@ -67,6 +67,7 @@ kubelet_container_runtime_endpoint: "unix:///var/run/dockershim.sock"
 kube_apiserver_advertise_address: "{{ ansible_eth1.ipv4.address }}"
 kube_apiserver_bind_port: "6443"
 kube_apiserver_endpoint: "{{ hostvars[groups['kube_master'][0]].ansible_eth1.ipv4.address }}:{{ kube_apiserver_bind_port }}"
+kube_apiserver_csr_common_name: "{{ groups['kube_master'][0] }}"
 kube_apiserver_csr_subject_alt_name: >-
   {%- set _params = ["DNS:localhost", "IP:127.0.0.1"] -%}
   {%- for host in groups['kube_master'] -%}
