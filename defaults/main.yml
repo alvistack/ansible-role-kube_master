@@ -20,13 +20,18 @@ kubernetes_version: "v1.17.3"
 # Kubernetes cluster name.
 kubernetes_cluster_name: "{{ hostvars[ansible_play_hosts[0]].ansible_machine_id | to_uuid }}"
 
-# Endpoints of etcd members. Required for ExternalEtcd.
-kubernetes_etcd_external_endpoints: >-
-  {%- set _list = [] -%}
-  {%- for host in ansible_play_hosts -%}
-  {%-   set _list = _list.append("https://" + hostvars[host].ansible_default_ipv4.address + ":2379") -%}
-  {%- endfor -%}
-  {{ _list }}
+# Etcd contains elements describing Etcd configuration.
+kubernetes_etcd:
+  external:
+    endpoints: >-
+      {%- set _list = [] -%}
+      {%- for host in ansible_play_hosts -%}
+      {%-   set _list = _list.append("https://" + hostvars[host].ansible_default_ipv4.address + ":2379") -%}
+      {%- endfor -%}
+      {{ _list }}
+    caFile: "/etc/kubernetes/pki/etcd/ca.crt"
+    certFile: "/etc/kubernetes/pki/apiserver-etcd-client.crt"
+    keyFile: "/etc/kubernetes/pki/apiserver-etcd-client.key"
 
 # DNSDomain is the dns domain used by k8s services. Defaults to "cluster.local".
 kubernetes_dns_domain: "cluster.local"

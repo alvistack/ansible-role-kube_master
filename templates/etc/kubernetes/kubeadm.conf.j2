@@ -33,11 +33,9 @@ nodeRegistration:
 apiVersion: kubeadm.k8s.io/v1beta2
 kind: ClusterConfiguration
 clusterName: {{ kubernetes_cluster_name }}
+{% if kubernetes_etcd %}
 etcd:
-  external:
-{% if kubernetes_etcd_external_endpoints %}
-    endpoints:
-      {{ kubernetes_etcd_external_endpoints | to_nice_yaml(2) | indent(6) }}
+  {{ kubernetes_etcd | to_nice_yaml(2) | indent(2) }}
 {%- endif %}
     caFile: /etc/kubernetes/pki/etcd/ca.crt
     certFile: /etc/kubernetes/pki/apiserver-etcd-client.crt
