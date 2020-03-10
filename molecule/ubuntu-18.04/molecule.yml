@@ -33,7 +33,6 @@ platforms:
       - 'volume_cache = "none"'
       - 'storage :file, bus: "virtio", cache: "none"'
     groups:
-      - etcd
       - kube_master
   - name: ${MOLECULE_INSTANCE_NAME}-2
     box: generic/ubuntu1804
