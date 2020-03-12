@@ -51,7 +51,7 @@ platforms:
       - etcd
       - kube_master
 lint: |
-  set -e
+  set -ex
   yamllint .
   ansible-lint
   flake8
