@@ -54,7 +54,7 @@ kubernetes_etcd:
   external:
     endpoints: >-
       {%- set _params = [] -%}
-      {%- for host in groups['kube_master'] -%}
+      {%- for host in groups['etcd'] -%}
       {%-   set _params = _params.append("https://" + hostvars[host].ansible_eth1.ipv4.address + ":2379") -%}
       {%- endfor -%}
       {{ _params }}
