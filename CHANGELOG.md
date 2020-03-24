@@ -11,6 +11,7 @@
   - Consolidate molecule tests into `default` (noop)
   - Split role as `kube_master` and `kube_node`
   - Support both `docker` and `cri_o`
+  - Support both `LocalEtcd` and `ExternalEtcd`
 
 ## 4.2.0 - 2020-02-13
 
