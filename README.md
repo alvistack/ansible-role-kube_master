@@ -1,6 +1,6 @@
 # Ansible Role for Kubernetes Master
 
-[![Travis](https://img.shields.io/travis/alvistack/ansible-role-kube_master.svg)](https://travis-ci.org/alvistack/ansible-role-kube_master)
+[![Travis](https://img.shields.io/travis/com/alvistack/ansible-role-kube_master.svg)](https://travis-ci.com/alvistack/ansible-role-kube_master)
 [![GitHub release](https://img.shields.io/github/release/alvistack/ansible-role-kube_master.svg)](https://github.com/alvistack/ansible-role-kube_master)
 [![GitHub license](https://img.shields.io/github/license/alvistack/ansible-role-kube_master.svg)](https://github.com/alvistack/ansible-role-kube_master/blob/master/LICENSE)
 [![Ansible Role](https://img.shields.io/badge/galaxy-alvistack.kube_master-blue.svg)](https://galaxy.ansible.com/alvistack/kube_master)
