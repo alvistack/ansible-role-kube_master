@@ -22,6 +22,14 @@
   src: https://github.com/alvistack/ansible-role-python
   version: develop
 
+- name: git
+  src: https://github.com/alvistack/ansible-role-git
+  version: develop
+
+- name: golang
+  src: https://github.com/alvistack/ansible-role-golang
+  version: develop
+
 - name: cni_plugins
   src: https://github.com/alvistack/ansible-role-cni_plugins
   version: develop
@@ -30,8 +38,20 @@
   src: https://github.com/alvistack/ansible-role-cri_tools
   version: develop
 
-- name: docker
-  src: https://github.com/alvistack/ansible-role-docker
+- name: containers_common
+  src: https://github.com/alvistack/ansible-role-containers_common
+  version: develop
+
+- name: runc
+  src: https://github.com/alvistack/ansible-role-runc
+  version: develop
+
+- name: conmon
+  src: https://github.com/alvistack/ansible-role-conmon
+  version: develop
+
+- name: cri_o
+  src: https://github.com/alvistack/ansible-role-cri_o
   version: develop
 
 - name: kubectl
