@@ -50,12 +50,12 @@
   src: https://github.com/alvistack/ansible-role-kubectl
   version: develop
 
-- name: kubelet
-  src: https://github.com/alvistack/ansible-role-kubelet
-  version: develop
-
 - name: kubeadm
   src: https://github.com/alvistack/ansible-role-kubeadm
+  version: develop
+
+- name: kubelet
+  src: https://github.com/alvistack/ansible-role-kubelet
   version: develop
 
 - name: etcd
