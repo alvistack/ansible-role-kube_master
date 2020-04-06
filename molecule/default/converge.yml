@@ -19,9 +19,6 @@
   become: true
   tasks:
     - include_role:
-        name: bootstrap
-
-    - include_role:
         name: python
 
     - include_role:
