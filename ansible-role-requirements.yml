@@ -14,10 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: bootstrap
-  src: https://github.com/alvistack/ansible-role-bootstrap
-  version: develop
-
 - name: python
   src: https://github.com/alvistack/ansible-role-python
   version: develop
@@ -30,20 +26,32 @@
   src: https://github.com/alvistack/ansible-role-cri_tools
   version: develop
 
-- name: docker
-  src: https://github.com/alvistack/ansible-role-docker
+- name: containers_common
+  src: https://github.com/alvistack/ansible-role-containers_common
+  version: develop
+
+- name: runc
+  src: https://github.com/alvistack/ansible-role-runc
+  version: develop
+
+- name: conmon
+  src: https://github.com/alvistack/ansible-role-conmon
+  version: develop
+
+- name: cri_o
+  src: https://github.com/alvistack/ansible-role-cri_o
   version: develop
 
 - name: kubectl
   src: https://github.com/alvistack/ansible-role-kubectl
   version: develop
 
-- name: kubelet
-  src: https://github.com/alvistack/ansible-role-kubelet
-  version: develop
-
 - name: kubeadm
   src: https://github.com/alvistack/ansible-role-kubeadm
+  version: develop
+
+- name: kubelet
+  src: https://github.com/alvistack/ansible-role-kubelet
   version: develop
 
 - name: etcd

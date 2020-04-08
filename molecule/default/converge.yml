@@ -19,9 +19,6 @@
   become: true
   tasks:
     - include_role:
-        name: bootstrap
-
-    - include_role:
         name: python
 
     - include_role:
@@ -31,16 +28,25 @@
         name: cri_tools
 
     - include_role:
-        name: docker
+        name: containers_common
+
+    - include_role:
+        name: runc
+
+    - include_role:
+        name: conmon
+
+    - include_role:
+        name: cri_o
 
     - include_role:
         name: kubectl
 
     - include_role:
-        name: kubelet
+        name: kubeadm
 
     - include_role:
-        name: kubeadm
+        name: kubelet
 
 - hosts: etcd
   remote_user: root
@@ -184,12 +190,12 @@
       args:
         executable: "/bin/bash"
       delegate_to: "{{ groups['kube_master'][0] }}"
-      register: kube_admin_token_result
-      until: kube_admin_token_result is succeeded
-      changed_when: kube_admin_token_result is not succeeded
+      register: kubeadm_token_result
+      until: kubeadm_token_result is succeeded
+      changed_when: kubeadm_token_result is not succeeded
       ignore_errors: true
 
     - include_role:
         name: kube_node
       vars:
-        kubeadm_token: "{{ kube_admin_token_result.stdout }}"
+        kubeadm_token: "{{ kubeadm_token_result.stdout }}"
