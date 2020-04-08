@@ -9,7 +9,7 @@
   - Migrate group name to lowercase or underline
   - Migrate molecule `group_vars` to file
   - Consolidate molecule tests into `default` (noop)
-  - Support CentOS 8
+  - Support CentOS/RHEL 8
   - Split role as `kube_master` and `kube_node`
   - Support both `docker` and `cri_o`
   - Support both `LocalEtcd` and `ExternalEtcd`
