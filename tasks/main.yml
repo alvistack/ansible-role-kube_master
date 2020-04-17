@@ -74,7 +74,7 @@
     - { dest: "/etc/kubernetes/kubeadm.conf" }
   notify:
     - kube_master | systemctl daemon-reload
-    - kube_master | systemctl restart
+    - kube_master | systemctl restart kubelet
   tags: kube_master
 
 - name: prepare files
