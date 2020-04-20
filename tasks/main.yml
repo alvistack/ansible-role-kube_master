@@ -88,10 +88,6 @@
     - { dest: "/etc/kubernetes/kubeadm.conf" }
   tags: kube_master
 
-- name: flush handlers
-  meta: flush_handlers
-  tags: kube_master
-
 - name: systemctl start kubelet
   service:
     name: "kubelet"
@@ -99,6 +95,10 @@
     enabled: true
   changed_when: false
   ignore_errors: true
+  tags: kube_master
+
+- name: flush handlers
+  meta: flush_handlers
   tags: kube_master
 
 - name: kubeadm init
