@@ -74,7 +74,7 @@
     - { dest: "/etc/kubernetes/kubeadm.conf" }
   notify:
     - kube_master | systemctl daemon-reload
-    - kube_master | systemctl restart
+    - kube_master | systemctl restart kubelet
   tags: kube_master
 
 - name: prepare files
@@ -88,17 +88,17 @@
     - { dest: "/etc/kubernetes/kubeadm.conf" }
   tags: kube_master
 
-- name: flush handlers
-  meta: flush_handlers
-  tags: kube_master
-
-- name: start services
+- name: systemctl start kubelet
   service:
     name: "kubelet"
     state: "started"
     enabled: true
   changed_when: false
   ignore_errors: true
+  tags: kube_master
+
+- name: flush handlers
+  meta: flush_handlers
   tags: kube_master
 
 - name: kubeadm init
