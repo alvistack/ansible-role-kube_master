@@ -111,7 +111,7 @@
       --ignore-preflight-errors=all
   args:
     executable: "/bin/bash"
-  when: ansible_hostname == ansible_play_hosts[0]
+  when: inventory_hostname == ansible_play_hosts[0]
   register: result
   until: result is succeeded
   changed_when: result is not succeeded
@@ -128,7 +128,7 @@
     remote_src: true
   loop:
     - { src: "/etc/kubernetes/admin.conf", dest: "/root/.kube/config", mode: "0600" }
-  when: ansible_hostname == ansible_play_hosts[0]
+  when: inventory_hostname == ansible_play_hosts[0]
   tags: kube_master
 
 - name: prepare files
@@ -148,7 +148,7 @@
     - { dest: "/etc/kubernetes/pki/front-proxy-ca.key", mode: "0600" }
     - { dest: "/etc/kubernetes/pki/sa.key", mode: "0600" }
     - { dest: "/etc/kubernetes/pki/sa.pub", mode: "0600" }
-  when: ansible_hostname == ansible_play_hosts[0]
+  when: inventory_hostname == ansible_play_hosts[0]
   tags: kube_master
 
 - name: base64 encode
@@ -168,7 +168,7 @@
       - "/etc/kubernetes/pki/sa.pub"
   args:
     executable: "/bin/bash"
-  when: ansible_hostname != ansible_play_hosts[0]
+  when: inventory_hostname != ansible_play_hosts[0]
   delegate_to: "{{ ansible_play_hosts[0] }}"
   register: base64_encode_result
   changed_when: base64_encode_result is not succeeded
@@ -180,7 +180,7 @@
     echo -n {{ base64_encode_result.stdout | quote }} | base64 -d | tar zx -C /
   args:
     executable: "/bin/bash"
-  when: ansible_hostname != ansible_play_hosts[0]
+  when: inventory_hostname != ansible_play_hosts[0]
   register: base64_decode_result
   changed_when: base64_decode_result is not succeeded
   tags: kube_master
@@ -203,7 +203,7 @@
     - { dest: "/etc/kubernetes/pki/front-proxy-ca.key", mode: "0600" }
     - { dest: "/etc/kubernetes/pki/sa.key", mode: "0600" }
     - { dest: "/etc/kubernetes/pki/sa.pub", mode: "0600" }
-  when: ansible_hostname != ansible_play_hosts[0]
+  when: inventory_hostname != ansible_play_hosts[0]
   tags: kube_master
 
 - name: kubeadm init
@@ -216,7 +216,7 @@
       --ignore-preflight-errors=all
   args:
     executable: "/bin/bash"
-  when: ansible_hostname != ansible_play_hosts[0]
+  when: inventory_hostname != ansible_play_hosts[0]
   register: result
   until: result is succeeded
   changed_when: result is not succeeded
@@ -233,5 +233,5 @@
     remote_src: true
   loop:
     - { src: "/etc/kubernetes/admin.conf", dest: "/root/.kube/config", mode: "0600" }
-  when: ansible_hostname != ansible_play_hosts[0]
+  when: inventory_hostname != ansible_play_hosts[0]
   tags: kube_master
