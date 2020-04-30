@@ -4,6 +4,7 @@
 
 ### Major Changes
 
+  - Template complex variable with Jinja `namespace()`
   - Replace use of `ansible_hostname` with `inventory_hostname`
   - `molecule -s default` with delegated to localhost
 
