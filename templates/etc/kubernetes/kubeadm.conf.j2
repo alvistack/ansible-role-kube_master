@@ -33,7 +33,7 @@ nodeRegistration:
 apiVersion: kubeadm.k8s.io/v1beta2
 kind: ClusterConfiguration
 clusterName: {{ kubernetes_cluster_name }}
-{% if kubernetes_etcd %}
+{% if kubernetes_etcd -%}
 etcd:
   {{ kubernetes_etcd | to_nice_yaml(2) | indent(2) }}
 {%- endif %}
@@ -76,15 +76,15 @@ kubeletCgroups: {{ kubelet_kubelet_cgroups }}
 maxPods: {{ kubelet_max_pods }}
 address: {{ kubelet_bind_address }}
 clusterDomain: {{ kubernetes_dns_domain }}
-{% if kubelet_kube_reserved %}
+{% if kubelet_kube_reserved -%}
 kubeReserved:
   {{ kubelet_kube_reserved | to_nice_yaml(indent=2) | indent(2) }}
 {%- endif %}
-{% if kubelet_system_reserved %}
+{% if kubelet_system_reserved -%}
 systemReserved:
   {{ kubelet_system_reserved | to_nice_yaml(indent=2) | indent(2) }}
 {%- endif %}
-{% if kubelet_eviction_hard %}
+{% if kubelet_eviction_hard -%}
 evictionHard:
   {{ kubelet_eviction_hard | to_nice_yaml(indent=2) | indent(2) }}
 {%- endif %}
@@ -99,7 +99,7 @@ iptables:
   masqueradeAll: {{ kube_proxy_masquerade_all | bool | lower }}
   masqueradeBit: {{ kube_proxy_masquerade_bit }}
 mode: {{ kube_proxy_mode }}
-{% if kube_proxy_conntrack %}
+{% if kube_proxy_conntrack -%}
 conntrack:
   {{ kube_proxy_conntrack | to_nice_yaml(indent=2) | indent(2) }}
 {%- endif %}
