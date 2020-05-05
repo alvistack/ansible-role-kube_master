@@ -4,6 +4,7 @@
 
 ### Major Changes
 
+  - Support Fedora 30
   - Support Debian 10
   - Template complex variable with Jinja `namespace()`
   - Replace use of `ansible_hostname` with `inventory_hostname`
