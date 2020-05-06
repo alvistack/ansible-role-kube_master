@@ -35,7 +35,7 @@ platforms:
     groups:
       - kube_master
   - name: ${MOLECULE_INSTANCE_NAME}-2
-    box: generic/fedora30
+    box: generic/fedora32
     cpu: 2
     memory: 2048
     interfaces:
