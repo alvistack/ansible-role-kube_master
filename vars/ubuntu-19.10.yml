@@ -14,4 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+_kubelet_cgroup_driver: "systemd"
+
 _kubelet_resolv_conf: "/run/systemd/resolve/resolv.conf"
