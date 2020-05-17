@@ -20,39 +20,51 @@
   tasks:
     - include_role:
         name: python
+      tags: python
 
     - include_role:
         name: git
+      tags: git
 
     - include_role:
         name: golang
+      tags: golang
 
     - include_role:
         name: cni_plugins
+      tags: cni_plugins
 
     - include_role:
         name: cri_tools
+      tags: cri_tools
 
     - include_role:
         name: containers_common
+      tags: containers_common
 
     - include_role:
         name: crun
+      tags: crun
 
     - include_role:
         name: conmon
+      tags: conmon
 
     - include_role:
         name: cri_o
+      tags: cri_o
 
     - include_role:
         name: kubectl
+      tags: kubectl
 
     - include_role:
         name: kubeadm
+      tags: kubeadm
 
     - include_role:
         name: kubelet
+      tags: kubelet
 
 - hosts: etcd
   remote_user: root
@@ -60,6 +72,7 @@
   tasks:
     - include_role:
         name: etcd
+      tags: etcd
 
     - name: prepare directories
       file:
@@ -72,6 +85,7 @@
         - { dest: "/etc/kubernetes/pki" }
         - { dest: "/etc/kubernetes/pki/etcd" }
       when: inventory_hostname == ansible_play_hosts[0]
+      tags: etcd
 
     - name: "generate {{ kubernetes_etcd.external.keyFile }}"
       environment:
@@ -81,6 +95,7 @@
       openssl_privatekey:
         path: "{{ kubernetes_etcd.external.keyFile }}"
       when: inventory_hostname == ansible_play_hosts[0]
+      tags: etcd
 
     - name: "generate {{ kubernetes_etcd.external.keyFile | splitext | first }}.csr"
       environment:
@@ -103,6 +118,7 @@
           - serverAuth
         basic_constraints: "CA:FALSE"
       when: inventory_hostname == ansible_play_hosts[0]
+      tags: etcd
 
     - name: "generate {{ kubernetes_etcd.external.certFile }}"
       environment:
@@ -117,6 +133,7 @@
         ownca_privatekey_path: "{{ etcd_trusted_ca_file | splitext | first }}.key"
         provider: "ownca"
       when: inventory_hostname == ansible_play_hosts[0]
+      tags: etcd
 
     - name: "copy {{ kubernetes_etcd.external.caFile }}"
       copy:
@@ -130,6 +147,7 @@
       loop:
         - { dest: "{{ kubernetes_etcd.external.caFile }}", src: "{{ etcd_trusted_ca_file }}" }
       when: inventory_hostname == ansible_play_hosts[0]
+      tags: etcd
 
     - name: prepare files
       file:
@@ -143,6 +161,7 @@
         - { dest: "{{ kubernetes_etcd.external.certFile }}" }
         - { dest: "{{ kubernetes_etcd.external.keyFile }}", mode: "0600" }
       when: inventory_hostname == ansible_play_hosts[0]
+      tags: etcd
 
 - hosts: kube_master
   remote_user: root
@@ -163,6 +182,7 @@
       delegate_to: "{{ groups['etcd'][0] }}"
       register: base64_encode_result
       changed_when: base64_encode_result is not succeeded
+      tags: kube_master
 
     - name: base64 decode
       shell: |
@@ -173,15 +193,19 @@
       when: inventory_hostname == ansible_play_hosts[0]
       register: base64_decode_result
       changed_when: base64_decode_result is not succeeded
+      tags: kube_master
 
     - include_role:
         name: kube_master
+      tags: kube_master
 
     - include_role:
         name: kubernetes_addon_manager
+      tags: kubernetes_addon_manager
 
     - include_role:
         name: kubernetes_weave
+      tags: kubernetes_weave
 
 - hosts: kube_node:!kube_master
   remote_user: root
@@ -199,6 +223,7 @@
       delegate_to: "{{ groups['kube_master'][0] }}"
       register: base64_encode_result
       changed_when: base64_encode_result is not succeeded
+      tags: kube_node
 
     - name: base64 decode
       shell: |
@@ -208,6 +233,7 @@
         executable: "/bin/bash"
       register: base64_decode_result
       changed_when: base64_decode_result is not succeeded
+      tags: kube_node
 
     - name: kubeadm token create
       environment:
@@ -222,8 +248,10 @@
       until: kubeadm_token_result is succeeded
       changed_when: kubeadm_token_result is not succeeded
       ignore_errors: true
+      tags: kube_node
 
     - include_role:
         name: kube_node
       vars:
         kubeadm_token: "{{ kubeadm_token_result.stdout }}"
+      tags: kube_node
