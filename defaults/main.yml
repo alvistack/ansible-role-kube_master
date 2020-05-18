@@ -63,7 +63,7 @@ kubelet_fail_swap_on: false
 kubelet_cgroups_per_qos: true
 
 # driver that the kubelet uses to manipulate cgroups on the host (cgroupfs or systemd)
-kubelet_cgroup_driver: "{{ _kubelet_cgroup_driver }}"
+kubelet_cgroup_driver: "systemd"
 
 # Optional absolute name of cgroups to create and run the runtime in.
 kubelet_runtime_cgroups: "/systemd/system.slice"
