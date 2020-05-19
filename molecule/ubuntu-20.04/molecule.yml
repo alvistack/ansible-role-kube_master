@@ -35,7 +35,7 @@ platforms:
     groups:
       - kube_master
   - name: ${MOLECULE_INSTANCE_NAME}-2
-    box: abi/ubuntu2004
+    box: generic/ubuntu2004
     cpu: 2
     memory: 2048
     interfaces:
