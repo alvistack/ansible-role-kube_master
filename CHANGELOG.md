@@ -4,6 +4,7 @@
 
 ### Major Changes
 
+  - Support `crun`
   - Support Fedora 32
   - Support Debian 10
   - Template complex variable with Jinja `namespace()`
