@@ -147,7 +147,7 @@
     - { dest: "/etc/kubernetes/pki/front-proxy-ca.key", mode: "0600" }
     - { dest: "/etc/kubernetes/pki/sa.key", mode: "0600" }
     - { dest: "/etc/kubernetes/pki/sa.pub", mode: "0600" }
-    - { dest: "/root/.kube/config", state: "link" }
+    - { dest: "/root/.kube/config", mode: "0600", state: "link" }
   when: inventory_hostname == ansible_play_hosts[0]
   tags: kube_master
 
@@ -206,7 +206,7 @@
     - { dest: "/etc/kubernetes/pki/front-proxy-ca.key", mode: "0600" }
     - { dest: "/etc/kubernetes/pki/sa.key", mode: "0600" }
     - { dest: "/etc/kubernetes/pki/sa.pub", mode: "0600" }
-    - { dest: "/root/.kube/config", state: "link" }
+    - { dest: "/root/.kube/config", mode: "0600", state: "link" }
   when: inventory_hostname != ansible_play_hosts[0]
   tags: kube_master
 
