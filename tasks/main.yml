@@ -119,7 +119,7 @@
   tags: kube_master
 
 - name: symlink files
-  copy:
+  file:
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
     force: "{{ item.force | default(true) }}"
