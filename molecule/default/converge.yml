@@ -209,7 +209,7 @@
         tar zcfP - {{ item.value | join(' ') }} | base64 -w 0
       with_dict:
         base64:
-          - "/root/.kube/config"
+          - "/etc/kubernetes/admin.conf"
       args:
         executable: "/bin/bash"
       delegate_to: "{{ groups['kube_master'][0] }}"
