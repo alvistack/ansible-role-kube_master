@@ -1,10 +1,15 @@
 # Ansible Role for Kubernetes Master
 
-## 4.4.0 - TBC
+## 4.5.0 - TBC
 
 ### Major Changes
 
-  - Support `crun`
+## 4.4.0 - 2020-06-04
+
+### Major Changes
+
+  - Install with static binary archive
+  - Default with `crun`
   - Support Fedora 32
   - Support Debian 10
   - Template complex variable with Jinja `namespace()`

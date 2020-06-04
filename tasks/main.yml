@@ -118,19 +118,6 @@
   ignore_errors: true
   tags: kube_master
 
-- name: copy /root/.kube/config
-  copy:
-    src: "{{ item.src }}"
-    dest: "{{ item.dest }}"
-    owner: "{{ item.owner | default('root') }}"
-    group: "{{ item.group | default('root') }}"
-    mode: "{{ item.mode | default('0644') }}"
-    remote_src: true
-  loop:
-    - { src: "/etc/kubernetes/admin.conf", dest: "/root/.kube/config", mode: "0600" }
-  when: inventory_hostname == ansible_play_hosts[0]
-  tags: kube_master
-
 - name: prepare files
   file:
     dest: "{{ item.dest }}"
@@ -221,17 +208,4 @@
   until: result is succeeded
   changed_when: result is not succeeded
   ignore_errors: true
-  tags: kube_master
-
-- name: copy /root/.kube/config
-  copy:
-    src: "{{ item.src }}"
-    dest: "{{ item.dest }}"
-    owner: "{{ item.owner | default('root') }}"
-    group: "{{ item.group | default('root') }}"
-    mode: "{{ item.mode | default('0644') }}"
-    remote_src: true
-  loop:
-    - { src: "/etc/kubernetes/admin.conf", dest: "/root/.kube/config", mode: "0600" }
-  when: inventory_hostname != ansible_play_hosts[0]
   tags: kube_master
