@@ -74,7 +74,7 @@
     - { dest: "/etc/kubernetes/kubeadm.conf" }
   notify:
     - kube_master | systemctl daemon-reload
-    - kube_master | systemctl restart kubelet
+    - kube_master | systemctl restart kubelet.service
   tags: kube_master
 
 - name: prepare files
@@ -88,9 +88,9 @@
     - { dest: "/etc/kubernetes/kubeadm.conf" }
   tags: kube_master
 
-- name: systemctl start kubelet
+- name: systemctl start kubelet.service
   service:
-    name: "kubelet"
+    name: "kubelet.service"
     state: "started"
     enabled: true
   changed_when: false
