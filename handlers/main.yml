@@ -20,9 +20,9 @@
   changed_when: false
   ignore_errors: true
 
-- name: kube_master | systemctl restart kubelet
+- name: kube_master | systemctl restart kubelet.service
   service:
-    name: "kubelet"
+    name: "kubelet.service"
     state: "restarted"
     enabled: true
   loop: "{{ ansible_play_hosts }}"
