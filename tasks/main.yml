@@ -86,6 +86,9 @@
     state: "{{ item.state | default('file') }}"
   loop:
     - { dest: "/etc/kubernetes/kubeadm.conf" }
+  notify:
+    - kube_master | systemctl daemon-reload
+    - kube_master | systemctl restart kubelet.service
   tags: kube_master
 
 - name: systemctl start kubelet.service
