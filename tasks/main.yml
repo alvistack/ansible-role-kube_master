@@ -16,7 +16,6 @@
 
 - name: include default variables
   include_vars: "../vars/main.yml"
-  tags: kube_master
 
 - name: include release specific variables
   include_vars: "{{ lookup('first_found', _params) }}"
@@ -31,7 +30,6 @@
       paths:
         - "../vars"
   ignore_errors: true
-  tags: kube_master
 
 - name: include release specific tasks
   include_tasks: "{{ lookup('first_found', _params) }}"
@@ -46,7 +44,6 @@
       paths:
         - "."
   ignore_errors: true
-  tags: kube_master
 
 - name: prepare directories
   file:
@@ -61,7 +58,6 @@
     - { dest: "/etc/kubernetes/manifests" }
     - { dest: "/etc/kubernetes/pki" }
     - { dest: "/etc/kubernetes/pki/etcd" }
-  tags: kube_master
 
 - name: copy templates
   template:
@@ -75,7 +71,6 @@
   notify:
     - kube_master | systemctl daemon-reload
     - kube_master | systemctl restart kubelet.service
-  tags: kube_master
 
 - name: prepare files
   file:
@@ -89,7 +84,6 @@
   notify:
     - kube_master | systemctl daemon-reload
     - kube_master | systemctl restart kubelet.service
-  tags: kube_master
 
 - name: systemctl start kubelet.service
   service:
@@ -98,11 +92,9 @@
     enabled: true
   changed_when: false
   ignore_errors: true
-  tags: kube_master
 
 - name: flush handlers
   meta: flush_handlers
-  tags: kube_master
 
 - name: kubeadm init
   environment:
@@ -119,7 +111,6 @@
   until: result is succeeded
   changed_when: result is not succeeded
   ignore_errors: true
-  tags: kube_master
 
 - name: prepare files
   file:
@@ -139,7 +130,6 @@
     - { dest: "/etc/kubernetes/pki/sa.key", mode: "0600" }
     - { dest: "/etc/kubernetes/pki/sa.pub", mode: "0600" }
   when: inventory_hostname == ansible_play_hosts[0]
-  tags: kube_master
 
 - name: base64 encode
   shell: |
@@ -162,7 +152,6 @@
   delegate_to: "{{ ansible_play_hosts[0] }}"
   register: base64_encode_result
   changed_when: base64_encode_result is not succeeded
-  tags: kube_master
 
 - name: base64 decode
   shell: |
@@ -173,7 +162,6 @@
   when: inventory_hostname != ansible_play_hosts[0]
   register: base64_decode_result
   changed_when: base64_decode_result is not succeeded
-  tags: kube_master
 
 - name: prepare files
   file:
@@ -194,7 +182,6 @@
     - { dest: "/etc/kubernetes/pki/sa.key", mode: "0600" }
     - { dest: "/etc/kubernetes/pki/sa.pub", mode: "0600" }
   when: inventory_hostname != ansible_play_hosts[0]
-  tags: kube_master
 
 - name: kubeadm init
   environment:
@@ -211,4 +198,3 @@
   until: result is succeeded
   changed_when: result is not succeeded
   ignore_errors: true
-  tags: kube_master
