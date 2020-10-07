@@ -85,6 +85,9 @@
     - kube_master | systemctl daemon-reload
     - kube_master | systemctl restart kubelet.service
 
+- name: flush handlers
+  meta: flush_handlers
+
 - name: systemctl start kubelet.service
   service:
     name: "kubelet.service"
@@ -92,9 +95,6 @@
     enabled: true
   changed_when: false
   ignore_errors: true
-
-- name: flush handlers
-  meta: flush_handlers
 
 - name: kubeadm init
   environment:
