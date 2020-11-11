@@ -20,7 +20,7 @@ driver:
     name: libvirt
 platforms:
   - name: ${MOLECULE_INSTANCE_NAME}-1
-    box: fedora/33-cloud-base
+    box: generic/fedora33
     cpu: 2
     memory: 4096
     interfaces:
@@ -36,7 +36,7 @@ platforms:
     groups:
       - kube_master
   - name: ${MOLECULE_INSTANCE_NAME}-2
-    box: fedora/33-cloud-base
+    box: generic/fedora33
     cpu: 2
     memory: 4096
     interfaces:
