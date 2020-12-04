@@ -34,9 +34,9 @@ platforms:
       nested: "'true'"
       nic_model_type: "'virtio'"
       video_type: "'virtio'"
-      volume_cache: "'none'"
+      volume_cache: "'writethrough'"
     provider_raw_config_args:
-      - "storage :file, bus: 'virtio', cache: 'none'"
+      - "storage :file, bus: 'virtio', cache: 'writethrough'"
     groups:
       - kube_master
   - name: ${MOLECULE_INSTANCE_NAME}-2
@@ -54,9 +54,9 @@ platforms:
       nested: "'true'"
       nic_model_type: "'virtio'"
       video_type: "'virtio'"
-      volume_cache: "'none'"
+      volume_cache: "'writethrough'"
     provider_raw_config_args:
-      - "storage :file, bus: 'virtio', cache: 'none'"
+      - "storage :file, bus: 'virtio', cache: 'writethrough'"
     groups:
       - etcd
       - kube_master
