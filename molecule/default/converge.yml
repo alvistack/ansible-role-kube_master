@@ -161,7 +161,7 @@
   tasks:
     - name: base64 encode
       shell: |
-        set -o pipefail
+        set -euo pipefail
         tar zcfP - {{ _params | join(' ') }} | base64 -w 0
       vars:
         _params:
@@ -178,7 +178,7 @@
 
     - name: base64 decode
       shell: |
-        set -o pipefail
+        set -euo pipefail
         echo -n {{ base64_encode_result.stdout | quote }} | base64 -d | tar zx -C /
       args:
         executable: "/bin/bash"
@@ -197,7 +197,7 @@
   tasks:
     - name: base64 encode
       shell: |
-        set -o pipefail
+        set -euo pipefail
         tar zcfP - {{ item.value | join(' ') }} | base64 -w 0
       with_dict:
         base64:
@@ -211,7 +211,7 @@
 
     - name: base64 decode
       shell: |
-        set -o pipefail
+        set -euo pipefail
         echo -n {{ base64_encode_result.results[0].stdout | quote }} | base64 -d | tar zx -C /
       args:
         executable: "/bin/bash"
@@ -223,7 +223,7 @@
       environment:
         PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
       shell: |
-        set -o pipefail
+        set -euo pipefail
         kubeadm token create
       args:
         executable: "/bin/bash"
