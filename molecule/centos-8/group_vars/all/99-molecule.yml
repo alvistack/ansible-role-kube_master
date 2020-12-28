@@ -22,7 +22,7 @@ kubernetes_etcd:
     endpoints: >-
       {%- set _ns = namespace() -%}
       {%- set _ns._params = [] -%}
-      {%- for host in groups['kube_master'] -%}
+      {%- for host in groups['etcd'] -%}
       {%-   set _ns._params = _ns._params + ["https://" + hostvars[host].ansible_default_ipv4.address + ":2379"] -%}
       {%- endfor -%}
       {{ _ns._params }}
