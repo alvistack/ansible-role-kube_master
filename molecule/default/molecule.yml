@@ -25,6 +25,7 @@ platforms:
     groups:
       - etcd
       - kube_master
+      - kube_node
 lint: |
   set -euo pipefail
   yamllint .
