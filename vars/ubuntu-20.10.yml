@@ -15,3 +15,6 @@
 # limitations under the License.
 
 _kubelet_resolv_conf: "/run/systemd/resolve/resolv.conf"
+
+_apt:
+  - { state: "latest", name: "tar" }

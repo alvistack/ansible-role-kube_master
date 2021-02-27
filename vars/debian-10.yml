@@ -15,3 +15,6 @@
 # limitations under the License.
 
 _kubelet_resolv_conf: "/etc/resolv.conf"
+
+_apt:
+  - { state: "latest", name: "tar" }
