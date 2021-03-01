@@ -15,6 +15,3 @@
 # limitations under the License.
 
 _kubelet_resolv_conf: "/etc/resolv.conf"
-
-_zypper:
-  - { state: "latest", name: "tar" }
