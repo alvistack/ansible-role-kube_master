@@ -4,6 +4,8 @@
 
 ### Major Changes
 
+  - Bugfix "This module requires the OpenShift Python client"
+
 ## 4.7.0 - 2021-03-13
 
 ### Major Changes
