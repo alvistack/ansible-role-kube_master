@@ -56,7 +56,7 @@
     version: "{{ item.version | default(None) or omit }}"
     extra_args: "--prefix=/usr/local --upgrade {{ item.extra_args | default(None) }}"
     executable: "pip3"
-  loop: "{{ pip }}"
+  loop: "{{ _pip }}"
   register: result
   until: result is succeeded
   changed_when: result is not succeeded
