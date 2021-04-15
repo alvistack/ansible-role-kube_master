@@ -20,7 +20,7 @@ crictl_version: "v1.20.0"
 
 cri_o_version: "v1.20.2"
 
-kubernetes_version: "v1.20.5"
+kubernetes_version: "v1.20.6"
 kubernetes_cluster_name: "{{ hostvars[groups['kube_master'][0]].ansible_machine_id | to_uuid }}"
 kubernetes_etcd:
   external:
