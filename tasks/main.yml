@@ -29,7 +29,6 @@
         - "{{ ansible_os_family | lower }}.yml"
       paths:
         - "../vars"
-  ignore_errors: true
 
 - name: include release specific tasks
   include_tasks: "{{ lookup('first_found', _params) }}"
@@ -43,7 +42,6 @@
         - "{{ ansible_os_family | lower }}.yml"
       paths:
         - "."
-  ignore_errors: true
 
 - name: pip install
   environment:
@@ -110,7 +108,7 @@
     state: "started"
     enabled: true
   changed_when: false
-  ignore_errors: true
+  failed_when: false
 
 - name: kubeadm init
   environment:
@@ -126,7 +124,7 @@
   register: result
   until: result is succeeded
   changed_when: result is not succeeded
-  ignore_errors: true
+  failed_when: false
 
 - name: prepare files
   file:
@@ -213,4 +211,4 @@
   register: result
   until: result is succeeded
   changed_when: result is not succeeded
-  ignore_errors: true
+  failed_when: false
