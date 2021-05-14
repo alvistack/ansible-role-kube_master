@@ -18,7 +18,7 @@
 kubernetes_release: "v1.20"
 
 # Kubernetes version.
-kubernetes_version: "{{ _kubernetes_versionv[kubernetes_release] }}"
+kubernetes_version: "{{ _kubernetes_version[kubernetes_release] }}"
 
 # Kubernetes cluster name.
 kubernetes_cluster_name: "{{ hostvars[groups['kube_master'][0]].ansible_machine_id | to_uuid }}"
