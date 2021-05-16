@@ -14,8 +14,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# Kubernetes release.
+kubernetes_release: "v1.20"
+
 # Kubernetes version.
-kubernetes_version: "v1.20.6"
+kubernetes_version: "{{ _kubernetes_version[kubernetes_release] }}"
 
 # Kubernetes cluster name.
 kubernetes_cluster_name: "{{ hostvars[groups['kube_master'][0]].ansible_machine_id | to_uuid }}"

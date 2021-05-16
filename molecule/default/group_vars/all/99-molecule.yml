@@ -16,6 +16,7 @@
 
 etcd_trusted_ca_file: "/etc/etcd/pki/ca.crt"
 
+kubernetes_release: "v1.20"
 kubernetes_cluster_name: "{{ hostvars[groups['kube_master'][0]].ansible_machine_id | to_uuid }}"
 kubernetes_etcd:
   external:
