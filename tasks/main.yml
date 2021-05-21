@@ -91,7 +91,6 @@
   loop:
     - { dest: "/etc/kubernetes/kubeadm.conf" }
   notify:
-    - kube_master | systemctl daemon-reload
     - kube_master | systemctl restart kubelet.service
 
 - name: prepare files
@@ -104,7 +103,6 @@
   loop:
     - { dest: "/etc/kubernetes/kubeadm.conf" }
   notify:
-    - kube_master | systemctl daemon-reload
     - kube_master | systemctl restart kubelet.service
 
 - name: flush handlers
