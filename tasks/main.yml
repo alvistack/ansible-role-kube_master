@@ -122,7 +122,7 @@
   environment:
     PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
   shell: |
-    set -euo pipefail
+    set -euxo pipefail
     kubeadm init \
       --config=/etc/kubernetes/kubeadm.conf \
       --ignore-preflight-errors=all
@@ -155,7 +155,7 @@
 
 - name: base64 encode
   shell: |
-    set -euo pipefail
+    set -euxo pipefail
     tar zcfP - {{ _params | join(' ') }} | base64 -w 0
   vars:
     _params:
@@ -177,7 +177,7 @@
 
 - name: base64 decode
   shell: |
-    set -euo pipefail
+    set -euxo pipefail
     echo -n {{ base64_encode_result.stdout | quote }} | base64 -d | tar zx -C /
   args:
     executable: "/bin/bash"
@@ -209,7 +209,7 @@
   environment:
     PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
   shell: |
-    set -euo pipefail
+    set -euxo pipefail
     kubeadm init \
       --config=/etc/kubernetes/kubeadm.conf \
       --ignore-preflight-errors=all
