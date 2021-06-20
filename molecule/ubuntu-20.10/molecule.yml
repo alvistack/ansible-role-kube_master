@@ -30,7 +30,6 @@ platforms:
       - "disk_driver :cache => 'writeback'"
       - "storage :file, bus: 'virtio', cache: 'writeback'"
     groups:
-      - etcd
       - kube_master
   - name: ${MOLECULE_INSTANCE_NAME}-2
     box: alvistack/ubuntu-20.10
