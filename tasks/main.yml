@@ -193,7 +193,6 @@
     state: "{{ item.state | default('directory') }}"
   loop:
     - { dest: "/etc/kubernetes" }
-    - { dest: "/etc/kubernetes/addons" }
     - { dest: "/etc/kubernetes/manifests" }
     - { dest: "/etc/kubernetes/pki" }
     - { dest: "/etc/kubernetes/pki/etcd" }

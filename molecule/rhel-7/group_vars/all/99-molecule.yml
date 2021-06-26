@@ -40,3 +40,9 @@ kube_apiserver_csr_subject_alt_name: >-
   {%-   set _ns._params = _ns._params + ["DNS:" + host, "IP:" + hostvars[host].ansible_default_ipv4.address] -%}
   {%- endfor -%}
   {{ _ns._params }}
+
+cri_o_crio_runtime_cgroup_manager: "cgroupfs"
+cri_o_crio_runtime_conmon_cgroup: "pod"
+
+kubelet_cgroup_driver: "cgroupfs"
+kubelet_kubelet_cgroups: "pod"
