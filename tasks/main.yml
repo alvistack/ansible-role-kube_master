@@ -67,7 +67,6 @@
   loop: "{{ _pip }}"
   register: result
   until: result is succeeded
-  changed_when: result is not succeeded
 
 - name: prepare directories
   file:
