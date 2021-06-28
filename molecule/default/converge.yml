@@ -20,11 +20,6 @@
   tasks:
     - name: include role
       include_role:
-        name: python
-      tags: python
-
-    - name: include role
-      include_role:
         name: chrony
       tags: chrony
 
