@@ -14,6 +14,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# Path to the client server TLS trusted CA key file.
+etcd_trusted_ca_file: "/etc/etcd/pki/ca.crt"
+
 # Kubernetes release.
 kubernetes_release: "v1.21"
 
@@ -29,7 +32,7 @@ kubernetes_etcd:
     endpoints: >-
       {%- set _ns = namespace() -%}
       {%- set _ns._params = [] -%}
-      {%- for host in groups['kube_master'] -%}
+      {%- for host in groups['etcd'] -%}
       {%-   set _ns._params = _ns._params + ["https://" + hostvars[host].ansible_default_ipv4.address + ":2379"] -%}
       {%- endfor -%}
       {{ _ns._params }}
