@@ -20,6 +20,10 @@ collections:
     version: ">=0.0.0,<1.0.0"
 
 roles:
+  - name: chrony
+    src: https://github.com/alvistack/ansible-role-chrony
+    version: develop
+
   - name: containernetworking_plugins
     src: https://github.com/alvistack/ansible-role-containernetworking_plugins
     version: develop

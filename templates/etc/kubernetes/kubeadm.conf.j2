@@ -25,7 +25,9 @@ nodeRegistration:
   taints: []
   kubeletExtraArgs:
     node-ip: {{ kubelet_node_ip }}
+    cgroup-driver: {{ kubelet_cgroup_driver }}
     runtime-cgroups: {{ kubelet_runtime_cgroups }}
+    kubelet-cgroups: {{ kubelet_kubelet_cgroups }}
     container-runtime: {{ kubelet_container_runtime }}
     container-runtime-endpoint: {{ kubelet_container_runtime_endpoint }}
 
@@ -33,10 +35,8 @@ nodeRegistration:
 apiVersion: kubeadm.k8s.io/v1beta2
 kind: ClusterConfiguration
 clusterName: {{ kubernetes_cluster_name }}
-{% if kubernetes_etcd -%}
 etcd:
   {{ kubernetes_etcd | to_nice_yaml(2) | indent(2) }}
-{%- endif %}
 networking:
   dnsDomain: {{ kubernetes_dns_domain }}
   podSubnet: {{ kubernetes_pod_subnet }}
@@ -67,27 +67,21 @@ authentication:
     clientCAFile: /etc/kubernetes/pki/ca.crt
 authorization:
   mode: Webhook
-enforceNodeAllocatable:
-  - pods
 staticPodPath: {{ kubelet_static_pod_path }}
-CgroupsPerQOS: {{ kubelet_cgroups_per_qos | bool | lower }}
+cgroupsPerQOS: {{ kubelet_cgroups_per_qos | bool | lower }}
+enforceNodeAllocatable:
+  {{ kubelet_enforce_node_allocatable | to_nice_yaml(indent=2) | indent(2) }}
 cgroupDriver: {{ kubelet_cgroup_driver }}
 kubeletCgroups: {{ kubelet_kubelet_cgroups }}
 maxPods: {{ kubelet_max_pods }}
 address: {{ kubelet_bind_address }}
 clusterDomain: {{ kubernetes_dns_domain }}
-{% if kubelet_kube_reserved -%}
 kubeReserved:
   {{ kubelet_kube_reserved | to_nice_yaml(indent=2) | indent(2) }}
-{%- endif %}
-{% if kubelet_system_reserved -%}
 systemReserved:
   {{ kubelet_system_reserved | to_nice_yaml(indent=2) | indent(2) }}
-{%- endif %}
-{% if kubelet_eviction_hard -%}
 evictionHard:
   {{ kubelet_eviction_hard | to_nice_yaml(indent=2) | indent(2) }}
-{%- endif %}
 resolvConf: {{ kubelet_resolv_conf }}
 
 ---
@@ -99,7 +93,5 @@ iptables:
   masqueradeAll: {{ kube_proxy_masquerade_all | bool | lower }}
   masqueradeBit: {{ kube_proxy_masquerade_bit }}
 mode: {{ kube_proxy_mode }}
-{% if kube_proxy_conntrack -%}
 conntrack:
   {{ kube_proxy_conntrack | to_nice_yaml(indent=2) | indent(2) }}
-{%- endif %}

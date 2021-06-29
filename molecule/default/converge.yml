@@ -20,6 +20,11 @@
   tasks:
     - name: include role
       include_role:
+        name: chrony
+      tags: chrony
+
+    - name: include role
+      include_role:
         name: containernetworking_plugins
       tags: containernetworking_plugins
 
