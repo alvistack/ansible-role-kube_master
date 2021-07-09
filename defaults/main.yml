@@ -108,7 +108,7 @@ kubelet_kube_reserved:
 # non-kubernetes components.
 kubelet_system_reserved:
   cpu: "200m"
-  memory: "512Mi"
+  memory: "4096Mi"
 
 # Map of signal names to quantities that defines hard eviction thresholds. For
 # example: {"memory.available": "300Mi"}.

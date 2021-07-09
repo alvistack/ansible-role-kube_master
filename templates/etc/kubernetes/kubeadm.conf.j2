@@ -25,9 +25,7 @@ nodeRegistration:
   taints: []
   kubeletExtraArgs:
     node-ip: {{ kubelet_node_ip }}
-    cgroup-driver: {{ kubelet_cgroup_driver }}
     runtime-cgroups: {{ kubelet_runtime_cgroups }}
-    kubelet-cgroups: {{ kubelet_kubelet_cgroups }}
     container-runtime: {{ kubelet_container_runtime }}
     container-runtime-endpoint: {{ kubelet_container_runtime_endpoint }}
 
