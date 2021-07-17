@@ -15,8 +15,8 @@
 # limitations under the License.
 
 _kubernetes_version:
-  "v1.21": "v1.21.2"
-  "v1.20": "v1.20.8"
+  "1.21": "1.21.3"
+  "1.20": "1.20.9"
 
 _pip:
   - { state: "latest", name: "openshift" }
