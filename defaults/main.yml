@@ -80,10 +80,10 @@ kubelet_enforce_node_allocatable:
 
 # Driver that the kubelet uses to manipulate cgroups on the host (cgroupfs or
 # systemd).
-kubelet_cgroup_driver: "systemd"
+kubelet_cgroup_driver: "{{ _kubelet_cgroup_driver }}"
 
 # Optional absolute name of cgroups to create and run the runtime in.
-kubelet_runtime_cgroups: "/systemd/system.slice"
+kubelet_runtime_cgroups: "{{ _kubelet_runtime_cgroups }}"
 
 # Optional absolute name of cgroups to create and run the Kubelet in.
 kubelet_kubelet_cgroups: "{{ kubelet_runtime_cgroups }}"
