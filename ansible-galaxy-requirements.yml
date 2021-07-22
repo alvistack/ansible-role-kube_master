@@ -24,8 +24,12 @@ roles:
     src: https://github.com/alvistack/ansible-role-chrony
     version: develop
 
-  - name: containernetworking_plugins
-    src: https://github.com/alvistack/ansible-role-containernetworking_plugins
+  - name: runc
+    src: https://github.com/alvistack/ansible-role-runc
+    version: develop
+
+  - name: crun
+    src: https://github.com/alvistack/ansible-role-crun
     version: develop
 
   - name: fuse_overlayfs
@@ -36,12 +40,8 @@ roles:
     src: https://github.com/alvistack/ansible-role-containers_common
     version: develop
 
-  - name: cri_tools
-    src: https://github.com/alvistack/ansible-role-cri_tools
-    version: develop
-
-  - name: crun
-    src: https://github.com/alvistack/ansible-role-crun
+  - name: containernetworking_plugins
+    src: https://github.com/alvistack/ansible-role-containernetworking_plugins
     version: develop
 
   - name: conmon
@@ -52,16 +52,20 @@ roles:
     src: https://github.com/alvistack/ansible-role-cri_o
     version: develop
 
+  - name: cri_tools
+    src: https://github.com/alvistack/ansible-role-cri_tools
+    version: develop
+
   - name: kubectl
     src: https://github.com/alvistack/ansible-role-kubectl
     version: develop
 
-  - name: kubeadm
-    src: https://github.com/alvistack/ansible-role-kubeadm
-    version: develop
-
   - name: kubelet
     src: https://github.com/alvistack/ansible-role-kubelet
+    version: develop
+
+  - name: kubeadm
+    src: https://github.com/alvistack/ansible-role-kubeadm
     version: develop
 
   - name: etcd

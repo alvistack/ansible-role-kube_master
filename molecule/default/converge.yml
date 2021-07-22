@@ -25,8 +25,13 @@
 
     - name: include role
       include_role:
-        name: containernetworking_plugins
-      tags: containernetworking_plugins
+        name: runc
+      tags: runc
+
+    - name: include role
+      include_role:
+        name: crun
+      tags: crun
 
     - name: include role
       include_role:
@@ -40,13 +45,8 @@
 
     - name: include role
       include_role:
-        name: cri_tools
-      tags: cri_tools
-
-    - name: include role
-      include_role:
-        name: crun
-      tags: crun
+        name: containernetworking_plugins
+      tags: containernetworking_plugins
 
     - name: include role
       include_role:
@@ -60,18 +60,23 @@
 
     - name: include role
       include_role:
+        name: cri_tools
+      tags: cri_tools
+
+    - name: include role
+      include_role:
         name: kubectl
       tags: kubectl
 
     - name: include role
       include_role:
-        name: kubeadm
-      tags: kubeadm
+        name: kubelet
+      tags: kubelet
 
     - name: include role
       include_role:
-        name: kubelet
-      tags: kubelet
+        name: kubeadm
+      tags: kubeadm
 
 - hosts: etcd
   remote_user: root
