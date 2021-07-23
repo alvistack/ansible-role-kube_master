@@ -81,24 +81,24 @@
   when: inventory_hostname  == ansible_play_hosts[0]
   delegate_to: "{{ groups['etcd'][0] }}"
 
-- name: "generate {{ kubernetes_etcd.external.keyFile }}"
+- name: "generate {{ kube_etcd.external.keyFile }}"
   environment:
     PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
   vars:
     ansible_python_interpreter: "python3"
   openssl_privatekey:
-    path: "{{ kubernetes_etcd.external.keyFile }}"
+    path: "{{ kube_etcd.external.keyFile }}"
   when: inventory_hostname  == ansible_play_hosts[0]
   delegate_to: "{{ groups['etcd'][0] }}"
 
-- name: "generate {{ kubernetes_etcd.external.keyFile | splitext | first }}.csr"
+- name: "generate {{ kube_etcd.external.keyFile | splitext | first }}.csr"
   environment:
     PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
   vars:
     ansible_python_interpreter: "python3"
   openssl_csr:
-    path: "{{ kubernetes_etcd.external.keyFile | splitext | first }}.csr"
-    privatekey_path: "{{ kubernetes_etcd.external.keyFile }}"
+    path: "{{ kube_etcd.external.keyFile | splitext | first }}.csr"
+    privatekey_path: "{{ kube_etcd.external.keyFile }}"
     common_name: "{{ kube_apiserver_csr_common_name }}"
     subject:
       CN: "{{ kube_apiserver_csr_common_name }}"
@@ -114,22 +114,22 @@
   when: inventory_hostname  == ansible_play_hosts[0]
   delegate_to: "{{ groups['etcd'][0] }}"
 
-- name: "generate {{ kubernetes_etcd.external.certFile }}"
+- name: "generate {{ kube_etcd.external.certFile }}"
   environment:
     PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
   vars:
     ansible_python_interpreter: "python3"
   openssl_certificate:
-    path: "{{ kubernetes_etcd.external.certFile }}"
-    csr_path: "{{ kubernetes_etcd.external.keyFile | splitext | first }}.csr"
-    privatekey_path: "{{ kubernetes_etcd.external.keyFile }}"
+    path: "{{ kube_etcd.external.certFile }}"
+    csr_path: "{{ kube_etcd.external.keyFile | splitext | first }}.csr"
+    privatekey_path: "{{ kube_etcd.external.keyFile }}"
     ownca_path: "{{ etcd_trusted_ca_file }}"
     ownca_privatekey_path: "{{ etcd_trusted_ca_file | splitext | first }}.key"
     provider: "ownca"
   when: inventory_hostname  == ansible_play_hosts[0]
   delegate_to: "{{ groups['etcd'][0] }}"
 
-- name: "copy {{ kubernetes_etcd.external.caFile }}"
+- name: "copy {{ kube_etcd.external.caFile }}"
   copy:
     dest: "{{ item.dest }}"
     src: "{{ item.src }}"
@@ -139,7 +139,7 @@
     remote_src: true
     force: false
   loop:
-    - { dest: "{{ kubernetes_etcd.external.caFile }}", src: "{{ etcd_trusted_ca_file }}" }
+    - { dest: "{{ kube_etcd.external.caFile }}", src: "{{ etcd_trusted_ca_file }}" }
   when: inventory_hostname  == ansible_play_hosts[0]
   delegate_to: "{{ groups['etcd'][0] }}"
 
@@ -151,9 +151,9 @@
     mode: "{{ item.mode | default('0644') }}"
     state: "{{ item.state | default('file') }}"
   loop:
-    - { dest: "{{ kubernetes_etcd.external.caFile }}" }
-    - { dest: "{{ kubernetes_etcd.external.certFile }}" }
-    - { dest: "{{ kubernetes_etcd.external.keyFile }}", mode: "0600" }
+    - { dest: "{{ kube_etcd.external.caFile }}" }
+    - { dest: "{{ kube_etcd.external.certFile }}" }
+    - { dest: "{{ kube_etcd.external.keyFile }}", mode: "0600" }
   when: inventory_hostname  == ansible_play_hosts[0]
   delegate_to: "{{ groups['etcd'][0] }}"
 
@@ -163,9 +163,9 @@
     tar zcfP - {{ _params | join(' ') }} | base64 -w 0
   vars:
     _params:
-      - "{{ kubernetes_etcd.external.caFile }}"
-      - "{{ kubernetes_etcd.external.certFile }}"
-      - "{{ kubernetes_etcd.external.keyFile }}"
+      - "{{ kube_etcd.external.caFile }}"
+      - "{{ kube_etcd.external.certFile }}"
+      - "{{ kube_etcd.external.keyFile }}"
   args:
     executable: "/bin/bash"
   when: inventory_hostname == groups['kube_master'][0]

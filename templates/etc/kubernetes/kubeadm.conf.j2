@@ -32,17 +32,17 @@ nodeRegistration:
 ---
 apiVersion: kubeadm.k8s.io/v1beta2
 kind: ClusterConfiguration
-clusterName: {{ kubernetes_cluster_name }}
+clusterName: {{ kube_cluster_name }}
 etcd:
-  {{ kubernetes_etcd | to_nice_yaml(2) | indent(2) }}
+  {{ kube_etcd | to_nice_yaml(2) | indent(2) }}
 networking:
-  dnsDomain: {{ kubernetes_dns_domain }}
-  podSubnet: {{ kubernetes_pod_subnet }}
-  serviceSubnet: {{ kubernetes_service_subnet }}
-kubernetesVersion: {{ kubernetes_version }}
+  dnsDomain: {{ kube_dns_domain }}
+  podSubnet: {{ kube_pod_subnet }}
+  serviceSubnet: {{ kube_service_subnet }}
+kubernetesVersion: {{ kube_version }}
 controlPlaneEndpoint: {{ kube_apiserver_advertise_address }}:{{ kube_apiserver_bind_port }}
 certificatesDir: /etc/kubernetes/pki
-imageRepository: {{ kubernetes_image_repository }}
+imageRepository: {{ kube_image_repository }}
 apiServer:
   extraArgs:
     authorization-mode: Node,RBAC
@@ -73,7 +73,7 @@ cgroupDriver: {{ kubelet_cgroup_driver }}
 kubeletCgroups: {{ kubelet_kubelet_cgroups }}
 maxPods: {{ kubelet_max_pods }}
 address: {{ kubelet_bind_address }}
-clusterDomain: {{ kubernetes_dns_domain }}
+clusterDomain: {{ kube_dns_domain }}
 kubeReserved:
   {{ kubelet_kube_reserved | to_nice_yaml(indent=2) | indent(2) }}
 systemReserved:
@@ -86,7 +86,7 @@ resolvConf: {{ kubelet_resolv_conf }}
 apiVersion: kubeproxy.config.k8s.io/v1alpha1
 kind: KubeProxyConfiguration
 bindAddress: {{ kube_proxy_bind_address }}
-clusterCIDR: {{ kubernetes_pod_subnet }}
+clusterCIDR: {{ kube_pod_subnet }}
 iptables:
   masqueradeAll: {{ kube_proxy_masquerade_all | bool | lower }}
   masqueradeBit: {{ kube_proxy_masquerade_bit }}
