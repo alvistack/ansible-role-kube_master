@@ -14,8 +14,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-_kubelet_cgroup_driver: "cgroupfs"
+_kube_kubelet_cgroup_driver: "cgroupfs"
 
-_kubelet_runtime_cgroups: "pod"
+_kube_kubelet_runtime_cgroups: "pod"
 
-_kubelet_resolv_conf: "/etc/resolv.conf"
+_kube_kubelet_resolv_conf: "/etc/resolv.conf"

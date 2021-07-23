@@ -56,73 +56,73 @@ kube_image_repository: "k8s.gcr.io"
 
 # Token is a token used to validate cluster information fetched from the
 # control-plane.
-kubeadm_token: ~
+kube_kubeadm_token: ~
 
 # IP address of the node. If set, kubelet will use this IP address for the
 # node.
-kubelet_node_ip: "{{ ansible_default_ipv4.address }}"
+kube_kubelet_node_ip: "{{ ansible_default_ipv4.address }}"
 
 # address is the IP address for the Kubelet to serve on (set to 0.0.0.0
 # for all interfaces).
-kubelet_bind_address: "0.0.0.0"
+kube_kubelet_bind_address: "0.0.0.0"
 
 # failSwapOn tells the Kubelet to fail to start if swap is enabled on the
 # node.
-kubelet_fail_swap_on: false
+kube_kubelet_fail_swap_on: false
 
 # Enable QoS based Cgroup hierarchy.
-kubelet_cgroups_per_qos: true
+kube_kubelet_cgroups_per_qos: true
 
 # This flag specifies the various Node Allocatable enforcements that Kubelet
 # needs to perform.
-kubelet_enforce_node_allocatable:
+kube_kubelet_enforce_node_allocatable:
   - "pods"
 
 # Driver that the kubelet uses to manipulate cgroups on the host (cgroupfs or
 # systemd).
-kubelet_cgroup_driver: "{{ _kubelet_cgroup_driver }}"
+kube_kubelet_cgroup_driver: "{{ _kube_kubelet_cgroup_driver }}"
 
 # Optional absolute name of cgroups to create and run the runtime in.
-kubelet_runtime_cgroups: "{{ _kubelet_runtime_cgroups }}"
+kube_kubelet_runtime_cgroups: "{{ _kube_kubelet_runtime_cgroups }}"
 
 # Optional absolute name of cgroups to create and run the Kubelet in.
-kubelet_kubelet_cgroups: "{{ kubelet_runtime_cgroups }}"
+kube_kubelet_kubelet_cgroups: "{{ kube_kubelet_runtime_cgroups }}"
 
 # The container runtime to use.
-kubelet_container_runtime: "remote"
+kube_kubelet_container_runtime: "remote"
 
 # The endpoint of remote runtime service.
-kubelet_container_runtime_endpoint: "unix:///var/run/crio/crio.sock"
+kube_kubelet_container_runtime_endpoint: "unix:///var/run/crio/crio.sock"
 
 # maxPods is the number of pods that can run on this Kubelet.
-kubelet_max_pods: "110"
+kube_kubelet_max_pods: "110"
 
 # A set of ResourceName=ResourceQuantity (e.g. cpu=200m,memory=150G) pairs
 # that describe resources reserved for kubernetes system components.
-kubelet_kube_reserved:
+kube_kubelet_kube_reserved:
   cpu: "200m"
   memory: "512Mi"
 
 # systemReserved is a set of ResourceName=ResourceQuantity (e.g.
 # cpu=200m,memory=150G) pairs that describe resources reserved for
 # non-kubernetes components.
-kubelet_system_reserved:
+kube_kubelet_system_reserved:
   cpu: "200m"
   memory: "4096Mi"
 
 # Map of signal names to quantities that defines hard eviction thresholds. For
 # example: {"memory.available": "300Mi"}.
-kubelet_eviction_hard:
+kube_kubelet_eviction_hard:
   memory.available: "128Mi"
   nodefs.available: "5%"
 
 # staticPodPath is the path to the directory containing local (static) pods to
 # run, or the path to a single static pod file.
-kubelet_static_pod_path: "/etc/kubernetes/manifests"
+kube_kubelet_static_pod_path: "/etc/kubernetes/manifests"
 
 # ResolverConfig is the resolver configuration file used as the basis
 # for the container DNS resolution configuration.
-kubelet_resolv_conf: "{{ _kubelet_resolv_conf }}"
+kube_kubelet_resolv_conf: "{{ _kube_kubelet_resolv_conf }}"
 
 # AdvertiseAddress sets the IP address for the API server to advertise.
 kube_apiserver_advertise_address: "{{ ansible_default_ipv4.address }}"

@@ -21,13 +21,13 @@ localAPIEndpoint:
   bindPort: {{ kube_apiserver_bind_port }}
 nodeRegistration:
   name: {{ ansible_hostname }}
-  criSocket: {{ kubelet_container_runtime_endpoint }}
+  criSocket: {{ kube_kubelet_container_runtime_endpoint }}
   taints: []
   kubeletExtraArgs:
-    node-ip: {{ kubelet_node_ip }}
-    runtime-cgroups: {{ kubelet_runtime_cgroups }}
-    container-runtime: {{ kubelet_container_runtime }}
-    container-runtime-endpoint: {{ kubelet_container_runtime_endpoint }}
+    node-ip: {{ kube_kubelet_node_ip }}
+    runtime-cgroups: {{ kube_kubelet_runtime_cgroups }}
+    container-runtime: {{ kube_kubelet_container_runtime }}
+    container-runtime-endpoint: {{ kube_kubelet_container_runtime_endpoint }}
 
 ---
 apiVersion: kubeadm.k8s.io/v1beta2
@@ -55,7 +55,7 @@ dns:
 ---
 apiVersion: kubelet.config.k8s.io/v1beta1
 kind: KubeletConfiguration
-failSwapOn: {{ kubelet_fail_swap_on | bool | lower }}
+failSwapOn: {{ kube_kubelet_fail_swap_on | bool | lower }}
 authentication:
   anonymous:
     enabled: false
@@ -65,22 +65,22 @@ authentication:
     clientCAFile: /etc/kubernetes/pki/ca.crt
 authorization:
   mode: Webhook
-staticPodPath: {{ kubelet_static_pod_path }}
-cgroupsPerQOS: {{ kubelet_cgroups_per_qos | bool | lower }}
+staticPodPath: {{ kube_kubelet_static_pod_path }}
+cgroupsPerQOS: {{ kube_kubelet_cgroups_per_qos | bool | lower }}
 enforceNodeAllocatable:
-  {{ kubelet_enforce_node_allocatable | to_nice_yaml(indent=2) | indent(2) }}
-cgroupDriver: {{ kubelet_cgroup_driver }}
-kubeletCgroups: {{ kubelet_kubelet_cgroups }}
-maxPods: {{ kubelet_max_pods }}
-address: {{ kubelet_bind_address }}
+  {{ kube_kubelet_enforce_node_allocatable | to_nice_yaml(indent=2) | indent(2) }}
+cgroupDriver: {{ kube_kubelet_cgroup_driver }}
+kubeletCgroups: {{ kube_kubelet_kubelet_cgroups }}
+maxPods: {{ kube_kubelet_max_pods }}
+address: {{ kube_kubelet_bind_address }}
 clusterDomain: {{ kube_dns_domain }}
 kubeReserved:
-  {{ kubelet_kube_reserved | to_nice_yaml(indent=2) | indent(2) }}
+  {{ kube_kubelet_kube_reserved | to_nice_yaml(indent=2) | indent(2) }}
 systemReserved:
-  {{ kubelet_system_reserved | to_nice_yaml(indent=2) | indent(2) }}
+  {{ kube_kubelet_system_reserved | to_nice_yaml(indent=2) | indent(2) }}
 evictionHard:
-  {{ kubelet_eviction_hard | to_nice_yaml(indent=2) | indent(2) }}
-resolvConf: {{ kubelet_resolv_conf }}
+  {{ kube_kubelet_eviction_hard | to_nice_yaml(indent=2) | indent(2) }}
+resolvConf: {{ kube_kubelet_resolv_conf }}
 
 ---
 apiVersion: kubeproxy.config.k8s.io/v1alpha1
