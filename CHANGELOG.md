@@ -105,7 +105,7 @@
 
   - Default `interpreter_python` with `python3`
   - Bugfix `python3-xml` not exists for openSUSE Leap 15.1
-  - Bugfix `kubernetes_version` with other roles
+  - Bugfix `kube_version` with other roles
 
 ## 4.0.0 - 2019-11-05
 
