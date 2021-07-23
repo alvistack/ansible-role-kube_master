@@ -56,16 +56,16 @@ roles:
     src: https://github.com/alvistack/ansible-role-cri_tools
     version: develop
 
-  - name: kubectl
-    src: https://github.com/alvistack/ansible-role-kubectl
+  - name: kube_kubectl
+    src: https://github.com/alvistack/ansible-role-kube_kubectl
     version: develop
 
-  - name: kubelet
-    src: https://github.com/alvistack/ansible-role-kubelet
+  - name: kube_kubelet
+    src: https://github.com/alvistack/ansible-role-kube_kubelet
     version: develop
 
-  - name: kubeadm
-    src: https://github.com/alvistack/ansible-role-kubeadm
+  - name: kube_kubeadm
+    src: https://github.com/alvistack/ansible-role-kube_kubeadm
     version: develop
 
   - name: etcd

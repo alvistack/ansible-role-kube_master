@@ -4,8 +4,8 @@
 
 ### Major Changes
 
+  - Rename prefix with `kube_`
   - Upgrade minimal Ansible community package support to 4.3.0
-
   - Restructure dependency packages with upstream repository
 
 ## 5.1.0 - 2021-07-18
@@ -30,12 +30,9 @@
 
 ### Major Changes
 
-  - Bugfix [ansible-lint
-    `namespace`](https://github.com/ansible-community/ansible-lint/pull/1451)
-  - Bugfix [ansible-lint
-    `no-handler`](https://github.com/ansible-community/ansible-lint/pull/1402)
-  - Bugfix [ansible-lint
-    `unnamed-task`](https://github.com/ansible-community/ansible-lint/pull/1413)
+  - Bugfix [ansible-lint `namespace`](https://github.com/ansible-community/ansible-lint/pull/1451)
+  - Bugfix [ansible-lint `no-handler`](https://github.com/ansible-community/ansible-lint/pull/1402)
+  - Bugfix [ansible-lint `unnamed-task`](https://github.com/ansible-community/ansible-lint/pull/1413)
   - Simplify Python dependency with system packages
   - Support RHEL 8 with Molecule
   - Support RHEL 7 with Molecule
@@ -108,7 +105,7 @@
 
   - Default `interpreter_python` with `python3`
   - Bugfix `python3-xml` not exists for openSUSE Leap 15.1
-  - Bugfix `kubernetes_version` with other roles
+  - Bugfix `kube_version` with other roles
 
 ## 4.0.0 - 2019-11-05
 
@@ -132,8 +129,7 @@
 ### Major Changes
 
   - Run molecule test manually on Travis CI
-  - Improve default for `--kube-reserved`, `--system-reserved` and
-    `--eviction-hard`
+  - Improve default for `--kube-reserved`, `--system-reserved` and `--eviction-hard`
 
 ## 3.3.0 - 2019-08-27
 
@@ -143,8 +139,7 @@
   - Add Vagrant test for RHEL 7
   - Restart service serially
   - Specify kubelet `--runtime-cgroups` and `--kubelet-cgroups`
-  - Specify kubelet `--kube-reserved`, `--system-reserved` and
-    `--eviction-hard`
+  - Specify kubelet `--kube-reserved`, `--system-reserved` and `--eviction-hard`
 
 ## 3.2.0 - 2019-07-08
 
