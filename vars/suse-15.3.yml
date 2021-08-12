@@ -14,8 +14,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-_kube_kubelet_cgroup_driver: "systemd"
+_kube_release: "1.20"
 
-_kube_kubelet_runtime_cgroups: "/systemd/system.slice"
+_kube_kubelet_cgroup_driver: "cgroupfs"
+
+_kube_kubelet_runtime_cgroups: "pod"
 
 _kube_kubelet_resolv_conf: "/etc/resolv.conf"
