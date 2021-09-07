@@ -53,23 +53,6 @@
         - "."
       skip: true
 
-- name: pip install
-  environment:
-    LANG: "en_US.UTF-8"
-    LC_ALL: "en_US.UTF-8"
-    PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
-  vars:
-    ansible_python_interpreter: "python3"
-  pip:
-    name: "{{ item.name }}"
-    state: "{{ item.state | default(None) or omit }}"
-    version: "{{ item.version | default(None) or omit }}"
-    extra_args: "--prefix=/usr/local --upgrade {{ item.extra_args | default(None) }}"
-    executable: "pip3"
-  loop: "{{ _pip }}"
-  register: result
-  until: result is succeeded
-
 - name: prepare directories
   file:
     dest: "{{ item.dest }}"

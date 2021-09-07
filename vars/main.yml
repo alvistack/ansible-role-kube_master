@@ -17,6 +17,3 @@
 _kube_version:
   "1.21": "1.21.4"
   "1.20": "1.20.10"
-
-_pip:
-  - { state: "latest", name: "openshift" }
