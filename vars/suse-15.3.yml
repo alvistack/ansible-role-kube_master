@@ -34,7 +34,7 @@ _yum_repository:
 _zypper:
   - { state: "latest", name: "python3-openshift" }
 
-_kube_release: "1.21"
+_kube_release: "1.22"
 
 _kube_kubelet_cgroup_driver: "systemd"
 
