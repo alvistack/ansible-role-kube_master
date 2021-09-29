@@ -217,8 +217,6 @@
   failed_when: false
 
 - name: kubeadm init
-  environment:
-    PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
   shell: |
     set -euxo pipefail
     kubeadm init \
@@ -304,8 +302,6 @@
   when: inventory_hostname != ansible_play_hosts[0]
 
 - name: kubeadm init
-  environment:
-    PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
   shell: |
     set -euxo pipefail
     kubeadm init \
