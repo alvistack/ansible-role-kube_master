@@ -19,57 +19,57 @@
   become: true
   tasks:
     - name: include role
-      include_role:
+      ansible.builtin.include_role:
         name: chrony
       tags: chrony
 
     - name: include role
-      include_role:
+      ansible.builtin.include_role:
         name: runc
       tags: runc
 
     - name: include role
-      include_role:
+      ansible.builtin.include_role:
         name: crun
       tags: crun
 
     - name: include role
-      include_role:
+      ansible.builtin.include_role:
         name: containers_common
       tags: containers_common
 
     - name: include role
-      include_role:
+      ansible.builtin.include_role:
         name: containernetworking_plugins
       tags: containernetworking_plugins
 
     - name: include role
-      include_role:
+      ansible.builtin.include_role:
         name: conmon
       tags: conmon
 
     - name: include role
-      include_role:
+      ansible.builtin.include_role:
         name: cri_o
       tags: cri_o
 
     - name: include role
-      include_role:
+      ansible.builtin.include_role:
         name: cri_tools
       tags: cri_tools
 
     - name: include role
-      include_role:
+      ansible.builtin.include_role:
         name: kube_kubectl
       tags: kube_kubectl
 
     - name: include role
-      include_role:
+      ansible.builtin.include_role:
         name: kube_kubelet
       tags: kube_kubelet
 
     - name: include role
-      include_role:
+      ansible.builtin.include_role:
         name: kube_kubeadm
       tags: kube_kubeadm
 
@@ -78,7 +78,7 @@
   become: true
   tasks:
     - name: include role
-      include_role:
+      ansible.builtin.include_role:
         name: etcd
       tags: etcd
 
@@ -87,7 +87,7 @@
   become: true
   tasks:
     - name: include role
-      include_role:
+      ansible.builtin.include_role:
         name: kube_master
       tags: kube_master
 
@@ -96,6 +96,6 @@
   become: true
   tasks:
     - name: include role
-      include_role:
+      ansible.builtin.include_role:
         name: kube_node
       tags: kube_node

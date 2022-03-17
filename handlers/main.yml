@@ -15,7 +15,7 @@
 # limitations under the License.
 
 - name: kube_master | systemctl restart kubelet.service
-  service:
+  ansible.builtin.service:
     name: "kubelet.service"
     state: "restarted"
     enabled: true
