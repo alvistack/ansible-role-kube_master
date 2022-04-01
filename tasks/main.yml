@@ -205,9 +205,6 @@
   notify:
     - kube_master | systemctl restart kubelet.service
 
-- name: flush handlers
-  ansible.builtin.meta: flush_handlers
-
 - name: systemctl start kubelet.service
   ansible.builtin.service:
     name: "kubelet.service"
@@ -314,3 +311,6 @@
   until: result is succeeded
   changed_when: result is not succeeded
   failed_when: false
+
+- name: flush handlers
+  ansible.builtin.meta: flush_handlers
