@@ -226,6 +226,8 @@
   until: result is succeeded
   changed_when: result is not succeeded
   failed_when: false
+  notify:
+    - kube_master | systemctl restart kubelet.service
 
 - name: prepare files
   ansible.builtin.file:
@@ -311,6 +313,8 @@
   until: result is succeeded
   changed_when: result is not succeeded
   failed_when: false
+  notify:
+    - kube_master | systemctl restart kubelet.service
 
 - name: flush handlers
   ansible.builtin.meta: flush_handlers
