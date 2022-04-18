@@ -222,12 +222,8 @@
   args:
     executable: "/bin/bash"
   when: inventory_hostname == ansible_play_hosts[0]
-  register: result
-  until: result is succeeded
-  changed_when: result is not succeeded
+  changed_when: false
   failed_when: false
-  notify:
-    - kube_master | systemctl restart kubelet.service
 
 - name: prepare files
   ansible.builtin.file:
@@ -309,12 +305,8 @@
   args:
     executable: "/bin/bash"
   when: inventory_hostname != ansible_play_hosts[0]
-  register: result
-  until: result is succeeded
-  changed_when: result is not succeeded
+  changed_when: false
   failed_when: false
-  notify:
-    - kube_master | systemctl restart kubelet.service
 
 - name: flush handlers
   ansible.builtin.meta: flush_handlers
