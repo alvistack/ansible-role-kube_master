@@ -20,54 +20,54 @@ collections:
     version: ">=0.0.0,<1.0.0"
 
 roles:
-  - name: chrony
+  - name: alvistack.chrony
     src: https://github.com/alvistack/ansible-role-chrony
     version: develop
 
-  - name: runc
+  - name: alvistack.runc
     src: https://github.com/alvistack/ansible-role-runc
     version: develop
 
-  - name: crun
+  - name: alvistack.crun
     src: https://github.com/alvistack/ansible-role-crun
     version: develop
 
-  - name: containers_common
+  - name: alvistack.containers_common
     src: https://github.com/alvistack/ansible-role-containers_common
     version: develop
 
-  - name: containernetworking_plugins
+  - name: alvistack.containernetworking_plugins
     src: https://github.com/alvistack/ansible-role-containernetworking_plugins
     version: develop
 
-  - name: conmon
+  - name: alvistack.conmon
     src: https://github.com/alvistack/ansible-role-conmon
     version: develop
 
-  - name: cri_o
+  - name: alvistack.cri_o
     src: https://github.com/alvistack/ansible-role-cri_o
     version: develop
 
-  - name: cri_tools
+  - name: alvistack.cri_tools
     src: https://github.com/alvistack/ansible-role-cri_tools
     version: develop
 
-  - name: kube_kubectl
+  - name: alvistack.kube_kubectl
     src: https://github.com/alvistack/ansible-role-kube_kubectl
     version: develop
 
-  - name: kube_kubelet
+  - name: alvistack.kube_kubelet
     src: https://github.com/alvistack/ansible-role-kube_kubelet
     version: develop
 
-  - name: kube_kubeadm
+  - name: alvistack.kube_kubeadm
     src: https://github.com/alvistack/ansible-role-kube_kubeadm
     version: develop
 
-  - name: etcd
+  - name: alvistack.etcd
     src: https://github.com/alvistack/ansible-role-etcd
     version: develop
 
-  - name: kube_node
+  - name: alvistack.kube_node
     src: https://github.com/alvistack/ansible-role-kube_node
     version: develop
