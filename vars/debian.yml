@@ -28,7 +28,7 @@ _apt_repository:
 _apt:
   - { state: "latest", name: "python3-openshift" }
 
-_kube_release: "1.23"
+_kube_release: "1.24"
 
 _kube_kubelet_cgroup_driver: "systemd"
 

@@ -24,10 +24,6 @@ roles:
     src: https://github.com/alvistack/ansible-role-chrony
     version: develop
 
-  - name: alvistack.runc
-    src: https://github.com/alvistack/ansible-role-runc
-    version: develop
-
   - name: alvistack.crun
     src: https://github.com/alvistack/ansible-role-crun
     version: develop
