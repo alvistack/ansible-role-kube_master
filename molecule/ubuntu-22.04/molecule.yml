@@ -31,6 +31,8 @@ platforms:
       - "video_type = 'virtio'"
       - "disk_driver :cache => 'writeback'"
       - "storage :file, bus: 'virtio', cache: 'writeback'"
+    instance_raw_config_args:
+      - "vm.box_check_update = false"
     groups:
       - etcd
       - kube_master
@@ -45,6 +47,8 @@ platforms:
       - "video_type = 'virtio'"
       - "disk_driver :cache => 'writeback'"
       - "storage :file, bus: 'virtio', cache: 'writeback'"
+    instance_raw_config_args:
+      - "vm.box_check_update = false"
     groups:
       - kube_master
 lint: |
