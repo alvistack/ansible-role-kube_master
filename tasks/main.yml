@@ -312,6 +312,7 @@
   ansible.builtin.shell: |
     set -euxo pipefail
     kubeadm upgrade apply \
+      --force \
       --config=/etc/kubernetes/kubeadm.conf \
       --ignore-preflight-errors=all
   args:
