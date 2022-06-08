@@ -308,5 +308,16 @@
   changed_when: false
   failed_when: false
 
+- name: kubeadm upgrade apply
+  ansible.builtin.shell: |
+    set -euxo pipefail
+    kubeadm upgrade apply \
+      --config=/etc/kubernetes/kubeadm.conf \
+      --ignore-preflight-errors=all
+  args:
+    executable: "/bin/bash"
+  changed_when: false
+  failed_when: false
+
 - name: flush handlers
   ansible.builtin.meta: flush_handlers
