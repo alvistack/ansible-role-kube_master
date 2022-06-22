@@ -32,7 +32,7 @@ _yum_repository:
     state: "present"
 
 _zypper:
-  - { state: "latest", name: "python38-openshift" }
+  - { state: "latest", name: "python3-openshift" }
 
 _kube_release: "1.24"
 
