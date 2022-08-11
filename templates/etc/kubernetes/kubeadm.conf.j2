@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-apiVersion: kubeadm.k8s.io/v1beta2
+apiVersion: kubeadm.k8s.io/v1beta3
 kind: InitConfiguration
 localAPIEndpoint:
   advertiseAddress: {{ kube_apiserver_advertise_address }}
@@ -30,7 +30,7 @@ nodeRegistration:
     container-runtime-endpoint: {{ kube_kubelet_container_runtime_endpoint }}
 
 ---
-apiVersion: kubeadm.k8s.io/v1beta2
+apiVersion: kubeadm.k8s.io/v1beta3
 kind: ClusterConfiguration
 clusterName: {{ kube_cluster_name }}
 etcd:
@@ -39,7 +39,7 @@ networking:
   dnsDomain: {{ kube_dns_domain }}
   podSubnet: {{ kube_pod_subnet }}
   serviceSubnet: {{ kube_service_subnet }}
-kubernetesVersion: {{ kube_version }}
+kubernetesVersion: {{ kube_version | regex_replace('~([a-z]*)([0-9]*)', '-\\1.\\2') }}
 controlPlaneEndpoint: {{ kube_apiserver_advertise_address }}:{{ kube_apiserver_bind_port }}
 certificatesDir: /etc/kubernetes/pki
 imageRepository: {{ kube_image_repository }}
@@ -50,7 +50,7 @@ apiServer:
 controllerManager: {}
 scheduler: {}
 dns:
-  type: CoreDNS
+  imageRepository: {{ kube_image_repository }}/coredns
 
 ---
 apiVersion: kubelet.config.k8s.io/v1beta1
