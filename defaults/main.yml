@@ -52,7 +52,7 @@ kube_service_subnet: "10.233.0.0/18"
 kube_pod_subnet: "10.233.64.0/18"
 
 # ImageRepository sets the container registry to pull images from.
-kube_image_repository: "k8s.gcr.io"
+kube_image_repository: "registry.k8s.io"
 
 # Token is a token used to validate cluster information fetched from the
 # control-plane.
