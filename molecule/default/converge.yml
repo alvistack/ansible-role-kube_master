@@ -14,7 +14,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- hosts: all
+- name: converge | all
+  hosts: all
   remote_user: root
   become: true
   tasks:
@@ -68,7 +69,8 @@
         name: alvistack.kube_kubeadm
       tags: alvistack.kube_kubeadm
 
-- hosts: etcd
+- name: converge | etcd
+  hosts: etcd
   remote_user: root
   become: true
   tasks:
@@ -77,7 +79,8 @@
         name: alvistack.etcd
       tags: alvistack.etcd
 
-- hosts: kube_master
+- name: converge | kube_master
+  hosts: kube_master
   remote_user: root
   become: true
   tasks:
@@ -86,7 +89,8 @@
         name: alvistack.kube_master
       tags: alvistack.kube_master
 
-- hosts: kube_node:!kube_master
+- name: converge | kube_node:!kube_master
+  hosts: kube_node:!kube_master
   remote_user: root
   become: true
   tasks:
