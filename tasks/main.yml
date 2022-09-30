@@ -104,7 +104,7 @@
     PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
   vars:
     ansible_python_interpreter: "python3"
-  community.crypto.openssl_certificate:
+  community.crypto.x509_certificate:
     path: "{{ kube_etcd.external.certFile }}"
     csr_path: "{{ kube_etcd.external.keyFile | splitext | first }}.csr"
     privatekey_path: "{{ kube_etcd.external.keyFile }}"
