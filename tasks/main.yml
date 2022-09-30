@@ -71,7 +71,7 @@
     PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
   vars:
     ansible_python_interpreter: "python3"
-  openssl_privatekey:
+  community.crypto.openssl_privatekey:
     path: "{{ kube_etcd.external.keyFile }}"
   when: inventory_hostname  == ansible_play_hosts[0]
   delegate_to: "{{ groups['etcd'][0] }}"
@@ -81,7 +81,7 @@
     PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
   vars:
     ansible_python_interpreter: "python3"
-  openssl_csr:
+  community.crypto.openssl_csr:
     path: "{{ kube_etcd.external.keyFile | splitext | first }}.csr"
     privatekey_path: "{{ kube_etcd.external.keyFile }}"
     common_name: "{{ kube_apiserver_csr_common_name }}"
@@ -104,7 +104,7 @@
     PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
   vars:
     ansible_python_interpreter: "python3"
-  openssl_certificate:
+  community.crypto.openssl_certificate:
     path: "{{ kube_etcd.external.certFile }}"
     csr_path: "{{ kube_etcd.external.keyFile | splitext | first }}.csr"
     privatekey_path: "{{ kube_etcd.external.keyFile }}"
