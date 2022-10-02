@@ -143,9 +143,10 @@
   delegate_to: "{{ groups['etcd'][0] }}"
 
 - name: base64 encode
-  ansible.builtin.shell: |
-    set -euxo pipefail
-    tar zcfP - {{ _params | join(' ') }} | base64 -w 0
+  ansible.builtin.shell:
+    cmd: |
+      set -euxo pipefail
+      tar zcfP - {{ _params | join(' ') }} | base64 -w 0
   vars:
     _params:
       - "{{ kube_etcd.external.caFile }}"
@@ -159,9 +160,10 @@
   changed_when: base64_encode_result is not succeeded
 
 - name: base64 decode
-  ansible.builtin.shell: |
-    set -euxo pipefail
-    echo -n {{ base64_encode_result.stdout | quote }} | base64 -d | tar zx -C /
+  ansible.builtin.shell:
+    cmd: |
+      set -euxo pipefail
+      echo -n {{ base64_encode_result.stdout | quote }} | base64 -d | tar zx -C /
   args:
     executable: "/bin/bash"
   when: inventory_hostname == ansible_play_hosts[0]
@@ -214,11 +216,12 @@
   failed_when: false
 
 - name: kubeadm init
-  ansible.builtin.shell: |
-    set -euxo pipefail
-    kubeadm init \
-      --config=/etc/kubernetes/kubeadm.conf \
-      --ignore-preflight-errors=all
+  ansible.builtin.shell:
+    cmd: |
+      set -euxo pipefail
+      kubeadm init \
+        --config=/etc/kubernetes/kubeadm.conf \
+        --ignore-preflight-errors=all
   args:
     executable: "/bin/bash"
   when: inventory_hostname == ansible_play_hosts[0]
@@ -245,9 +248,10 @@
   when: inventory_hostname == ansible_play_hosts[0]
 
 - name: base64 encode
-  ansible.builtin.shell: |
-    set -euxo pipefail
-    tar zcfP - {{ _params | join(' ') }} | base64 -w 0
+  ansible.builtin.shell:
+    cmd: |
+      set -euxo pipefail
+      tar zcfP - {{ _params | join(' ') }} | base64 -w 0
   vars:
     _params:
       - "/etc/kubernetes/pki/apiserver-etcd-client.crt"
@@ -267,9 +271,10 @@
   changed_when: base64_encode_result is not succeeded
 
 - name: base64 decode
-  ansible.builtin.shell: |
-    set -euxo pipefail
-    echo -n {{ base64_encode_result.stdout | quote }} | base64 -d | tar zx -C /
+  ansible.builtin.shell:
+    cmd: |
+      set -euxo pipefail
+      echo -n {{ base64_encode_result.stdout | quote }} | base64 -d | tar zx -C /
   args:
     executable: "/bin/bash"
   when: inventory_hostname != ansible_play_hosts[0]
@@ -297,11 +302,12 @@
   when: inventory_hostname != ansible_play_hosts[0]
 
 - name: kubeadm init
-  ansible.builtin.shell: |
-    set -euxo pipefail
-    kubeadm init \
-      --config=/etc/kubernetes/kubeadm.conf \
-      --ignore-preflight-errors=all
+  ansible.builtin.shell:
+    cmd: |
+      set -euxo pipefail
+      kubeadm init \
+        --config=/etc/kubernetes/kubeadm.conf \
+        --ignore-preflight-errors=all
   args:
     executable: "/bin/bash"
   when: inventory_hostname != ansible_play_hosts[0]
@@ -309,12 +315,13 @@
   failed_when: false
 
 - name: kubeadm upgrade apply
-  ansible.builtin.shell: |
-    set -euxo pipefail
-    kubeadm upgrade apply \
-      --force \
-      --config=/etc/kubernetes/kubeadm.conf \
-      --ignore-preflight-errors=all
+  ansible.builtin.shell:
+    cmd: |
+      set -euxo pipefail
+      kubeadm upgrade apply \
+        --force \
+        --config=/etc/kubernetes/kubeadm.conf \
+        --ignore-preflight-errors=all
   args:
     executable: "/bin/bash"
   changed_when: false
