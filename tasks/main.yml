@@ -320,6 +320,7 @@
       set -euxo pipefail
       kubeadm upgrade apply \
         --force \
+        --certificate-renewal=true \
         --config=/etc/kubernetes/kubeadm.conf \
         --ignore-preflight-errors=all
   args:
