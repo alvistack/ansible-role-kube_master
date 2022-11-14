@@ -63,7 +63,7 @@
   loop:
     - { dest: "/etc/kubernetes/pki" }
     - { dest: "/etc/kubernetes/pki/etcd" }
-  when: inventory_hostname  == ansible_play_hosts[0]
+  when: inventory_hostname == ansible_play_hosts[0]
   delegate_to: "{{ groups['etcd'][0] }}"
 
 - name: generate /etc/kubernetes/pki/apiserver-etcd-client.key
@@ -73,7 +73,7 @@
     ansible_python_interpreter: "python3"
   community.crypto.openssl_privatekey:
     path: "{{ kube_etcd.external.keyFile }}"
-  when: inventory_hostname  == ansible_play_hosts[0]
+  when: inventory_hostname == ansible_play_hosts[0]
   delegate_to: "{{ groups['etcd'][0] }}"
 
 - name: generate /etc/kubernetes/pki/apiserver-etcd-client.csr
@@ -96,7 +96,7 @@
       - clientAuth
       - serverAuth
     basic_constraints: "CA:FALSE"
-  when: inventory_hostname  == ansible_play_hosts[0]
+  when: inventory_hostname == ansible_play_hosts[0]
   delegate_to: "{{ groups['etcd'][0] }}"
 
 - name: generate /etc/kubernetes/pki/apiserver-etcd-client.crt
@@ -111,7 +111,7 @@
     ownca_path: "{{ etcd_trusted_ca_file }}"
     ownca_privatekey_path: "{{ etcd_trusted_ca_file | splitext | first }}.key"
     provider: "ownca"
-  when: inventory_hostname  == ansible_play_hosts[0]
+  when: inventory_hostname == ansible_play_hosts[0]
   delegate_to: "{{ groups['etcd'][0] }}"
 
 - name: copy /etc/kubernetes/pki/etcd/ca.crt
@@ -125,7 +125,7 @@
     force: false
   loop:
     - { dest: "{{ kube_etcd.external.caFile }}", src: "{{ etcd_trusted_ca_file }}" }
-  when: inventory_hostname  == ansible_play_hosts[0]
+  when: inventory_hostname == ansible_play_hosts[0]
   delegate_to: "{{ groups['etcd'][0] }}"
 
 - name: prepare files
@@ -139,7 +139,7 @@
     - { dest: "{{ kube_etcd.external.caFile }}" }
     - { dest: "{{ kube_etcd.external.certFile }}" }
     - { dest: "{{ kube_etcd.external.keyFile }}", mode: "0600" }
-  when: inventory_hostname  == ansible_play_hosts[0]
+  when: inventory_hostname == ansible_play_hosts[0]
   delegate_to: "{{ groups['etcd'][0] }}"
 
 - name: base64 encode
