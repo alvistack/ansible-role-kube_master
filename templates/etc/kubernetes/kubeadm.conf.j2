@@ -26,7 +26,6 @@ nodeRegistration:
   kubeletExtraArgs:
     node-ip: {{ kube_kubelet_node_ip }}
     runtime-cgroups: {{ kube_kubelet_runtime_cgroups }}
-    container-runtime: {{ kube_kubelet_container_runtime }}
     container-runtime-endpoint: {{ kube_kubelet_container_runtime_endpoint }}
 
 ---
