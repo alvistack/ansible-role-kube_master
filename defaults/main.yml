@@ -88,9 +88,6 @@ kube_kubelet_runtime_cgroups: "{{ _kube_kubelet_runtime_cgroups }}"
 # Optional absolute name of cgroups to create and run the Kubelet in.
 kube_kubelet_kubelet_cgroups: "{{ kube_kubelet_runtime_cgroups }}"
 
-# The container runtime to use.
-kube_kubelet_container_runtime: "remote"
-
 # The endpoint of remote runtime service.
 kube_kubelet_container_runtime_endpoint: "unix:///var/run/crio/crio.sock"
 
