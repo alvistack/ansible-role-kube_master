@@ -91,6 +91,9 @@ kube_kubelet_kubelet_cgroups: "{{ kube_kubelet_runtime_cgroups }}"
 # The endpoint of remote runtime service.
 kube_kubelet_container_runtime_endpoint: "unix:///var/run/crio/crio.sock"
 
+# Comma-separated list of cipher suites for the server.
+kube_kubelet_tls_cipher_suites: "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384"
+
 # maxPods is the number of pods that can run on this Kubelet.
 kube_kubelet_max_pods: "110"
 
@@ -142,6 +145,9 @@ kube_apiserver_csr_subject_alt_name: >-
   {%-   set _ns._params = _ns._params + ["DNS:" + host, "IP:" + hostvars[host].ansible_default_ipv4.address] -%}
   {%- endfor -%}
   {{ _ns._params }}
+
+# Comma-separated list of cipher suites for the server.
+kube_apiserver_tls_cipher_suites: "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384"
 
 # bindAddress is the IP address for the proxy server to serve on (set to
 # 0.0.0.0 for all interfaces).
