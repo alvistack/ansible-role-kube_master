@@ -15,6 +15,7 @@
 # limitations under the License.
 
 _kube_version:
+  "1.28": "1.28.0~rc1"
   "1.27": "1.27.4"
   "1.26": "1.26.7"
   "1.25": "1.25.12"
