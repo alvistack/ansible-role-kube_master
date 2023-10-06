@@ -193,6 +193,7 @@
   loop:
     - { dest: "/etc/kubernetes/kubeadm.conf" }
   notify:
+    - kube_master | kubeadm certs renew all
     - kube_master | systemctl restart kubelet.service
 
 - name: prepare files
@@ -205,6 +206,7 @@
   loop:
     - { dest: "/etc/kubernetes/kubeadm.conf" }
   notify:
+    - kube_master | kubeadm certs renew all
     - kube_master | systemctl restart kubelet.service
 
 - name: systemctl start kubelet.service
@@ -311,20 +313,6 @@
   args:
     executable: "/bin/bash"
   when: inventory_hostname != ansible_play_hosts[0]
-  changed_when: false
-  failed_when: false
-
-- name: kubeadm upgrade apply
-  ansible.builtin.shell:
-    cmd: |
-      set -euxo pipefail
-      kubeadm upgrade apply \
-        --force \
-        --certificate-renewal=true \
-        --config=/etc/kubernetes/kubeadm.conf \
-        --ignore-preflight-errors=all
-  args:
-    executable: "/bin/bash"
   changed_when: false
   failed_when: false
 
