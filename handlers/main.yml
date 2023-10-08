@@ -14,6 +14,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+- name: kube_master | kubeadm certs renew all
+  ansible.builtin.shell:
+    cmd: |
+      set -euxo pipefail
+      kubeadm certs renew all \
+        --config=/etc/kubernetes/kubeadm.conf \
+        --ignore-preflight-errors=all
+  args:
+    executable: "/bin/bash"
+  changed_when: false
+  failed_when: false
+
 - name: kube_master | systemctl restart kubelet.service
   ansible.builtin.service:
     name: "kubelet.service"
