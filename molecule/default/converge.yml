@@ -22,52 +22,42 @@
     - name: include role
       ansible.builtin.include_role:
         name: alvistack.chrony
-      tags: alvistack.chrony
 
     - name: include role
       ansible.builtin.include_role:
         name: alvistack.crun
-      tags: alvistack.crun
 
     - name: include role
       ansible.builtin.include_role:
         name: alvistack.containers_common
-      tags: alvistack.containers_common
 
     - name: include role
       ansible.builtin.include_role:
         name: alvistack.containernetworking_plugins
-      tags: alvistack.containernetworking_plugins
 
     - name: include role
       ansible.builtin.include_role:
         name: alvistack.conmon
-      tags: alvistack.conmon
 
     - name: include role
       ansible.builtin.include_role:
         name: alvistack.cri_o
-      tags: alvistack.cri_o
 
     - name: include role
       ansible.builtin.include_role:
         name: alvistack.cri_tools
-      tags: alvistack.cri_tools
 
     - name: include role
       ansible.builtin.include_role:
         name: alvistack.kube_kubectl
-      tags: alvistack.kube_kubectl
 
     - name: include role
       ansible.builtin.include_role:
         name: alvistack.kube_kubelet
-      tags: alvistack.kube_kubelet
 
     - name: include role
       ansible.builtin.include_role:
         name: alvistack.kube_kubeadm
-      tags: alvistack.kube_kubeadm
 
 - name: converge | etcd
   hosts: etcd
@@ -77,7 +67,6 @@
     - name: include role
       ansible.builtin.include_role:
         name: alvistack.etcd
-      tags: alvistack.etcd
 
 - name: converge | kube_master
   hosts: kube_master
@@ -87,7 +76,6 @@
     - name: include role
       ansible.builtin.include_role:
         name: alvistack.kube_master
-      tags: alvistack.kube_master
 
 - name: converge | kube_node:!kube_master
   hosts: kube_node:!kube_master
@@ -97,4 +85,3 @@
     - name: include role
       ansible.builtin.include_role:
         name: alvistack.kube_node
-      tags: alvistack.kube_node
