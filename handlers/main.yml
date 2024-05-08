@@ -25,9 +25,10 @@
   changed_when: false
   failed_when: false
 
-- name: kube_master | systemctl daemon-reload
-  ansible.builtin.systemd:
-    daemon_reload: true
+- name: kube_master | systemctl restart systemd-sysctl.service
+  ansible.builtin.service:
+    name: systemd-sysctl.service
+    state: restarted
   changed_when: false
   failed_when: false
 
