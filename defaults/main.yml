@@ -94,7 +94,7 @@ kube_kubelet_container_runtime_endpoint: unix:///var/run/crio/crio.sock
 kube_kubelet_tls_cipher_suites: TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 
 # maxPods is the number of pods that can run on this Kubelet.
-kube_kubelet_max_pods: "110"
+kube_kubelet_max_pods: "256"
 
 # A set of ResourceName=ResourceQuantity (e.g. cpu=200m,memory=150G) pairs
 # that describe resources reserved for kubernetes system components.
@@ -167,3 +167,9 @@ kube_proxy_mode: iptables
 kube_proxy_conntrack:
   maxPerCore: 32768
   min: 131072
+
+# Entries for sysctl.
+kube_master_sysctl:
+  - { state: present, name: fs.inotify.max_queued_events, value: "32768" }
+  - { state: present, name: fs.inotify.max_user_instances, value: "256" }
+  - { state: present, name: fs.inotify.max_user_watches, value: "524288" }
