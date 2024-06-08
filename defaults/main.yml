@@ -63,7 +63,7 @@ kube_kubelet_node_ip: "{{ ansible_default_ipv4.address }}"
 
 # address is the IP address for the Kubelet to serve on (set to 0.0.0.0
 # for all interfaces).
-kube_kubelet_bind_address: "0.0.0.0"
+kube_kubelet_bind_address: 0.0.0.0
 
 # failSwapOn tells the Kubelet to fail to start if swap is enabled on the
 # node.
@@ -150,7 +150,7 @@ kube_apiserver_tls_cipher_suites: TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDH
 
 # bindAddress is the IP address for the proxy server to serve on (set to
 # 0.0.0.0 for all interfaces).
-kube_proxy_bind_address: "0.0.0.0"
+kube_proxy_bind_address: 0.0.0.0
 
 # masqueradeAll tells kube-proxy to SNAT everything if using the pure iptables
 # proxy mode.
