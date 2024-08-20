@@ -2,6 +2,8 @@
 
 ## 10.4.0 - TBC
 
+- Support Kubernetes 1.31
+
 ## 10.3.0 - 2024-08-18
 
 - Support Ansible community package 10.3.0
