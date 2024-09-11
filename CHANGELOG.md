@@ -1,6 +1,10 @@
 # Ansible Role for Kubernetes Master
 
-## 10.4.0 - TBC
+## 10.5.0 - TBC
+
+## 10.4.0 - 2024-09-11
+
+- Support Ansible community package 10.4.0
 
 - Support Kubernetes 1.31
 
