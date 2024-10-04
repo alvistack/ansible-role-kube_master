@@ -2,10 +2,11 @@
 
 ## 10.5.0 - TBC
 
+- Remove Kubernetes 1.28 support
+
 ## 10.4.0 - 2024-09-11
 
 - Support Ansible community package 10.4.0
-
 - Support Kubernetes 1.31
 
 ## 10.3.0 - 2024-08-18
