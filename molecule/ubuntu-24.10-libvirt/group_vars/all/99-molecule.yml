@@ -14,7 +14,4 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-_kube_version:
-  "1.31": 1.31.2
-  "1.30": 1.30.6
-  "1.29": 1.29.10
+kube_release: "1.31"
