@@ -1,6 +1,8 @@
 # Ansible Role for Kubernetes Master
 
-## 11.0.0 - TBC
+## 11.1.0 - TBC
+
+## 11.0.0 - 2024-11-20
 
 - Support Ansible community package 11.0.0
 
