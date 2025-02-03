@@ -23,6 +23,9 @@ kube_release: "{{ _kube_release }}"
 # Kubernetes version.
 kube_version: "{{ _kube_version[kube_release] }}"
 
+# python3-kubernetes version.
+kube_master_python3_kubernetes_version: "{{ _kube_master_python3_kubernetes_version[kube_release] }}"
+
 # Kubernetes cluster name.
 kube_cluster_name: "{{ hostvars[groups['kube_master'][0]].ansible_machine_id | to_uuid }}"
 

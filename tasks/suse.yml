@@ -39,6 +39,14 @@
     reposdir: "{{ item.reposdir | default('/etc/zypp/repos.d') }}"
   loop: "{{ _yum_repository }}"
 
+- name: zypper removelock
+  ansible.builtin.command:
+    cmd: zypper removelock {{ item.name | regex_replace('^(.*)-[0-9]*:*[0-9]+\..*$', '\1-*') }}
+  loop: "{{ _zypper }}"
+  when: item.state == "present"
+  changed_when: false
+  failed_when: false
+
 - name: zypper install
   vars:
     ansible_python_interpreter: python3
@@ -49,3 +57,11 @@
   loop: "{{ _zypper }}"
   register: result
   until: result is succeeded
+
+- name: zypper addlock
+  ansible.builtin.command:
+    cmd: zypper addlock {{ item.name | regex_replace('^(.*)-[0-9]*:*[0-9]+\..*$', '\1-*') }}
+  loop: "{{ _zypper }}"
+  when: item.state == "present"
+  changed_when: false
+  failed_when: false
