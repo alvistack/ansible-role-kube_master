@@ -36,6 +36,15 @@
     state: "{{ item.state }}"
   loop: "{{ _yum_repository }}"
 
+- name: yum versionlock delete
+  community.general.yum_versionlock:
+    name: "{{ item.name | regex_replace('^(.*)-[0-9]*:*[0-9]+\\..*$', '\\1-*') }}"
+    state: absent
+  loop: "{{ _yum }}"
+  when: item.state == "present"
+  changed_when: false
+  failed_when: false
+
 - name: yum install
   ansible.builtin.dnf:
     name: "{{ item.name }}"
@@ -43,3 +52,12 @@
   loop: "{{ _yum }}"
   register: result
   until: result is succeeded
+
+- name: yum versionlock add
+  community.general.yum_versionlock:
+    name: "{{ item.name | regex_replace('^(.*)-[0-9]*:*[0-9]+\\..*$', '\\1-*') }}"
+    state: present
+  loop: "{{ _yum }}"
+  when: item.state == "present"
+  changed_when: false
+  failed_when: false

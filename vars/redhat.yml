@@ -32,6 +32,7 @@ _yum_repository:
     state: present
 
 _yum:
+  - { state: present, name: "python3-kubernetes-100:{{ kube_master_python3_kubernetes_version }}*" }
   - { state: latest, name: python3-openshift }
 
 _kube_release: "1.32"
