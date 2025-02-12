@@ -27,7 +27,7 @@ kube_version: "{{ _kube_version[kube_release] }}"
 kube_master_python3_kubernetes_version: "{{ _kube_master_python3_kubernetes_version[kube_release] }}"
 
 # Kubernetes cluster name.
-kube_cluster_name: "{{ hostvars[groups['kube_master'][0]].ansible_machine_id | to_uuid }}"
+kube_cluster_name: "{{ hostvars[groups['kube_master'][0]].ansible_machine_id }}"
 
 # Etcd contains elements describing Etcd configuration.
 kube_etcd:
