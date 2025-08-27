@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-apiVersion: kubeadm.k8s.io/v1beta3
+apiVersion: kubeadm.k8s.io/v1beta4
 kind: InitConfiguration
 localAPIEndpoint:
   advertiseAddress: {{ kube_apiserver_advertise_address }}
@@ -24,13 +24,17 @@ nodeRegistration:
   criSocket: {{ kube_kubelet_container_runtime_endpoint }}
   taints: []
   kubeletExtraArgs:
-    node-ip: {{ kube_kubelet_node_ip }}
-    runtime-cgroups: {{ kube_kubelet_runtime_cgroups }}
-    container-runtime-endpoint: {{ kube_kubelet_container_runtime_endpoint }}
-    tls-cipher-suites: "{{ kube_kubelet_tls_cipher_suites }}"
+    - name: node-ip
+      value: {{ kube_kubelet_node_ip }}
+    - name: runtime-cgroups
+      value: {{ kube_kubelet_runtime_cgroups }}
+    - name: container-runtime-endpoint
+      value: {{ kube_kubelet_container_runtime_endpoint }}
+    - name: tls-cipher-suites
+      value: "{{ kube_kubelet_tls_cipher_suites }}"
 
 ---
-apiVersion: kubeadm.k8s.io/v1beta3
+apiVersion: kubeadm.k8s.io/v1beta4
 kind: ClusterConfiguration
 clusterName: {{ kube_cluster_name }}
 etcd:
@@ -45,9 +49,10 @@ certificatesDir: /etc/kubernetes/pki
 imageRepository: {{ kube_image_repository }}
 apiServer:
   extraArgs:
-    authorization-mode: Node,RBAC
-    tls-cipher-suites: "{{ kube_apiserver_tls_cipher_suites }}"
-  timeoutForControlPlane: 4m0s
+    - name: authorization-mode
+      value: Node,RBAC
+    - name: tls-cipher-suites
+      value: "{{ kube_apiserver_tls_cipher_suites }}"
 controllerManager: {}
 scheduler: {}
 dns:
