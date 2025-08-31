@@ -151,6 +151,9 @@ kube_apiserver_csr_subject_alt_name: >-
 # Comma-separated list of cipher suites for the server.
 kube_apiserver_tls_cipher_suites: TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 
+# If true, allow privileged containers.
+kube_apiserver_allow_privileged: true
+
 # bindAddress is the IP address for the proxy server to serve on (set to
 # 0.0.0.0 for all interfaces).
 kube_proxy_bind_address: 0.0.0.0
