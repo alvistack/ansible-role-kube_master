@@ -53,6 +53,8 @@ apiServer:
       value: Node,RBAC
     - name: tls-cipher-suites
       value: "{{ kube_apiserver_tls_cipher_suites }}"
+    - name: allow-privileged
+      value: "{{ kube_apiserver_allow_privileged | bool | lower }}"
 controllerManager: {}
 scheduler: {}
 dns:
