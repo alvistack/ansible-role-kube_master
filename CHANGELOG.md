@@ -434,7 +434,7 @@
 - Replace `with_dict` with `var`
 - Replace `with_first_found` with `lookup('first_found')`
 - Update Vagrant test with `private_network`
-- Reduce hardcoded `ansible_default_ipv4`
+- Reduce hardcoded `ansible_facts['default_ipv4']`
 
 ## 3.1.0 - 2019-06-13
 

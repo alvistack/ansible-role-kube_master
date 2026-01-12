@@ -27,7 +27,7 @@ kube_version: "{{ _kube_version[kube_release] }}"
 kube_master_python3_kubernetes_version: "{{ _kube_master_python3_kubernetes_version[kube_release] }}"
 
 # Kubernetes cluster name.
-kube_cluster_name: "{{ hostvars[groups['kube_master'][0]].ansible_machine_id }}"
+kube_cluster_name: "{{ hostvars[groups['kube_master'][0]].ansible_facts['machine_id'] }}"
 
 # Etcd contains elements describing Etcd configuration.
 kube_etcd:
@@ -36,7 +36,7 @@ kube_etcd:
       {%- set ns = namespace() -%}
       {%- set ns.params = [] -%}
       {%- for host in groups['etcd'] -%}
-      {%-   set ns.params = ns.params + ["https://" + hostvars[host].ansible_default_ipv4.address + ":2379"] -%}
+      {%-   set ns.params = ns.params + ["https://" + hostvars[host].ansible_facts['default_ipv4'].address + ":2379"] -%}
       {%- endfor -%}
       {{ ns.params }}
     caFile: /etc/kubernetes/pki/etcd/ca.crt
@@ -62,7 +62,7 @@ kube_image_repository: registry.k8s.io
 kube_kubeadm_token:
 # IP address of the node. If set, kubelet will use this IP address for the
 # node.
-kube_kubelet_node_ip: "{{ ansible_default_ipv4.address }}"
+kube_kubelet_node_ip: "{{ ansible_facts['default_ipv4'].address }}"
 
 # address is the IP address for the Kubelet to serve on (set to 0.0.0.0
 # for all interfaces).
@@ -127,14 +127,14 @@ kube_kubelet_static_pod_path: /etc/kubernetes/manifests
 kube_kubelet_resolv_conf: "{{ _kube_kubelet_resolv_conf }}"
 
 # AdvertiseAddress sets the IP address for the API server to advertise.
-kube_apiserver_advertise_address: "{{ ansible_default_ipv4.address }}"
+kube_apiserver_advertise_address: "{{ ansible_facts['default_ipv4'].address }}"
 
 # BindPort sets the secure port for the API Server to bind to.
 kube_apiserver_bind_port: "6443"
 
 # APIServerEndpoint is an IP or domain name to the API server from which info
 # will be fetched.
-kube_apiserver_endpoint: "{{ hostvars[groups['kube_master'][0]].ansible_default_ipv4.address }}:{{ kube_apiserver_bind_port }}"
+kube_apiserver_endpoint: "{{ hostvars[groups['kube_master'][0]].ansible_facts['default_ipv4'].address }}:{{ kube_apiserver_bind_port }}"
 
 # commonName field of the CSR.
 kube_apiserver_csr_common_name: "{{ groups['kube_master'][0] }}"
@@ -144,7 +144,7 @@ kube_apiserver_csr_subject_alt_name: >-
   {%- set ns = namespace() -%}
   {%- set ns.params = ["DNS:localhost", "IP:127.0.0.1"] -%}
   {%- for host in groups['kube_master'] -%}
-  {%-   set ns.params = ns.params + ["DNS:" + host, "IP:" + hostvars[host].ansible_default_ipv4.address] -%}
+  {%-   set ns.params = ns.params + ["DNS:" + host, "IP:" + hostvars[host].ansible_facts['default_ipv4'].address] -%}
   {%- endfor -%}
   {{ ns.params }}
 
