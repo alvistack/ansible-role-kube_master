@@ -14,23 +14,25 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-_apt_key:
-  - url: http://download.opensuse.org/repositories/home:/alvistack/xUbuntu_20.04/Release.key
-    dest: /etc/apt/keyrings/home-alvistack.asc
-    checksum: "sha256:2959bf5709615cba0109715e4c2001066a4536398fa54f0f602abc208f04017e"
-
-_deb822_repository:
-  - name: home-alvistack
-    types: deb
-    uris: http://download.opensuse.org/repositories/home:/alvistack/xUbuntu_20.04
-    suites: /
-    components:
-    signed_by: /etc/apt/keyrings/home-alvistack.asc
-    enabled: true
+_rpm_key:
+  - key: http://download.opensuse.org/repositories/home:/alvistack/openSUSE_Leap_16.0/repodata/repomd.xml.key
+    fingerprint: 789CFFDE0295B8A1F4E5690C4BECC97550D0B1FD
     state: present
 
-_apt:
-  - { state: present, name: "python3-kubernetes=100:{{ kube_master_python3_kubernetes_version }}*" }
+_yum_repository:
+  - file: home_alvistack
+    name: home_alvistack
+    description: home:alvistack (openSUSE_Leap_16.0)
+    baseurl: http://download.opensuse.org/repositories/home:/alvistack/openSUSE_Leap_16.0
+    enabled: true
+    priority: "2"
+    module_hotfixes: true
+    gpgcheck: true
+    gpgkey: http://download.opensuse.org/repositories/home:/alvistack/openSUSE_Leap_16.0/repodata/repomd.xml.key
+    state: present
+
+_zypper:
+  - { state: present, name: "python3-kubernetes-100:{{ kube_master_python3_kubernetes_version }}" }
   - { state: latest, name: python3-openshift }
 
 _kube_release: "1.35"
@@ -39,4 +41,4 @@ _kube_kubelet_cgroup_driver: systemd
 
 _kube_kubelet_runtime_cgroups: /systemd/system.slice
 
-_kube_kubelet_resolv_conf: /run/systemd/resolve/resolv.conf
+_kube_kubelet_resolv_conf: /etc/resolv.conf

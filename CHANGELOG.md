@@ -1,6 +1,14 @@
 # Ansible Role for Kubernetes Master
 
-## 13.0.0 - TBC
+## 13.4.0 - TBC
+
+## 13.3.0 - 2026-02-03
+
+- Support openSUSE Leap 16.0
+- Support RHEL 10
+- Support Fedora 43
+- Remove Fedora 41 support
+- Support Ansible community package 13.3.0
 
 ## 12.3.0 - 2026-01-08
 
@@ -430,7 +438,7 @@
 - Replace `with_dict` with `var`
 - Replace `with_first_found` with `lookup('first_found')`
 - Update Vagrant test with `private_network`
-- Reduce hardcoded `ansible_default_ipv4`
+- Reduce hardcoded `ansible_facts['default_ipv4']`
 
 ## 3.1.0 - 2019-06-13
 
