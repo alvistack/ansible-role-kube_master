@@ -227,6 +227,22 @@
   changed_when: false
   failed_when: false
 
+- name: systemctl start kubectl-drain.service
+  ansible.builtin.service:
+    name: kubectl-drain.service
+    state: started
+    enabled: true
+  changed_when: false
+  failed_when: false
+
+- name: systemctl start kubectl-uncordon.service
+  ansible.builtin.service:
+    name: kubectl-uncordon.service
+    state: started
+    enabled: true
+  changed_when: false
+  failed_when: false
+
 - name: kubeadm init
   ansible.builtin.shell:
     cmd: |
