@@ -24,7 +24,7 @@ kube_release: "{{ _kube_release }}"
 kube_version: "{{ _kube_version[kube_release] }}"
 
 # Kubernetes detected memory total (default with 8192Mi).
-kube_memtotal_mb: "{{ (((ansible_facts['ansible_memtotal_mb'] / 1024) | round(0, 'ceil')) * 1024) | int }}"
+kube_memtotal_mb: "{{ (((ansible_facts['memtotal_mb'] / 1024) | round(0, 'ceil')) * 1024) | int }}"
 
 # python3-kubernetes version.
 kube_master_python3_kubernetes_version: "{{ _kube_master_python3_kubernetes_version[kube_release] }}"
