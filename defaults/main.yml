@@ -113,7 +113,7 @@ kube_kubelet_kube_reserved:
 # non-kubernetes components.
 kube_kubelet_system_reserved:
   cpu: 200m
-  memory: "{{ (kube_memtotal_mb * (4096 / 8192)) | int }}Mi"  # 8192Mi / 2 ~= 4096Mi
+  memory: "{{ (kube_memtotal_mb * (6144 / 8192)) | int }}Mi"  # 8192Mi * 75% ~= 6144Mi
 
 # Map of signal names to quantities that defines hard eviction thresholds. For
 # example: {"memory.available": "300Mi"}.
