@@ -20,7 +20,7 @@ localAPIEndpoint:
   advertiseAddress: {{ kube_apiserver_advertise_address }}
   bindPort: {{ kube_apiserver_bind_port }}
 nodeRegistration:
-  name: {{ ansible_hostname }}
+  name: {{ inventory_hostname }}
   criSocket: {{ kube_kubelet_container_runtime_endpoint }}
   taints: []
   kubeletExtraArgs:

@@ -21,10 +21,13 @@ etcd_trusted_ca_file: /etc/etcd/pki/ca.crt
 kube_release: "{{ _kube_release }}"
 
 # Kubernetes version.
-kube_version: "{{ _kube_version[kube_release] }}"
+kube_version: "{{ _kube_version }}"
+
+# Kubernetes detected memory total (default with 8192Mi).
+kube_memtotal_mb: "{{ (((ansible_facts['memtotal_mb'] + 8191) // 8192) * 8192) | int }}"
 
 # python3-kubernetes version.
-kube_master_python3_kubernetes_version: "{{ _kube_master_python3_kubernetes_version[kube_release] }}"
+kube_master_python3_kubernetes_version: "{{ _kube_master_python3_kubernetes_version }}"
 
 # Kubernetes cluster name.
 kube_cluster_name: "{{ hostvars[groups['kube_master'][0]].ansible_facts['machine_id'] }}"
@@ -110,7 +113,7 @@ kube_kubelet_kube_reserved:
 # non-kubernetes components.
 kube_kubelet_system_reserved:
   cpu: 200m
-  memory: 4096Mi
+  memory: "{{ ((kube_memtotal_mb | float) * (2048 / 8192)) | int }}Mi"  # 8192Mi * 25% ~= 2048Mi
 
 # Map of signal names to quantities that defines hard eviction thresholds. For
 # example: {"memory.available": "300Mi"}.
