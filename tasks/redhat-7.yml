@@ -76,4 +76,4 @@
   changed_when: false
   failed_when: false
   tags:
-     - _yum
+    - _yum
