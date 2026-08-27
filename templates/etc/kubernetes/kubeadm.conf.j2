@@ -74,6 +74,7 @@ authentication:
 authorization:
   mode: Webhook
 staticPodPath: {{ kube_kubelet_static_pod_path }}
+imageGCHighThresholdPercent: {{ kube_kubelet_image_gc_high_threshold_percent }}
 cgroupsPerQOS: {{ kube_kubelet_cgroups_per_qos | bool | lower }}
 enforceNodeAllocatable:
   {{ kube_kubelet_enforce_node_allocatable | to_nice_yaml(indent=2) | indent(2) }}

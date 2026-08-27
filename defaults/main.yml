@@ -75,6 +75,13 @@ kube_kubelet_bind_address: 0.0.0.0
 # node.
 kube_kubelet_fail_swap_on: false
 
+# imageGCHighThresholdPercent is the percent of disk usage after which
+# image garbage collection is always run. The percent is calculated by
+# dividing this field value by 100, so this field must be between 0 and
+# 100, inclusive. When specified, the value must be greater than
+# imageGCLowThresholdPercent. Default: 85
+kube_kubelet_image_gc_high_threshold_percent: "100"
+
 # Enable QoS based Cgroup hierarchy.
 kube_kubelet_cgroups_per_qos: true
 
