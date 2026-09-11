@@ -187,5 +187,5 @@ kube_proxy_conntrack:
 # Entries for sysctl.
 kube_master_sysctl:
   - { state: present, name: fs.inotify.max_queued_events, value: "32768" }
-  - { state: present, name: fs.inotify.max_user_instances, value: "256" }
+  - { state: present, name: fs.inotify.max_user_instances, value: "8192" }
   - { state: present, name: fs.inotify.max_user_watches, value: "524288" }
