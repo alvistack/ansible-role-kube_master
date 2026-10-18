@@ -113,20 +113,20 @@ kube_kubelet_max_pods: "256"
 # that describe resources reserved for kubernetes system components.
 kube_kubelet_kube_reserved:
   cpu: 200m
-  memory: 512Mi
+  memory: 512Mi  # 256Mi
 
 # systemReserved is a set of ResourceName=ResourceQuantity (e.g.
 # cpu=200m,memory=150G) pairs that describe resources reserved for
 # non-kubernetes components.
 kube_kubelet_system_reserved:
   cpu: 200m
-  memory: "{{ ((kube_memtotal_mb | float) * (2048 / 8192)) | int }}Mi"  # 8192Mi * 25% ~= 2048Mi
+  memory: "{{ ((kube_memtotal_mb | float) * (2048 / 8192)) | int }}Mi"  # 256Mi
 
 # Map of signal names to quantities that defines hard eviction thresholds. For
 # example: {"memory.available": "300Mi"}.
 kube_kubelet_eviction_hard:
-  memory.available: 128Mi
-  nodefs.available: 5%
+  memory.available: 128Mi  # 100Mi
+  nodefs.available: 5%  # 10%
 
 # staticPodPath is the path to the directory containing local (static) pods to
 # run, or the path to a single static pod file.
